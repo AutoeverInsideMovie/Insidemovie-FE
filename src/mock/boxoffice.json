@@ -1,0 +1,5 @@
+[
+    { "rank": 1, "title": "영화 A", "audience": 100000 },
+    { "rank": 2, "title": "영화 B", "audience": 90000 },
+    { "rank": 3, "title": "영화 C", "audience": 85000 }
+]
