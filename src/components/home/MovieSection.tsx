@@ -1,4 +1,4 @@
-import image from "../assets/sample_poster.png";
+import image from "../../assets/sample_poster.png";
 
 const MovieCard = () => (
     <div className="w-48">

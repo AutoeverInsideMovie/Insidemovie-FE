@@ -1,4 +1,4 @@
-import image from "../assets/sample_poster.png";
+import image from "../../assets/sample_poster.png";
 
 const BoxOfficeItem = ({ rank }: { rank: number }) => (
     <div className="bg-white/10 rounded-2xl p-4 flex flex-row items-center space-x-4 backdrop-blur">

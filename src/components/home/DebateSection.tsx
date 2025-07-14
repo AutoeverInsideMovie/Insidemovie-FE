@@ -1,4 +1,4 @@
-import image from "../assets/sample_poster.png";
+import image from "../../assets/sample_poster.png";
 
 const DebateSection = () => {
     return (
