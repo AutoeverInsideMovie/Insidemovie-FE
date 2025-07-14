@@ -15,6 +15,13 @@ const Home: React.FC = () => {
             style={{ backgroundImage: "url()" }}
         >
             <Button
+                text={"박스오피스 순위"}
+                textColor="white"
+                buttonColor="default"
+                onClick={() => navigate("/boxoffice")}
+                className="ml-10"
+            />
+            <Button
                 text={"로그인"}
                 textColor="white"
                 buttonColor="default"
