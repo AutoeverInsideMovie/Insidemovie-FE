@@ -2,9 +2,7 @@ import * as React from "react";
 import InputField from "../components/InputField";
 import Button from "../components/Button";
 import TransparentBox from "../components/TransparentBox";
-// @ts-ignore
 import BackgroundBubble from "../assets/background_bubble.svg?react";
-// @ts-ignore
 import SearchIcon from "../assets/search.svg?react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
