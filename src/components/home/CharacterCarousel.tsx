@@ -1,5 +1,5 @@
 import * as React from "react";
-import EmotionSlider from "./EmotionSlider";
+import EmotionSlider from "../EmotionSlider";
 import { useState } from "react";
 import joyImg from "../../assets/character/joy.png";
 import sadImg from "../../assets/character/sad.png";
@@ -8,6 +8,10 @@ import fearImg from "../../assets/character/fear.png";
 import disgustImg from "../../assets/character/disgust.png";
 import bingdbongImg from "../../assets/character/bingbong.png";
 import Button from "../Button";
+
+interface CharacterCarouselSectionProps {
+    className?: string;
+}
 
 const characters = [
     joyImg,
@@ -18,14 +22,16 @@ const characters = [
     bingdbongImg,
 ];
 
-const CharacterCarousel: React.FC = () => {
+const CharacterCarousel: React.FC<CharacterCarouselSectionProps> = ({
+    className = "",
+}) => {
     const [joyValue, setJoyValue] = useState(50);
     const [sadValue, setSadValue] = useState(50);
     const [angryValue, setAngryValue] = useState(50);
     const [fearValue, setFearValue] = useState(50);
     const [disgustValue, setDisgustValue] = useState(50);
     return (
-        <div>
+        <div className={`${className}`}>
             <div className="flex items-center justify-center space-x-4 overflow-x-auto scrollbar-hide px-2 py-4">
                 <EmotionSlider
                     name="JOY"
