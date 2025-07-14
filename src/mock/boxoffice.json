@@ -1,5 +1,7 @@
 [
-    { "rank": 1, "title": "영화 A", "audience": 100000 },
-    { "rank": 2, "title": "영화 B", "audience": 90000 },
-    { "rank": 3, "title": "영화 C", "audience": 85000 }
+    { "rank": 1, "title": "영화 A", "score": 1.0 },
+    { "rank": 2, "title": "영화 B", "score": 2.5 },
+    { "rank": 3, "title": "영화 C", "score": 3.0 },
+    { "rank": 3, "title": "영화 D", "score": 4.5 },
+    { "rank": 3, "title": "영화 F", "score": 5.0 }
 ]
