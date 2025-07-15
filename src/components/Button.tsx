@@ -14,7 +14,7 @@ const Button: React.FC<ButtonProps> = ({
     text = "",
     textColor = "white",
     buttonColor = "default",
-    disabled = true,
+    disabled = false,
     prefixIcon = "",
     className = "",
     onClick,
