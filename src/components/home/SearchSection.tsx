@@ -1,5 +1,5 @@
 import * as React from "react";
-import SearchIcon from "../../assets/search.svg?react";
+import SearchIcon from "@assets/search.svg?react";
 
 interface SearchSectionProps {
     className?: string;

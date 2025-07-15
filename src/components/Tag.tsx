@@ -1,5 +1,5 @@
 import * as React from "react";
-import Check from "../assets/check.svg?react";
+import Check from "@assets/check.svg?react";
 
 interface TagProps {
     label: string;

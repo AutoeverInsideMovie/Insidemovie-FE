@@ -1,7 +1,10 @@
 export interface BoxOffice {
-    id: number;
     rank: number;
-    title: string;
-    rating: number;
-    image: string;
+    posterImg: string;
+    posterName: string;
+    starValue: number;
+    emotions: {
+        icon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
+        value: number;
+    }[];
 }

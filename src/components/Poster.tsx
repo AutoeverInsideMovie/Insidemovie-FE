@@ -1,12 +1,12 @@
 import * as React from "react";
 import TransparentBox from "./TransparentBox";
-import joyIcon from "../assets/character/joy_icon.png";
-import sadIcon from "../assets/character/sad_icon.png";
-import angryIcon from "../assets/character/angry_icon.png";
-import fearIcon from "../assets/character/fear_icon.png";
-import disgustIcon from "../assets/character/disgust_icon.png";
-import bingbongIcon from "../assets/character/bingbong_icon.png";
-import StarFull from "../assets/star_full.svg?react";
+import joyIcon from "@assets/character/joy_icon.png";
+import sadIcon from "@assets/character/sad_icon.png";
+import angryIcon from "@assets/character/angry_icon.png";
+import fearIcon from "@assets/character/fear_icon.png";
+import disgustIcon from "@assets/character/disgust_icon.png";
+import bingbongIcon from "@assets/character/bingbong_icon.png";
+import StarFull from "@assets/star_full.svg?react";
 import type { Movie } from "../interfaces/Movie";
 
 const emotionMap = {

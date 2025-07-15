@@ -1,10 +1,11 @@
 import * as React from "react";
-import ArrowRight from "../../assets/arrow_right.svg?react";
+import ArrowRight from "@assets/arrow_right.svg?react";
 import Poster from "../Poster";
 import Tag from "../Tag";
 import { useEffect, useState } from "react";
 import type { Movie } from "../../interfaces/Movie";
 import axios from "axios";
+import SamplePoster from "@assets/sample_poster.png";
 
 interface RecommendMovieSectionProps {
     className?: string;
@@ -17,6 +18,9 @@ const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
     const scrollRef = React.useRef<HTMLDivElement>(null);
     const [canScrollLeft, setCanScrollLeft] = React.useState(false);
     const [canScrollRight, setCanScrollRight] = React.useState(true);
+
+    const tagList = ["hello", "ㄷㄷ", "태그", "스포츠", "안녕"];
+    const [movieList, setMovieList] = useState<Movie[]>([]);
 
     React.useEffect(() => {
         const scrollElement = scrollRef.current;
@@ -31,16 +35,13 @@ const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
         };
 
         scrollElement.addEventListener("scroll", updateScroll);
-        updateScroll();
+        requestAnimationFrame(updateScroll);
 
         return () => scrollElement.removeEventListener("scroll", updateScroll);
-    }, []);
-
-    const tagList = ["hello", "ㄷㄷ", "태그", "스포츠", "안녕"];
-    const [movieList, setMovieList] = useState<Movie[]>([]);
+    }, [movieList]);
 
     useEffect(() => {
-        const getBoxOffice = async () => {
+        (async () => {
             try {
                 const res = await axios.get("/mock/movie.json");
                 setMovieList(res.data);
@@ -48,8 +49,7 @@ const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
             } catch (e) {
                 console.error("맞춤 영화 조회 에러!! : ", e);
             }
-        };
-        getBoxOffice();
+        })();
     }, []);
 
     const handleTagClick = (label: string) => {
@@ -62,7 +62,7 @@ const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
 
     return (
         <section className={`w-full ${className}`}>
-            <h1 className="flex items-center gap-2 text-xl font-extralight mb-4 text-white">
+            <h1 className="flex items-center gap-2 text-xl font-semibold mb-4 text-white">
                 추천 영화
                 <ArrowRight />
             </h1>
@@ -85,7 +85,7 @@ const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
                         {movieList.map((poster, idx) => (
                             <Poster
                                 key={idx}
-                                posterImg={poster.posterImg}
+                                posterImg={SamplePoster}
                                 posterName={poster.posterName}
                                 emotionIcon={poster.emotionIcon}
                                 emotionValue={poster.emotionValue}

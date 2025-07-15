@@ -9,7 +9,11 @@
         "allowSyntheticDefaultImports": true,
         "verbatimModuleSyntax": true,
         "noEmit": true,
-        "composite": true
+        "composite": true,
+        "baseUrl": "src",
+        "paths": {
+            "@assets/*": ["assets/*"]
+        }
     },
     "files": [],
     "references": [

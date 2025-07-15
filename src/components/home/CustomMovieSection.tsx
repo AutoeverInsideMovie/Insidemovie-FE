@@ -3,6 +3,7 @@ import Poster from "../Poster";
 import type { Movie } from "../../interfaces/Movie";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import SamplePoster from "@assets/sample_poster.png";
 
 interface CustomMovieSectionProps {
     className?: string;
@@ -14,7 +15,7 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
     const [movieList, setMovieList] = useState<Movie[]>([]);
 
     useEffect(() => {
-        const getBoxOffice = async () => {
+        (async () => {
             try {
                 const res = await axios.get("/mock/movie.json");
                 setMovieList(res.data);
@@ -22,20 +23,17 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
             } catch (e) {
                 console.error("맞춤 영화 조회 에러!! : ", e);
             }
-        };
-        getBoxOffice();
+        })();
     }, []);
 
     return (
         <section className={`w-full ${className}`}>
-            <h1 className="text-xl font-extralight mb-4 text-white">
-                맞춤 영화
-            </h1>
+            <h1 className="text-xl font-semibold mb-4 text-white">맞춤 영화</h1>
             <div className="flex gap-6 overflow-x-hidden scrollbar-hide px-2">
                 {movieList.map((movie, idx) => (
                     <Poster
                         key={idx}
-                        posterImg={movie.posterImg}
+                        posterImg={SamplePoster}
                         posterName={movie.posterName}
                         emotionIcon={movie.emotionIcon}
                         emotionValue={movie.emotionValue}
