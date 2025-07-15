@@ -32,8 +32,10 @@ const Button: React.FC<ButtonProps> = ({
         white: "bg-white hover:bg-white/80",
     };
 
-    const textClass = textColors[textColor ?? "white"];
-    const bgClass = baseColors[buttonColor ?? "default"];
+    const textClass =
+        textColor && textColors[textColor] ? textColors[textColor] : "";
+    const bgClass =
+        buttonColor && baseColors[buttonColor] ? baseColors[buttonColor] : "";
 
     return (
         <button
