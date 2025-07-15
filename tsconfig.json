@@ -14,8 +14,8 @@
         },
 
         "noEmit": true,
-        "composite": false,
-        "declaration": false
+//        "composite": false,
+//        "declaration": false
     },
     "files": [],
 //    "references": [
