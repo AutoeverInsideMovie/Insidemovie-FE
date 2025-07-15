@@ -11,10 +11,10 @@ interface ButtonProps {
 }
 
 const Button: React.FC<ButtonProps> = ({
-    text,
+    text = "",
     textColor = "white",
     buttonColor = "default",
-    disabled,
+    disabled = true,
     prefixIcon = "",
     className = "",
     onClick,
