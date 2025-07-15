@@ -22,7 +22,7 @@ const characters = [
     bingdbongImg,
 ];
 
-const CharacterCarousel: React.FC<CharacterCarouselSectionProps> = ({
+const EmotionSection: React.FC<CharacterCarouselSectionProps> = ({
     className = "",
 }) => {
     const [joyValue, setJoyValue] = useState(50);
@@ -80,4 +80,4 @@ const CharacterCarousel: React.FC<CharacterCarouselSectionProps> = ({
     );
 };
 
-export default CharacterCarousel;
+export default EmotionSection;

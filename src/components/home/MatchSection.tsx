@@ -1,20 +1,41 @@
-import image from "../../assets/sample_poster.png";
+import * as React from "react";
+import Poster, { type PosterProps } from "../Poster";
+import ArrowRight from "../../assets/arrow_right.svg?react";
+import samplePoster from "../../assets/sample_poster.png";
 
-const DebateSection = () => {
+interface MatchSectionProps {
+    className?: string;
+}
+
+const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
+    const posterList: PosterProps[] = Array.from({ length: 5 }, (_, i) => ({
+        posterImg: samplePoster,
+        posterName: `인사이드 아웃 ${i + 1}`,
+        emotionIcon: "joy",
+        emotionValue: 50,
+        starValue: 40,
+    }));
+
     return (
-        <section>
-            <h2 className="text-xl font-bold mb-4">금주의 영화 대결</h2>
-            <div className="flex justify-center gap-10">
-                {[1, 2, 3].map((i) => (
-                    <div key={i} className="w-40 text-center">
-                        <img src={image} className="rounded-md" />
-                        <p className="mt-2 font-medium">인사이드 아웃</p>
-                        <p className="text-yellow-400">⭐ 4.5</p>
-                    </div>
+        <section className={`w-full ${className}`}>
+            <h1 className="flex items-center gap-2 text-xl font-extralight mb-4 text-white">
+                빅스오피스 순위
+                <ArrowRight />
+            </h1>
+            <div className="flex gap-6 overflow-x-hidden scrollbar-hide px-2">
+                {posterList.map((poster, idx) => (
+                    <Poster
+                        key={idx}
+                        posterImg={poster.posterImg}
+                        posterName={poster.posterName}
+                        emotionIcon={poster.emotionIcon}
+                        emotionValue={poster.emotionValue}
+                        starValue={poster.starValue}
+                    />
                 ))}
             </div>
         </section>
     );
 };
 
-export default DebateSection;
+export default MatchSection;

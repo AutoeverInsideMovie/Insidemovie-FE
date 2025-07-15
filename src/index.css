@@ -13,6 +13,14 @@ html, body {
   height: 100%;
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none;    /* Firefox */
+}
+
 @font-face {
   font-family: "Paperlogy";
   src: url("fonts/Paperlogy-1Thin.ttf") format("truetype");

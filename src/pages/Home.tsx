@@ -2,10 +2,11 @@ import * as React from "react";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import SearchSection from "../components/home/SearchSection";
-import CharacterCarousel from "../components/home/CharacterCarousel";
+import EmotionSection from "../components/home/EmotionSection";
 import CustomMovieSection from "../components/home/CustomMovieSection";
 import BoxOfficeSection from "../components/home/BoxOfficeSection";
-import DebateSection from "../components/home/DebateSection";
+import MatchSection from "../components/home/MatchSection";
+import RecommendMovieSection from "../components/home/RecommendMovieSection";
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
@@ -27,11 +28,11 @@ const Home: React.FC = () => {
                     className="ml-10"
                 />
                 <SearchSection className="mt-10" />
-                <CharacterCarousel className="mt-10" />
-                <CustomMovieSection className="mt-10" />x
+                <EmotionSection className="mt-10" />
                 <CustomMovieSection className="mt-10" />
-                <BoxOfficeSection />
-                <DebateSection />
+                <RecommendMovieSection className="mt-10" />
+                <BoxOfficeSection className="mt-10" />
+                <MatchSection className="mt-10" />
                 {/* <h1 className="text-4xl font-paper font-bold text-white">
                 Main 화면입니다.
             </h1> */}

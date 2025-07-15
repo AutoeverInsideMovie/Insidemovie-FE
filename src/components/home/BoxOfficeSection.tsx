@@ -1,23 +1,40 @@
-import image from "../../assets/sample_poster.png";
+import * as React from "react";
+import Poster from "../Poster";
+import type { PosterProps } from "../Poster";
+import ArrowRight from "../../assets/arrow_right.svg?react";
+import samplePoster from "../../assets/sample_poster.png";
 
-const BoxOfficeItem = ({ rank }: { rank: number }) => (
-    <div className="bg-white/10 rounded-2xl p-4 flex flex-row items-center space-x-4 backdrop-blur">
-        <div className="text-3xl font-bold w-10">{rank}</div>
-        <img src={image} className="w-16 h-24 rounded-md" />
-        <div>
-            <p className="font-bold text-lg">인사이드 아웃</p>
-            <p className="text-yellow-400">⭐ 5.0</p>
-        </div>
-    </div>
-);
+interface CustomBoxOfficeSectionProps {
+    className?: string;
+}
 
-const BoxOfficeSection = () => {
+const BoxOfficeSection: React.FC<CustomBoxOfficeSectionProps> = ({
+    className = "",
+}) => {
+    const posterList: PosterProps[] = Array.from({ length: 6 }, (_, i) => ({
+        posterImg: samplePoster,
+        posterName: `인사이드 아웃 ${i + 1}`,
+        emotionIcon: "joy",
+        emotionValue: 50,
+        starValue: 40,
+    }));
+
     return (
-        <section>
-            <h2 className="text-xl font-bold mb-4">박스오피스 순위</h2>
-            <div className="space-y-4">
-                {[1, 2, 3].map((rank) => (
-                    <BoxOfficeItem key={rank} rank={rank} />
+        <section className={`w-full ${className}`}>
+            <h1 className="flex items-center gap-2 text-xl font-extralight mb-4 text-white">
+                빅스오피스 순위
+                <ArrowRight />
+            </h1>
+            <div className="flex gap-6 overflow-x-hidden scrollbar-hide px-2">
+                {posterList.map((poster, idx) => (
+                    <Poster
+                        key={idx}
+                        posterImg={poster.posterImg}
+                        posterName={poster.posterName}
+                        emotionIcon={poster.emotionIcon}
+                        emotionValue={poster.emotionValue}
+                        starValue={poster.starValue}
+                    />
                 ))}
             </div>
         </section>

@@ -5,12 +5,13 @@ import sadIcon from "../assets/character/sad_icon.png";
 import angryIcon from "../assets/character/angry_icon.png";
 import fearIcon from "../assets/character/fear_icon.png";
 import disgustIcon from "../assets/character/disgust_icon.png";
+import bingbongIcon from "../assets/character/bingbong_icon.png";
 import StarFull from "../assets/star_full.svg?react";
 
-interface PosterProps {
+export interface PosterProps {
     posterImg: string;
     posterName: string;
-    emotionIcon: "joy" | "sad" | "angry" | "fear" | "disgust";
+    emotionIcon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
     emotionValue: number;
     starValue: number;
 }
@@ -21,12 +22,13 @@ const emotionMap = {
     angry: angryIcon,
     fear: fearIcon,
     disgust: disgustIcon,
+    bingbong: bingbongIcon,
 };
 
 const Poster: React.FC<PosterProps> = ({
     posterImg,
     posterName,
-    emotionIcon,
+    emotionIcon = "bingbong",
     emotionValue = 0,
     starValue = 0,
 }) => {
