@@ -5,11 +5,11 @@ import type { BoxOffice } from "../interfaces/BoxOffice";
 import Poster from "@assets/sample_poster.png";
 import BoxOfficeItem from "../components/BoxOfficeItem";
 
-const BoxOfficeDetail: React.FC = () => {
+const BoxOfficeMovie: React.FC = () => {
     const [movieList, setMovieList] = useState<BoxOffice[]>([]);
 
     useEffect(() => {
-        const getBoxOffice = async () => {
+        (async () => {
             try {
                 const res = await axios.get("/mock/boxoffice.json");
                 setMovieList(res.data);
@@ -17,8 +17,7 @@ const BoxOfficeDetail: React.FC = () => {
             } catch (e) {
                 console.error("박스오피스 조회 에러!! : ", e);
             }
-        };
-        getBoxOffice();
+        })();
     }, []);
 
     return (
@@ -49,4 +48,4 @@ const BoxOfficeDetail: React.FC = () => {
     );
 };
 
-export default BoxOfficeDetail;
+export default BoxOfficeMovie;

@@ -5,6 +5,7 @@ import axios from "axios";
 import BoxOfficeItem from "../BoxOfficeItem";
 import SamplePoster from "@assets/sample_poster.png";
 import type { BoxOffice } from "../../interfaces/BoxOffice";
+import { useNavigate } from "react-router-dom";
 
 interface CustomBoxOfficeSectionProps {
     className?: string;
@@ -13,6 +14,7 @@ interface CustomBoxOfficeSectionProps {
 const BoxOfficeSection: React.FC<CustomBoxOfficeSectionProps> = ({
     className = "",
 }) => {
+    const navigate = useNavigate();
     const [movieList, setMovieList] = useState<BoxOffice[]>([]);
 
     useEffect(() => {
@@ -29,11 +31,14 @@ const BoxOfficeSection: React.FC<CustomBoxOfficeSectionProps> = ({
 
     return (
         <section className={`w-full ${className}`}>
-            <h1 className="flex items-center gap-2 text-xl font-semibold mb-4 text-white">
+            <h1
+                onClick={() => navigate("/boxoffice")}
+                className="inline-flex items-center gap-2 cursor-pointer text-xl font-semibold mb-4 text-white transform transition-transform duration-200 hover:scale-105"
+            >
                 박스오피스 순위
                 <ArrowRight />
             </h1>
-            <div className="flex flex-col gap-6 overflow-x-hidden scrollbar-hide px-2">
+            <div className="flex flex-col gap-3 overflow-x-hidden scrollbar-hide px-2">
                 {movieList.slice(0, 3).map((movie) => (
                     <BoxOfficeItem
                         rank={movie.rank}

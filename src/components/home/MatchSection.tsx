@@ -7,12 +7,14 @@ import axios from "axios";
 import SamplePoster from "@assets/sample_poster.png";
 import WinnerItem from "../WinnerItem";
 import Button from "../Button";
+import { useNavigate } from "react-router-dom";
 
 interface MatchSectionProps {
     className?: string;
 }
 
 const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
+    const navigate = useNavigate();
     const [movieList, setMovieList] = useState<Winner[]>([]);
 
     useEffect(() => {
@@ -29,7 +31,10 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
 
     return (
         <section className={`w-full ${className}`}>
-            <h1 className="flex items-center gap-2 text-xl font-semibold mb-4 text-white">
+            <h1
+                onClick={() => navigate("/weekmatch")}
+                className="inline-flex items-center gap-2 cursor-pointer text-xl font-semibold mb-4 text-white transform transition-transform duration-200 hover:scale-105"
+            >
                 금주의 영화 대결
                 <ArrowRight />
             </h1>

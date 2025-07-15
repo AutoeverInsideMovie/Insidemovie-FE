@@ -29,8 +29,8 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
     return (
         <section className={`w-full ${className}`}>
             <h1 className="text-xl font-semibold mb-4 text-white">맞춤 영화</h1>
-            <div className="flex gap-6 overflow-x-hidden scrollbar-hide px-2">
-                {movieList.map((movie, idx) => (
+            <div className="flex gap-3 overflow-x-hidden scrollbar-hide px-2">
+                {movieList.splice(0, 5).map((movie, idx) => (
                     <Poster
                         key={idx}
                         posterImg={SamplePoster}
