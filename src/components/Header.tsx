@@ -76,7 +76,7 @@ const Header: React.FC = () => {
                     />
                 </div>
             </header>
-            <div className="h-20" /> {/* Spacer to prevent content overlap */}
+            <div className="h-20" />
         </>
     );
 };

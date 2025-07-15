@@ -10,12 +10,12 @@ const Home: React.FC = () => {
     return (
         <div className="min-h-screen flex justify-center flex-col items-center px-4">
             <div className="max-w-screen-lg w-full flex flex-col items-center">
-                <SearchSection className="mt-10" />
-                <EmotionSection className="mt-10" />
-                <CustomMovieSection className="mt-10" />
-                <RecommendMovieSection className="mt-10" />
-                <BoxOfficeSection className="mt-10" />
-                <MatchSection className="mt-10" />
+                <SearchSection className="mt-20" />
+                <EmotionSection className="mt-20" />
+                <CustomMovieSection className="mt-20" />
+                <RecommendMovieSection className="mt-20" />
+                <BoxOfficeSection className="mt-20" />
+                <MatchSection className="mt-20" />
             </div>
         </div>
     );
