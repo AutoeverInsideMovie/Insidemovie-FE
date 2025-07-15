@@ -13,7 +13,7 @@
             "@assets/*": ["assets/*"]
         },
 
-        "noEmit": true,
+        "noEmit": false,
 //        "composite": false,
 //        "declaration": false
     },

@@ -21,9 +21,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    "composite": true,
-    "noEmit": false,
-    "declaration": false
+    "composite": false,
+    "declaration": false,
+    "noEmit": false
   },
   "include": ["vite.config.ts"]
 }
