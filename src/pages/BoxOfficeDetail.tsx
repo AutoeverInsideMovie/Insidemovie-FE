@@ -6,7 +6,7 @@ import TransparentBox from "../components/TransparentBox";
 import Poster from "../assets/sample_poster.png";
 import StarRating from "../components/StarRating";
 
-const BoxOffice: React.FC = () => {
+const BoxOfficeDetail: React.FC = () => {
     const [movieList, setMovieList] = useState<BoxOffice[]>([]);
 
     useEffect(() => {
@@ -74,4 +74,4 @@ const BoxOffice: React.FC = () => {
     );
 };
 
-export default BoxOffice;
+export default BoxOfficeDetail;

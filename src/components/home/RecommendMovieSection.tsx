@@ -1,9 +1,10 @@
 import * as React from "react";
 import ArrowRight from "../../assets/arrow_right.svg?react";
-import samplePoster from "../../assets/sample_poster.png";
 import Poster from "../Poster";
-import type { PosterProps } from "../Poster";
 import Tag from "../Tag";
+import { useEffect, useState } from "react";
+import type { Movie } from "../../interfaces/Movie";
+import axios from "axios";
 
 interface RecommendMovieSectionProps {
     className?: string;
@@ -36,13 +37,20 @@ const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
     }, []);
 
     const tagList = ["hello", "ㄷㄷ", "태그", "스포츠", "안녕"];
-    const posterList: PosterProps[] = Array.from({ length: 10 }, (_, i) => ({
-        posterImg: samplePoster,
-        posterName: `인사이드 아웃 ${i + 1}`,
-        emotionIcon: "joy",
-        emotionValue: 50,
-        starValue: 40,
-    }));
+    const [movieList, setMovieList] = useState<Movie[]>([]);
+
+    useEffect(() => {
+        const getBoxOffice = async () => {
+            try {
+                const res = await axios.get("/mock/movie.json");
+                setMovieList(res.data);
+                console.log(res.data);
+            } catch (e) {
+                console.error("맞춤 영화 조회 에러!! : ", e);
+            }
+        };
+        getBoxOffice();
+    }, []);
 
     const handleTagClick = (label: string) => {
         setSelectedTags((prev) =>
@@ -74,7 +82,7 @@ const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
                     className="w-full overflow-x-auto scrollbar-hide"
                 >
                     <div className="flex gap-6 w-max px-2">
-                        {posterList.map((poster, idx) => (
+                        {movieList.map((poster, idx) => (
                             <Poster
                                 key={idx}
                                 posterImg={poster.posterImg}

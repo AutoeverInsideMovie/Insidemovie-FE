@@ -1,20 +1,29 @@
 import * as React from "react";
-import Poster, { type PosterProps } from "../Poster";
+import Poster from "../Poster";
 import ArrowRight from "../../assets/arrow_right.svg?react";
-import samplePoster from "../../assets/sample_poster.png";
+import { useEffect, useState } from "react";
+import type { Movie } from "../../interfaces/Movie";
+import axios from "axios";
 
 interface MatchSectionProps {
     className?: string;
 }
 
 const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
-    const posterList: PosterProps[] = Array.from({ length: 5 }, (_, i) => ({
-        posterImg: samplePoster,
-        posterName: `인사이드 아웃 ${i + 1}`,
-        emotionIcon: "joy",
-        emotionValue: 50,
-        starValue: 40,
-    }));
+    const [movieList, setMovieList] = useState<Movie[]>([]);
+
+    useEffect(() => {
+        const getBoxOffice = async () => {
+            try {
+                const res = await axios.get("/mock/movie.json");
+                setMovieList(res.data);
+                console.log(res.data);
+            } catch (e) {
+                console.error("맞춤 영화 조회 에러!! : ", e);
+            }
+        };
+        getBoxOffice();
+    }, []);
 
     return (
         <section className={`w-full ${className}`}>
@@ -23,7 +32,7 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
                 <ArrowRight />
             </h1>
             <div className="flex gap-6 overflow-x-hidden scrollbar-hide px-2">
-                {posterList.map((poster, idx) => (
+                {movieList.map((poster, idx) => (
                     <Poster
                         key={idx}
                         posterImg={poster.posterImg}

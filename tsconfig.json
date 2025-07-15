@@ -1,4 +1,17 @@
 {
+    "compilerOptions": {
+        "target": "ES2021",
+        "lib": ["DOM", "ES2021", "DOM.Iterable"],
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "jsx": "react-jsx",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "allowImportingTsExtensions": true,
+        "verbatimModuleSyntax": true,
+        "emitDeclarationOnly": true,
+        "composite": true
+    },
     "files": [],
     "references": [
         { "path": "./tsconfig.app.json" },
