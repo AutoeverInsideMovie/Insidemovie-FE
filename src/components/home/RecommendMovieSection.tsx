@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import type { Movie } from "../../interfaces/Movie";
 import axios from "axios";
 import SamplePoster from "@assets/sample_poster.png";
+import { useNavigate } from "react-router-dom";
 
 interface RecommendMovieSectionProps {
     className?: string;
@@ -14,6 +15,7 @@ interface RecommendMovieSectionProps {
 const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
     className = "",
 }) => {
+    const navigate = useNavigate();
     const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
     const scrollRef = React.useRef<HTMLDivElement>(null);
     const [canScrollLeft, setCanScrollLeft] = React.useState(false);
@@ -62,7 +64,10 @@ const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
 
     return (
         <section className={`w-full ${className}`}>
-            <h1 className="flex items-center gap-2 text-xl font-semibold mb-4 text-white">
+            <h1
+                onClick={() => navigate("/recommend")}
+                className="inline-flex items-center gap-2 cursor-pointer text-xl font-semibold mb-4 text-white transform transition-transform duration-200 hover:scale-105"
+            >
                 추천 영화
                 <ArrowRight />
             </h1>
@@ -81,7 +86,7 @@ const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
                     ref={scrollRef}
                     className="w-full overflow-x-auto scrollbar-hide"
                 >
-                    <div className="flex gap-6 w-max px-2">
+                    <div className="flex gap-3 w-max px-2">
                         {movieList.map((poster, idx) => (
                             <Poster
                                 key={idx}
