@@ -14,10 +14,8 @@
         },
 
         "noEmit": false,
-//        "composite": false,
+        "composite": true,
 //        "declaration": false
     },
-    "files": [],
-
     "include": ["src"]
 }
