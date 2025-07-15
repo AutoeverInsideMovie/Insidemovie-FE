@@ -1,10 +1,10 @@
 import * as React from "react";
 import { useState } from "react";
-import MailIcon from "../assets/mail.svg?react";
-import PasswordIcon from "../assets/password.svg?react";
-import NicknameIcon from "../assets/nickname.svg?react";
-import Visible from "../assets/visibility_on.svg?react";
-import Invisible from "../assets/visibility_off.svg?react";
+import MailIcon from "@assets/mail.svg?react";
+import PasswordIcon from "@assets/password.svg?react";
+import NicknameIcon from "@assets/nickname.svg?react";
+import Visible from "@assets/visibility_on.svg?react";
+import Invisible from "@assets/visibility_off.svg?react";
 
 interface InputFieldProps {
     type: "text" | "email" | "password";

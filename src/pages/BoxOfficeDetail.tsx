@@ -2,9 +2,8 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import type { BoxOffice } from "../interfaces/BoxOffice";
-import TransparentBox from "../components/TransparentBox";
-import Poster from "../assets/sample_poster.png";
-import StarRating from "../components/StarRating";
+import Poster from "@assets/sample_poster.png";
+import BoxOfficeItem from "../components/BoxOfficeItem";
 
 const BoxOfficeDetail: React.FC = () => {
     const [movieList, setMovieList] = useState<BoxOffice[]>([]);
@@ -33,37 +32,13 @@ const BoxOfficeDetail: React.FC = () => {
                                     박스오피스 순위 top100
                                 </h1>
                                 {movieList.map((movie) => (
-                                    <div
-                                        key={movie.id}
-                                        className="flex flex-row pb-6"
-                                    >
-                                        <div className="text-4xl font-bold pl-8 first-line: pr-4 text-white">
-                                            {movie.rank}
-                                        </div>
-                                        <TransparentBox className="w-full h-[150px] overflow-hidden flex flex-row p-0">
-                                            <img
-                                                src={Poster /*movie.image*/}
-                                                alt="포스터"
-                                                className="h-full object-cover"
-                                            />
-
-                                            <div className="p-4 flex flex-col justify-between">
-                                                <h1 className=" text-2xl font-sebold text-white ">
-                                                    {movie.title}
-                                                </h1>
-                                                <div className="text-white flex flex-row">
-                                                    <StarRating
-                                                        rating={movie.rating}
-                                                    />
-                                                    <div className="w-2 h-2"></div>
-                                                    {movie.rating.toFixed(1)}
-                                                </div>
-                                                <div className="flex flex-row text-white">
-                                                    (감정 파라미터)
-                                                </div>
-                                            </div>
-                                        </TransparentBox>
-                                    </div>
+                                    <BoxOfficeItem
+                                        rank={movie.rank}
+                                        posterImg={Poster}
+                                        posterName={movie.posterName}
+                                        starValue={movie.starValue}
+                                        emotions={movie.emotions}
+                                    />
                                 ))}
                             </div>
                         </div>

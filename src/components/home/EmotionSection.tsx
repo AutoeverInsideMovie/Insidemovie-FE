@@ -1,12 +1,12 @@
 import * as React from "react";
 import EmotionSlider from "../EmotionSlider";
 import { useState } from "react";
-import joyImg from "../../assets/character/joy.png";
-import sadImg from "../../assets/character/sad.png";
-import angryImg from "../../assets/character/angry.png";
-import fearImg from "../../assets/character/fear.png";
-import disgustImg from "../../assets/character/disgust.png";
-import bingdbongImg from "../../assets/character/bingbong.png";
+import joyImg from "@assets/character/joy.png";
+import sadImg from "@assets/character/sad.png";
+import angryImg from "@assets/character/angry.png";
+import fearImg from "@assets/character/fear.png";
+import disgustImg from "@assets/character/disgust.png";
+import bingdbongImg from "@assets/character/bingbong.png";
 import Button from "../Button";
 
 interface CharacterCarouselSectionProps {
