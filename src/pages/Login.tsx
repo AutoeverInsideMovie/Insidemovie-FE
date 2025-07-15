@@ -10,8 +10,6 @@ const Login: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    console.log("LOGIN: " + email + " " + password);
-
     return (
         <div className="min-h-screen flex items-center justify-center">
             <TransparentBox

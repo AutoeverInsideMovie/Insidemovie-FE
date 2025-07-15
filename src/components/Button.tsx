@@ -3,7 +3,7 @@ import * as React from "react";
 interface ButtonProps {
     text: string;
     textColor?: "white" | "black";
-    buttonColor?: "kakao" | "default" | "disabled";
+    buttonColor?: "kakao" | "default" | "transparent" | "disabled" | "white";
     disabled?: boolean;
     prefixIcon?: string;
     className?: string;
@@ -11,10 +11,10 @@ interface ButtonProps {
 }
 
 const Button: React.FC<ButtonProps> = ({
-    text,
-    textColor,
-    buttonColor,
-    disabled,
+    text = "",
+    textColor = "white",
+    buttonColor = "default",
+    disabled = false,
     prefixIcon = "",
     className = "",
     onClick,
@@ -27,7 +27,9 @@ const Button: React.FC<ButtonProps> = ({
     const baseColors = {
         kakao: "bg-kakao_yellow hover:bg-kakao_yellow_bright",
         default: "bg-movie_sub hover:bg-movie_bright",
+        transparent: "bg-box_bg_white hover:bg-white/40",
         disabled: "bg-grey_300",
+        white: "bg-white hover:bg-white/80",
     };
 
     return (

@@ -1,21 +1,37 @@
 import * as React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
-import BoxOffice from "./pages/BoxOffice";
-import ReviewWrite from "./pages/ReviewWrite";
+import BoxOfficeMovie from "./pages/BoxOfficeMovie";
+import Header from "./components/Header";
+import RecommendMovie from "./pages/RecommendMovie";
+import WeekMatch from "./pages/WeekMatch";
 
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
+    const location = useLocation();
+    const hideHeader =
+        location.pathname === "/login" || location.pathname === "/signup";
+
     return (
-        <BrowserRouter>
+        <>
+            {!hideHeader && <Header />}
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-                <Route path="/boxoffice" element={<BoxOffice />} />
-                <Route path="/review-write" element={<ReviewWrite />} />
+                <Route path="/recommend" element={<RecommendMovie />} />
+                <Route path="/boxoffice" element={<BoxOfficeMovie />} />
+                <Route path="/weekmatch" element={<WeekMatch />} />
             </Routes>
+        </>
+    );
+};
+
+const App: React.FC = () => {
+    return (
+        <BrowserRouter>
+            <AppContent />
         </BrowserRouter>
     );
 };

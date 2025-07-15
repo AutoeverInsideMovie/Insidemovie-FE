@@ -1,15 +1,10 @@
 import * as React from "react";
 import { useState } from "react";
-// @ts-ignore
-import MailIcon from "../assets/mail.svg?react";
-// @ts-ignore
-import PasswordIcon from "../assets/password.svg?react";
-// @ts-ignore
-import NicknameIcon from "../assets/nickname.svg?react";
-// @ts-ignore
-import Visible from "../assets/visibility_on.svg?react";
-// @ts-ignore
-import Invisible from "../assets/visibility_off.svg?react";
+import MailIcon from "@assets/mail.svg?react";
+import PasswordIcon from "@assets/password.svg?react";
+import NicknameIcon from "@assets/nickname.svg?react";
+import Visible from "@assets/visibility_on.svg?react";
+import Invisible from "@assets/visibility_off.svg?react";
 
 interface InputFieldProps {
     type: "text" | "email" | "password";
@@ -53,14 +48,14 @@ const InputField: React.FC<InputFieldProps> = ({
 
     return (
         <div className="mb-4 w-full">
-            <div className="flex items-center bg-white/80 rounded-full shadow-md text-xs px-4 py-3 mb-2 transition duration-200 focus-within:bg-white">
+            <div className="flex items-center bg-white/80 rounded-full shadow-md text-xs px-4 py-1 mb-2 transition duration-200 focus-within:bg-white">
                 {renderIcon()}
                 <input
                     type={showToggle && isVisible ? "text" : type}
                     placeholder={placeholder}
                     value={value !== undefined ? value : internalValue}
                     onChange={handleChange}
-                    className="ml-3 flex-1 bg-transparent outline-none text-black"
+                    className="ml-3 py-3 flex-1 bg-transparent outline-none text-black"
                 />
                 {showToggle && (
                     <button
