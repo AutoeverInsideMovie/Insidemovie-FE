@@ -63,6 +63,7 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
                         text="투표하러 가기"
                         textColor="black"
                         buttonColor="white"
+                        onClick={() => navigate("/weekmatch")}
                     />
                 </div>
                 <div className="flex flex-col flex-1">

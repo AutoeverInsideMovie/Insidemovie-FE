@@ -21,30 +21,28 @@ const BoxOfficeMovie: React.FC = () => {
     }, []);
 
     return (
-        <>
-            <div>
-                <div className="flex justify-center">
-                    <div className="max-w-screen-md w-full min-h-screen">
-                        <div className="flex flex-col">
-                            <div className="py-[240px]">
-                                <h1 className="text-white text-2xl font-semibold pb-6 text-left">
-                                    박스오피스 순위 top100
-                                </h1>
-                                {movieList.map((movie) => (
-                                    <BoxOfficeItem
-                                        rank={movie.rank}
-                                        posterImg={Poster}
-                                        posterName={movie.posterName}
-                                        starValue={movie.starValue}
-                                        emotions={movie.emotions}
-                                    />
-                                ))}
-                            </div>
+        <div>
+            <div className="flex justify-center">
+                <div className="max-w-screen-lg w-full">
+                    <div className="flex flex-col">
+                        <div className="pt-10 py-36">
+                            <h1 className="text-white text-3xl font-semibold pb-6 text-left">
+                                박스오피스 순위 top100
+                            </h1>
+                            {movieList.map((movie) => (
+                                <BoxOfficeItem
+                                    rank={movie.rank}
+                                    posterImg={Poster}
+                                    posterName={movie.posterName}
+                                    starValue={movie.starValue}
+                                    emotions={movie.emotions}
+                                />
+                            ))}
                         </div>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 
