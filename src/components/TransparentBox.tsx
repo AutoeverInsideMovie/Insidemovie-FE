@@ -13,7 +13,7 @@ const TransparentBox: React.FC<TransparentBoxProps> = ({
 }) => {
     return (
         <div
-            className={`bg-box_bg_white/10 backdrop-blur rounded-3xl shadow-xl p-8 ${padding} ${className}`}
+            className={`bg-box_bg_white/10 backdrop-blur rounded-3xl shadow-xl ${padding} ${className}`}
         >
             {children}
         </div>
