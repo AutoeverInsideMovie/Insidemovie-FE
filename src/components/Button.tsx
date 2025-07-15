@@ -36,7 +36,7 @@ const Button: React.FC<ButtonProps> = ({
         <button
             onClick={onClick}
             disabled={disabled}
-            className={`rounded-full px-4 py-4 text-xs font-semibold transition duration-200 shadow-md flex items-center justify-center gap-2 ${textColors[textColor ?? "white"]} ${baseColors[buttonColor ?? "default"]} ${disabled ? "opacity-50" : ""} ${className}`}
+            className={`rounded-full px-4 py-4 text-xs font-semibold transition duration-200 shadow-md flex items-center justify-center gap-2 ${textColor && textColors[textColor] ? textColors[textColor] : ""} ${buttonColor && baseColors[buttonColor] ? baseColors[buttonColor] : ""} ${disabled ? "opacity-50" : ""} ${className}`}
         >
             {prefixIcon && (
                 <img src={prefixIcon} alt="icon" className="w-4 h-4" />
