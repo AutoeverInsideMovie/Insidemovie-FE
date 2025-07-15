@@ -8,16 +8,19 @@
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "verbatimModuleSyntax": true,
-        "composite": true,
         "baseUrl": "src",
         "paths": {
             "@assets/*": ["assets/*"]
-        }
+        },
+
+        "noEmit": true,
+        "composite": false,
+        "declaration": false
     },
     "files": [],
-    "references": [
-        { "path": "./tsconfig.app.json" },
-        { "path": "./tsconfig.node.json" }
-    ],
+//    "references": [
+//        { "path": "./tsconfig.app.json" },
+//        { "path": "./tsconfig.node.json" }
+//    ],
     "include": ["src"]
 }
