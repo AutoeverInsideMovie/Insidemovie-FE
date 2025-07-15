@@ -28,6 +28,13 @@ const Home: React.FC = () => {
                 onClick={() => navigate("/login")}
                 className="ml-10"
             />
+            <Button
+                text={"리뷰 작성"}
+                textColor="white"
+                buttonColor="default"
+                onClick={() => navigate("/review-write")}
+                className="ml-10"
+            />
             <SearchSection />
             <CharacterCarousel />
             <MovieSection title="맞춤 영화" />

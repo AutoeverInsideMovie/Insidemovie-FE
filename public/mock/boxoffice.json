@@ -4,7 +4,9 @@
         "rank": 1,
         "title": "영화 A",
         "rating": 1.0,
-        "image": "../assets/sample_poster.png"
+        "image": "../assets/sample_poster.png",
+        "genre": "액션",
+        "releaseYear": "2025"
     },
     {
         "id": 2,
