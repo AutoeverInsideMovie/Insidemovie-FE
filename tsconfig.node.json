@@ -22,7 +22,8 @@
     "noUncheckedSideEffectImports": true,
 
     "composite": true,
-    "noEmit": false
+    "noEmit": false,
+    "declaration": false
   },
   "include": ["vite.config.ts"]
 }
