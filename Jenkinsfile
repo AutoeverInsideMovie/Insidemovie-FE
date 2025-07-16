@@ -18,13 +18,10 @@ pipeline {
                 checkout scm
             }
         }
-        
+
         stage('Docker Build') {
             steps {
                 script {
-                    sh 'pwd'          // 현재 작업 디렉터리 출력
-                    sh 'ls -al'       // 현재 디렉터리 파일 목록 확인
-                    sh 'ls -al ./Dockerfile'  // Dockerfile 존재 확인
                     sh "docker build --no-cache -t ${IMAGE_NAME}:${TAG} ."
                 }
             }
@@ -51,9 +48,9 @@ pipeline {
                     sh """
                     ssh -o StrictHostKeyChecking=no ubuntu@52.79.175.149 "
                         docker pull ${IMAGE_NAME}:${TAG} &&
-                        docker stop ${CONTAINER_NAME} || true &&
+                        docker-compose down &&
                         docker rm ${CONTAINER_NAME} || true &&
-                        docker run -d -p 5173:80 --name frontend ${IMAGE_NAME}:${TAG}
+                        docker-compose up -d
                     "
                     """
                 }
