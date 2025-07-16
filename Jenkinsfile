@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    options {
-        skipDefaultCheckout(true)
-    }
-    
     environment {
         IMAGE_NAME = 'ssafysong/inside-movie'
         TAG = 'fe'
@@ -17,7 +13,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    sh "docker build -t ${IMAGE_NAME}:${TAG} ."
+                    sh "docker build --no-cache -t ${IMAGE_NAME}:${TAG} ."
                 }
             }
         }
