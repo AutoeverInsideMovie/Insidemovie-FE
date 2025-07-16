@@ -29,6 +29,17 @@ const StarRating: React.FC<StarRatingProps> = ({
                         onChange(newValue);
                     }
                 }}
+                sx={{
+                    "& .MuiRating-iconFilled": {
+                        color: "#FFD602", // 채워진 별
+                    },
+                    "& .MuiRating-iconEmpty": {
+                        color: "#7C7C7C", // 빈 별 색상
+                    },
+                    "& .MuiRating-iconHover": {
+                        color: "#FFA500", // 호버 시
+                    },
+                }}
             />
             {showValue && (
                 <span className="text-sm text-white">{value.toFixed(1)}</span>
