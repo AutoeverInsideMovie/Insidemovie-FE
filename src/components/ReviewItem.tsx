@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Profile from "@assets/profile/joy_profile.png";
 import StarRating from "./StarRating";
 import Like from "@assets/like.svg?react";
@@ -35,7 +35,7 @@ const emotionMap = {
     bingbong: bingbongIcon,
 };
 
-const ReviewItem = ({
+const ReviewItem: React.FC<ReviewItemProps> = ({
     review_id,
     user_profile,
     user_name,
@@ -45,7 +45,7 @@ const ReviewItem = ({
     star_value,
     spoiler,
     emotions,
-}: ReviewItemProps) => {
+}) => {
     const [showContent, setShowContent] = useState(!spoiler); // 스포일러면 처음엔 false
 
     const getTopEmotionIcon = (emotions: ReviewItemProps["emotions"]) => {
