@@ -7,11 +7,32 @@ import angryIcon from "@assets/character/angry_icon.png";
 import fearIcon from "@assets/character/fear_icon.png";
 import disgustIcon from "@assets/character/disgust_icon.png";
 import bingbongIcon from "@assets/character/bingbong_icon.png";
+import Like from "@assets/like.svg?react";
+import Unlike from "@assets/unlike.svg?react";
+import Edit from "@assets/edit.svg?react";
+import Delete from "@assets/delete.svg?react";
 import axios from "axios";
 import type { MovieOne } from "../interfaces/MovieOne";
 import type { Review } from "../interfaces/Review";
 import Button from "../components/Button";
 import ReviewItem from "../components/ReviewItem";
+import { useNavigate } from "react-router-dom";
+import Profile from "@assets/profile/joy_profile.png";
+
+interface ReviewItemProps {
+    review_id: number;
+    user_profile: string;
+    user_name: string;
+    date: string;
+    content: string;
+    like_count: number;
+    star_value: number;
+    spoiler: true;
+    emotions: {
+        icon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
+        value: number;
+    }[];
+}
 
 const emotionMap = {
     joy: joyIcon,
@@ -31,9 +52,23 @@ const emotionColorMap = {
     bingbong: "bg-bingbong_pink",
 };
 
-const MovieDetail: React.FC = () => {
+const MovieDetail: React.FC<ReviewItemProps> = ({ emotions }) => {
+    const navigate = useNavigate();
     const [movieInfo, setMovieInfo] = useState<MovieOne | null>(null);
     const [reviewList, setReviewList] = useState<Review[]>([]);
+    const isLogin = false;
+
+    const getTopEmotionIcon = (emotions: ReviewItemProps["emotions"]) => {
+        if (!emotions || emotions.length === 0) return null;
+
+        const topEmotion = emotions.reduce((prev, curr) =>
+            curr.value > prev.value ? curr : prev,
+        );
+
+        return topEmotion.icon;
+    };
+
+    const topEmotionIcon = getTopEmotionIcon(emotions);
 
     useEffect(() => {
         (async () => {
@@ -126,17 +161,88 @@ const MovieDetail: React.FC = () => {
                 </div>
 
                 {/* 내가 쓴 리뷰 */}
-                <div className="mt-10">
-                    <h2 className="text-3xl font-semibold text-white">
-                        내가 쓴 리뷰
-                    </h2>
-                    <div className="p-10 rounded-xl border border-white/20 mt-6">
-                        <Button
-                            text="리뷰 작성 하기"
-                            className="mx-auto block px-6 py-2"
-                        />
+                {isLogin && (
+                    <div className="mt-10">
+                        <h2 className="text-3xl font-semibold text-white">
+                            내가 쓴 리뷰
+                        </h2>
+                        <div className="p-10 rounded-3xl border border-white/20 mt-6">
+                            <Button
+                                text="리뷰 작성 하기"
+                                className="mx-auto block px-6 py-2"
+                                onClick={() => {
+                                    navigate("/review-write");
+                                }}
+                            />
+                        </div>
                     </div>
-                </div>
+                )}
+
+                {/* 로그인 시 작성한 리뷰 보여주기 */}
+                {!isLogin && (
+                    <div className="bg-box_bg_white p-4 rounded-3xl text-white mt-10">
+                        <div className="flex items-center justify-between">
+                            <div className="flex gap-2 items-center">
+                                <img
+                                    src={Profile}
+                                    alt="유저"
+                                    className="w-8 h-8 rounded-full"
+                                />
+                                <div>
+                                    <div className="font-normal text-sm">
+                                        홍길동
+                                    </div>
+                                    <div className="text-xs font-light text-gray-400">
+                                        1일 전
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-1 bg-box_bg_white/10 px-2 py-1 rounded-full text-sm">
+                                {topEmotionIcon && (
+                                    <img
+                                        src={emotionMap[topEmotionIcon]}
+                                        alt={topEmotionIcon}
+                                        className="w-6 h-6"
+                                    />
+                                )}
+                                |
+                                <StarRating
+                                    value={4.5}
+                                    readOnly={true}
+                                    showOneStar={true}
+                                    showValue={true}
+                                    size={"small"}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="mt-3 text-[15px] leading-relaxed">
+                            <p className="px-2">"내용"</p>
+                        </div>
+
+                        <div className="w-full h-[1px] bg-white/10 mt-4" />
+
+                        <div className="mt-4 flex justify-start items-center text-sm text-gray-300">
+                            <div className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer">
+                                <Unlike className="w-5 h-5" />
+                                12{/*{like_count}*/}
+                            </div>
+                            <div
+                                className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer"
+                                onClick={() => {
+                                    navigate("/review-write");
+                                }}
+                            >
+                                <Edit className="w-5 h-5" />
+                                수정하기
+                            </div>
+                            <div className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer">
+                                <Delete className="w-5 h-5" />
+                                삭제하기
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* 리뷰 목록 */}
                 <div className="mt-12">
