@@ -7,6 +7,7 @@ import BoxOfficeMovie from "./pages/BoxOfficeMovie";
 import Header from "./components/Header";
 import RecommendMovie from "./pages/RecommendMovie";
 import WeekMatch from "./pages/WeekMatch";
+import Dashboard from "./pages/admin/Dashboard";
 
 const AppContent: React.FC = () => {
     const location = useLocation();
@@ -23,6 +24,7 @@ const AppContent: React.FC = () => {
                 <Route path="/recommend" element={<RecommendMovie />} />
                 <Route path="/boxoffice" element={<BoxOfficeMovie />} />
                 <Route path="/weekmatch" element={<WeekMatch />} />
+                <Route path="/admin" element={<Dashboard />} />
             </Routes>
         </>
     );
