@@ -52,7 +52,7 @@ const emotionColorMap = {
     bingbong: "bg-bingbong_pink",
 };
 
-const MovieDetail: React.FC<ReviewItemProps> = ({ emotions }) => {
+const MovieDetail: React.FC = () => {
     const navigate = useNavigate();
     const [movieInfo, setMovieInfo] = useState<MovieOne | null>(null);
     const [reviewList, setReviewList] = useState<Review[]>([]);
@@ -68,7 +68,18 @@ const MovieDetail: React.FC<ReviewItemProps> = ({ emotions }) => {
         return topEmotion.icon;
     };
 
-    const topEmotionIcon = getTopEmotionIcon(emotions);
+    const sampleEmotions: {
+        icon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
+        value: number;
+    }[] = [
+        { icon: "joy", value: 35 },
+        { icon: "sad", value: 15 },
+        { icon: "angry", value: 10 },
+        { icon: "fear", value: 25 },
+        { icon: "disgust", value: 10 },
+        { icon: "bingbong", value: 5 },
+    ];
+    const topEmotionIcon = getTopEmotionIcon(sampleEmotions);
 
     useEffect(() => {
         (async () => {
