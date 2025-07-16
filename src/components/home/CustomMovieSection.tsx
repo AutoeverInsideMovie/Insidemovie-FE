@@ -4,6 +4,7 @@ import type { Movie } from "../../interfaces/Movie";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import SamplePoster from "@assets/sample_poster.png";
+import { useNavigate } from "react-router-dom";
 
 interface CustomMovieSectionProps {
     className?: string;
@@ -12,6 +13,7 @@ interface CustomMovieSectionProps {
 const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
     className = "",
 }) => {
+    const navigate = useNavigate();
     const [movieList, setMovieList] = useState<Movie[]>([]);
 
     useEffect(() => {
@@ -38,6 +40,7 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
                         emotionIcon={movie.emotionIcon}
                         emotionValue={movie.emotionValue}
                         starValue={movie.starValue}
+                        onClick={() => navigate("/movie")}
                     />
                 ))}
             </div>

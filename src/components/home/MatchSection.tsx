@@ -49,6 +49,7 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
                                     emotionIcon={poster.emotionIcon}
                                     emotionValue={poster.emotionValue}
                                     starValue={poster.starValue}
+                                    onClick={() => navigate("/movie")}
                                 />
                                 {idx < 2 && (
                                     <span className="text-white text-xl mx-2">
@@ -80,6 +81,7 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
                                 emotionValue={movie.emotionValue}
                                 starValue={movie.starValue}
                                 winnerWeek={movie.winnerWeek}
+                                onClick={() => navigate("/movie")}
                             />
                         ))}
                     </div>

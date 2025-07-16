@@ -95,6 +95,7 @@ const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
                                 emotionIcon={poster.emotionIcon}
                                 emotionValue={poster.emotionValue}
                                 starValue={poster.starValue}
+                                onClick={() => navigate("/movie")}
                             />
                         ))}
                     </div>

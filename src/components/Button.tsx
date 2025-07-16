@@ -32,11 +32,16 @@ const Button: React.FC<ButtonProps> = ({
         white: "bg-white hover:bg-white/80",
     };
 
+    const textClass =
+        textColor && textColors[textColor] ? textColors[textColor] : "";
+    const bgClass =
+        buttonColor && baseColors[buttonColor] ? baseColors[buttonColor] : "";
+
     return (
         <button
             onClick={onClick}
             disabled={disabled}
-            className={`rounded-full px-4 py-4 text-xs font-semibold transition duration-200 shadow-md flex items-center justify-center gap-2 ${textColor && textColors[textColor] ? textColors[textColor] : ""} ${buttonColor && baseColors[buttonColor] ? baseColors[buttonColor] : ""} ${disabled ? "opacity-50" : ""} ${className}`}
+            className={`rounded-full px-4 py-4 text-xs font-semibold transition duration-200 shadow-md flex items-center justify-center gap-2 ${textClass} ${bgClass} ${disabled ? "opacity-50" : ""} ${className}`}
         >
             {prefixIcon && (
                 <img src={prefixIcon} alt="icon" className="w-4 h-4" />

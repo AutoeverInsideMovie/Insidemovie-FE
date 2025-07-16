@@ -46,6 +46,7 @@ const BoxOfficeSection: React.FC<CustomBoxOfficeSectionProps> = ({
                         posterName={movie.posterName}
                         starValue={movie.starValue}
                         emotions={movie.emotions}
+                        onClick={() => navigate("/movie")}
                     />
                 ))}
             </div>

@@ -4,20 +4,24 @@ pipeline {
     options {
         skipDefaultCheckout(true)
     }
-    
     environment {
         IMAGE_NAME = 'ssafysong/inside-movie'
         TAG = 'fe'
         CONTAINER_NAME = 'frontend'
         DOCKER_CREDENTIALS_ID = 'movie'
-        PEM_FILE = "/var/jenkins_home/.ssh/book-key.pem"
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Docker Build') {
             steps {
                 script {
-                    sh "docker build -t ${IMAGE_NAME}:${TAG} ."
+                    sh "docker build --no-cache -t ${IMAGE_NAME}:${TAG} ."
                 }
             }
         }
@@ -41,12 +45,11 @@ pipeline {
             steps {
                 sshagent(['movie_SSH']) {
                     sh """
-                    ssh -o StrictHostKeyChecking=no ubuntu@52.79.175.149 "
-                        docker pull ${IMAGE_NAME}:${TAG} &&
-                        docker stop ${CONTAINER_NAME} || true &&
-                        docker rm ${CONTAINER_NAME} || true &&
-                        docker run -d -p 5173:80 --name frontend ${IMAGE_NAME}:${TAG}
-                    "
+                    ssh -o StrictHostKeyChecking=no ubuntu@52.79.175.149 '
+                        docker-compose pull
+                        docker-compose down &&
+                        docker-compose up -d
+                    '
                     """
                 }
             }

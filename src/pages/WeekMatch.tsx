@@ -5,8 +5,10 @@ import Button from "../components/Button";
 import type { Winner } from "../interfaces/Winner";
 import axios from "axios";
 import WinnerItem from "../components/WinnerItem";
+import { useNavigate } from "react-router-dom";
 
 const WeekMatch: React.FC = () => {
+    const navigate = useNavigate();
     const [movieList, setMovieList] = useState<Winner[]>([]);
 
     useEffect(() => {
@@ -40,6 +42,7 @@ const WeekMatch: React.FC = () => {
                                             emotionIcon={poster.emotionIcon}
                                             emotionValue={poster.emotionValue}
                                             starValue={poster.starValue}
+                                            onClick={() => navigate("/movie")}
                                         />
                                         {idx < 2 && (
                                             <span className="text-white text-xl mx-2">
@@ -71,6 +74,7 @@ const WeekMatch: React.FC = () => {
                                         emotionValue={movie.emotionValue}
                                         starValue={movie.starValue}
                                         winnerWeek={movie.winnerWeek}
+                                        onClick={() => navigate("/movie")}
                                     />
                                 ))}
                             </div>

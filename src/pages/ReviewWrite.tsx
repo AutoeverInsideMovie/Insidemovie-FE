@@ -23,6 +23,7 @@ interface Movie {
     genre: string;
     releaseYear: string;
 }
+
 const ReviewWrite: React.FC = () => {
     const [movie, setMovie] = useState<Movie | null>(null);
 
@@ -135,7 +136,9 @@ const ReviewWrite: React.FC = () => {
                                         portalId="root-portal"
                                         ref={datePickerRef}
                                         selected={watchedAt}
-                                        onChange={(date) => setWatchedAt(date)}
+                                        onChange={(date: Date | null) =>
+                                            setWatchedAt(date)
+                                        }
                                         showYearDropdown
                                         showMonthDropdown
                                         dropdownMode="select"

@@ -6,6 +6,7 @@ import BackgroundBubble from "@assets/background_bubble.svg?react";
 import SearchIcon from "@assets/search.svg?react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Logo from "@assets/insidemovie_white.png";
 
 // TODO : 에러메시지 반환 결과 출력 방법 논의 후 적용
 
@@ -89,11 +90,7 @@ const Signup: React.FC = () => {
                 {/* Left side with logo and background */}
                 <div className="w-1/2 bg-cover bg-center relative flex items-center justify-center">
                     <BackgroundBubble className="absolute h-fit w-fit" />
-                    <img
-                        src="/src/assets/insidemovie_white.png"
-                        alt="INSIDE MOVIE"
-                        className="w-56 z-10"
-                    />
+                    <img src={Logo} alt="INSIDE MOVIE" className="w-56 z-10" />
                 </div>
 
                 {/* Right side with signup form */}
