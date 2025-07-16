@@ -4,19 +4,27 @@ pipeline {
     options {
         skipDefaultCheckout(true)
     }
-    
+
     environment {
         IMAGE_NAME = 'ssafysong/inside-movie'
         TAG = 'fe'
         CONTAINER_NAME = 'frontend'
         DOCKER_CREDENTIALS_ID = 'movie'
-        PEM_FILE = "/var/jenkins_home/.ssh/book-key.pem"
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
         stage('Docker Build') {
             steps {
                 script {
+                    sh 'pwd'          // 현재 작업 디렉터리 출력
+                    sh 'ls -al'       // 현재 디렉터리 파일 목록 확인
+                    sh 'ls -al ./Dockerfile'  // Dockerfile 존재 확인
                     sh "docker build --no-cache -t ${IMAGE_NAME}:${TAG} ."
                 }
             }
