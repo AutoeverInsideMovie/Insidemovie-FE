@@ -1,9 +1,8 @@
 FROM node:24-alpine AS build
 WORKDIR /movie
-COPY package*.json ./
 
-RUN npm install
 COPY . .
+RUN npm install
 
 RUN npm run build
 
