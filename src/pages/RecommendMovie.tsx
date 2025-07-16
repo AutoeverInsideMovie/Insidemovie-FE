@@ -4,8 +4,10 @@ import type { Movie } from "../interfaces/Movie";
 import SamplePoster from "@assets/sample_poster.png";
 import Poster from "../components/Poster";
 import Tag from "../components/Tag";
+import { useNavigate } from "react-router-dom";
 
 const RecommendMovie: React.FC = () => {
+    const navigate = useNavigate();
     const [movieList, setMovieList] = useState<Movie[]>([]);
     const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
     const tagList = ["hello", "ㄷㄷ", "태그", "스포츠", "안녕"];
@@ -58,6 +60,7 @@ const RecommendMovie: React.FC = () => {
                                     emotionIcon={poster.emotionIcon}
                                     emotionValue={poster.emotionValue}
                                     starValue={poster.starValue}
+                                    onClick={() => navigate("/movie")}
                                 />
                             ))}
                         </div>

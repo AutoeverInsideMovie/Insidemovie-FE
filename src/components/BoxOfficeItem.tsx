@@ -6,7 +6,18 @@ import angryIcon from "@assets/character/angry_icon.png";
 import fearIcon from "@assets/character/fear_icon.png";
 import disgustIcon from "@assets/character/disgust_icon.png";
 import bingbongIcon from "@assets/character/bingbong_icon.png";
-import type { BoxOffice } from "../interfaces/BoxOffice";
+
+interface BoxOfficeItemProps {
+    rank: number;
+    posterImg: string;
+    posterName: string;
+    starValue: number;
+    emotions: {
+        icon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
+        value: number;
+    }[];
+    onClick?: () => void;
+}
 
 const emotionMap = {
     joy: joyIcon,
@@ -26,15 +37,16 @@ const emotionColorMap = {
     bingbong: "bg-bingbong_pink",
 };
 
-const BoxOfficeItem: React.FC<BoxOffice> = ({
+const BoxOfficeItem: React.FC<BoxOfficeItemProps> = ({
     rank,
     posterImg,
     posterName,
     starValue,
     emotions,
+    onClick,
 }) => {
     return (
-        <div className="flex gap-3 mb-2">
+        <div className="flex gap-3 mb-2" onClick={onClick}>
             <div className="w-[80px] text-white text-4xl font-bold text-end">
                 {rank}
             </div>

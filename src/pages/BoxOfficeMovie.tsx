@@ -4,8 +4,10 @@ import axios from "axios";
 import type { BoxOffice } from "../interfaces/BoxOffice";
 import Poster from "@assets/sample_poster.png";
 import BoxOfficeItem from "../components/BoxOfficeItem";
+import { useNavigate } from "react-router-dom";
 
 const BoxOfficeMovie: React.FC = () => {
+    const navigate = useNavigate();
     const [movieList, setMovieList] = useState<BoxOffice[]>([]);
 
     useEffect(() => {
@@ -36,6 +38,7 @@ const BoxOfficeMovie: React.FC = () => {
                                     posterName={movie.posterName}
                                     starValue={movie.starValue}
                                     emotions={movie.emotions}
+                                    onClick={() => navigate("/movie")}
                                 />
                             ))}
                         </div>

@@ -2,6 +2,7 @@ FROM node:24-alpine AS build
 WORKDIR /movie
 COPY . .
 RUN npm install
+
 RUN npm run build
 
 FROM nginx:alpine
