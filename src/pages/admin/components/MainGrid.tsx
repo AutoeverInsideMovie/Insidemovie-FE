@@ -12,39 +12,37 @@ import PageViewsBarChart from "./PageViewsBarChart";
 import SessionsChart from "./SessionsChart";
 import StatCard, { StatCardProps } from "./StatCard";
 
+const latestOneYearUsers: number[] = [
+    6, 100, 150, 300, 270, 360, 450, 600, 800, 750, 1200, 1350,
+];
+const latestOneYearReviews: number[] = [
+    10, 10, 10, 50, 150, 170, 180, 300, 450, 600, 750, 1000,
+];
+const latestOneYearReports: number[] = [
+    1, 1, 2, 4, 5, 20, 30, 40, 50, 60, 70, 80,
+];
+
 const data: StatCardProps[] = [
     {
         title: "Users",
-        value: "3.2k",
-        interval: "Last 30 days",
+        value: String(latestOneYearUsers[11]),
+        interval: "Last 12 months",
         trend: "up",
-        data: [
-            24, 100, 200, 220, 240, 240, 240, 260, 280, 300, 320, 340, 340, 340,
-            360, 360, 380, 380, 380, 400, 400, 420, 440, 460, 460, 480, 600,
-            640, 880, 920,
-        ],
+        data: latestOneYearUsers,
     },
     {
         title: "Reviews",
-        value: "325",
-        interval: "Last 30 days",
+        value: String(latestOneYearReviews[11]),
+        interval: "Last 12 months",
         trend: "neutral",
-        data: [
-            220, 300, 360, 380, 400, 450, 480, 500, 520, 600, 620, 660, 720,
-            740, 760, 780, 800, 820, 820, 840, 840, 900, 900, 920, 970, 1050,
-            1080, 1130, 1250, 1640,
-        ],
+        data: latestOneYearReviews,
     },
     {
         title: "Reports",
-        value: "51",
-        interval: "Last 30 days",
+        value: String(latestOneYearReports[11]),
+        interval: "Last 12 months",
         trend: "down",
-        data: [
-            400, 410, 420, 430, 500, 510, 510, 510, 510, 510, 510, 520, 520,
-            520, 520, 520, 520, 530, 530, 530, 530, 530, 530, 530, 530, 600,
-            610, 610, 620, 730,
-        ],
+        data: latestOneYearReports,
     },
 ];
 
@@ -62,7 +60,7 @@ export default function MainGrid() {
                 sx={{ mb: (theme) => theme.spacing(2) }}
             >
                 {data.map((card, index) => (
-                    <Grid key={index} size={{ xs: 12, sm: 6, lg: 4 }}>
+                    <Grid key={index} size={{ xs: 12, sm: 4, lg: 4 }}>
                         <StatCard {...card} />
                     </Grid>
                 ))}
@@ -74,7 +72,7 @@ export default function MainGrid() {
                 </Grid>
             </Grid>
             <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
-                Details
+                Reports
             </Typography>
             <Grid container spacing={2} columns={12}>
                 <Grid size={{ xs: 12, lg: 9 }}>

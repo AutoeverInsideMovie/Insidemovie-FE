@@ -16,15 +16,16 @@ import HelpRoundedIcon from "@mui/icons-material/HelpRounded";
 const mainListItems = [
     { text: "Home", icon: <HomeRoundedIcon /> },
     { text: "Members", icon: <PeopleRoundedIcon /> },
-    { text: "Analytics", icon: <AnalyticsRoundedIcon /> },
+    // { text: "Analytics", icon: <AnalyticsRoundedIcon /> },
     { text: "Reports", icon: <AssignmentRoundedIcon /> },
+    { text: "Settings", icon: <SettingsRoundedIcon /> },
 ];
 
-const secondaryListItems = [
-    { text: "Settings", icon: <SettingsRoundedIcon /> },
-    { text: "About", icon: <InfoRoundedIcon /> },
-    { text: "Feedback", icon: <HelpRoundedIcon /> },
-];
+// const secondaryListItems = [
+//     { text: "Settings", icon: <SettingsRoundedIcon /> },
+//     { text: "About", icon: <InfoRoundedIcon /> },
+//     { text: "Feedback", icon: <HelpRoundedIcon /> },
+// ];
 
 export default function MenuContent() {
     return (
@@ -43,7 +44,7 @@ export default function MenuContent() {
                     </ListItem>
                 ))}
             </List>
-            <List dense>
+            {/* <List dense>
                 {secondaryListItems.map((item, index) => (
                     <ListItem
                         key={index}
@@ -56,7 +57,7 @@ export default function MenuContent() {
                         </ListItemButton>
                     </ListItem>
                 ))}
-            </List>
+            </List> */}
         </Stack>
     );
 }
