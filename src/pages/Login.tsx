@@ -4,6 +4,8 @@ import Button from "../components/Button";
 import TransparentBox from "../components/TransparentBox";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Logo from "@assets/insidemovie_white.png";
+import KakaoIcon from "@assets/kakao.png";
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
@@ -17,7 +19,7 @@ const Login: React.FC = () => {
                 padding="px-8 py-10"
             >
                 <img
-                    src="/src/assets/insidemovie_white.png"
+                    src={Logo}
                     alt="INSIDE MOVIE"
                     className="w-20 mx-auto mb-10"
                 />
@@ -26,7 +28,7 @@ const Login: React.FC = () => {
                     text="카카오 로그인"
                     textColor="black"
                     buttonColor="kakao"
-                    prefixIcon="/src/assets/kakao.png"
+                    prefixIcon={KakaoIcon}
                     className="w-full mb-4"
                 />
 
