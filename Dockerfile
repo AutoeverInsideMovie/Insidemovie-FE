@@ -1,7 +1,7 @@
 FROM node:24-alpine AS build
 WORKDIR /movie
 COPY package.json package-lock.json ./
-RUN npm install
+RUN rm -rf node_modules package-lock.json && npm install
 COPY . .
 RUN npm run build
 
