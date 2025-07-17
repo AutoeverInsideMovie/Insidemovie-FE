@@ -37,15 +37,15 @@ const ITEMS: TreeViewBaseItem<ExtendedTreeItemProps>[] = [
         id: "1",
         label: "InsideMovie",
         children: [
-            { id: "1.1", label: "Home", color: "green" },
-            { id: "1.2", label: "Recommand", color: "green" },
-            { id: "1.3", label: "Boxoffice", color: "green" },
-            { id: "1.4", label: "weekmatch", color: "green" },
+            { id: "1.1", label: "홈", color: "green" },
+            { id: "1.2", label: "추천 영화", color: "green" },
+            { id: "1.3", label: "박스오피스", color: "green" },
+            { id: "1.4", label: "주간 대결 영화", color: "green" },
         ],
     },
     {
         id: "2",
-        label: "Website",
+        label: "외부 사이트",
         children: [
             {
                 id: "2.1",
@@ -224,7 +224,7 @@ export default function CustomizedTreeView() {
         >
             <CardContent>
                 <Typography component="h2" variant="subtitle2">
-                    Quick Link
+                    바로가기
                 </Typography>
                 <RichTreeView
                     items={ITEMS}

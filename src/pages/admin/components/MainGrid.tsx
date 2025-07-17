@@ -11,38 +11,44 @@ import HighlightedCard from "./HighlightedCard";
 import PageViewsBarChart from "./PageViewsBarChart";
 import SessionsChart from "./SessionsChart";
 import StatCard, { StatCardProps } from "./StatCard";
-
-const latestOneYearUsers: number[] = [
-    6, 100, 150, 300, 270, 360, 450, 600, 800, 750, 1200, 1350,
+import Card from "@mui/material/Card";
+// 더미데이터
+const latestOneMonthUsers: number[] = [
+    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1350,
+    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1350,
+    1000, 1100, 1150, 1100, 1200, 1250,
 ];
-const latestOneYearReviews: number[] = [
-    10, 10, 10, 50, 150, 170, 180, 300, 450, 600, 750, 1000,
+const latestOneMonthReviews: number[] = [
+    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1800,
+    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1800,
+    1000, 1100, 1150, 1100, 1200, 1250,
 ];
-const latestOneYearReports: number[] = [
-    1, 1, 2, 4, 5, 20, 30, 40, 50, 60, 70, 80,
+const latestOneMonthReports: number[] = [
+    550, 560, 570, 580, 600, 670, 680, 690, 700, 710, 720, 730, 550, 560, 570,
+    580, 600, 670, 680, 690, 700, 710, 720, 730, 550, 560, 570, 580, 600, 670,
 ];
 
 const data: StatCardProps[] = [
     {
-        title: "Users",
-        value: String(latestOneYearUsers[11]),
-        interval: "Last 12 months",
+        title: "유저",
+        value: String(latestOneMonthUsers[29]),
+        interval: "지난 30일 일별 추이 (어제 기준)",
         trend: "up",
-        data: latestOneYearUsers,
+        data: latestOneMonthUsers,
     },
     {
-        title: "Reviews",
-        value: String(latestOneYearReviews[11]),
-        interval: "Last 12 months",
+        title: "리뷰",
+        value: String(latestOneMonthReviews[29]),
+        interval: "지난 30일 일별 추이 (어제 기준)",
         trend: "neutral",
-        data: latestOneYearReviews,
+        data: latestOneMonthReviews,
     },
     {
-        title: "Reports",
-        value: String(latestOneYearReports[11]),
-        interval: "Last 12 months",
+        title: "신고",
+        value: String(latestOneMonthReports[29]),
+        interval: "지난 30일 일별 추이 (어제 기준)",
         trend: "down",
-        data: latestOneYearReports,
+        data: latestOneMonthReports,
     },
 ];
 
@@ -51,8 +57,9 @@ export default function MainGrid() {
         <Box sx={{ width: "100%", maxWidth: { sm: "100%", md: "1700px" } }}>
             {/* cards */}
             <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
-                Overview
+                개요
             </Typography>
+
             <Grid
                 container
                 spacing={2}
@@ -72,7 +79,7 @@ export default function MainGrid() {
                 </Grid>
             </Grid>
             <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
-                Reports
+                신고 내역
             </Typography>
             <Grid container spacing={2} columns={12}>
                 <Grid size={{ xs: 12, lg: 9 }}>

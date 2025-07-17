@@ -7,6 +7,17 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import { LineChart } from "@mui/x-charts/LineChart";
 
+// 더미데이터
+const latestOneYearUsers: number[] = [
+    1000, 1500, 1200, 1700, 1300, 2000, 2400, 2200, 2600, 2800, 2500, 2600,
+];
+const latestOneYearReviews: number[] = [
+    500, 900, 700, 1400, 1100, 1700, 2300, 2000, 2600, 2900, 2300, 2400,
+];
+const latestOneYearReports: number[] = [
+    300, 900, 600, 1200, 1500, 1800, 2400, 2100, 2700, 3000, 1800, 1850,
+];
+
 function AreaGradient({ color, id }: { color: string; id: string }) {
     return (
         <defs>
@@ -18,24 +29,33 @@ function AreaGradient({ color, id }: { color: string; id: string }) {
     );
 }
 
-function getDaysInMonth(month: number, year: number) {
-    const date = new Date(year, month, 0);
-    const monthName = date.toLocaleDateString("en-US", {
-        month: "short",
-    });
-    const daysInMonth = date.getDate();
-    const days = [];
-    let i = 1;
-    while (days.length < daysInMonth) {
-        days.push(`${monthName} ${i}`);
-        i += 1;
-    }
-    return days;
-}
+function getLastYearFromLastMonth() {
+    // 지난달 기준 최근 12달 라벨링(ex. 25년 3월 기준, 24년 3월 ~ 25년 2월 추출)
+    const today: Date = new Date();
+    const lastMonthDate = new Date(today.getFullYear(), today.getMonth(), 0);
 
+    const year = lastMonthDate.getFullYear();
+    const month = lastMonthDate.getMonth(); // 0~11
+    const monthArray = [];
+    for (let i = 0; i < 12; i++) {
+        monthArray.push(i); // 월 배열
+    }
+
+    const months = monthArray
+        .map((i) => {
+            const d = new Date(year, month - i, 1); // 오늘 연/월부터 역순
+            return d.toLocaleDateString("ko-KR", {
+                year: "2-digit",
+                month: "long",
+            });
+        })
+        .reverse(); // 그래프에 나타내기 위해선 역순으로 된 배열을 반대로 써야함
+
+    return months;
+}
 export default function SessionsChart() {
     const theme = useTheme();
-    const data = getDaysInMonth(4, 2024);
+    const data = getLastYearFromLastMonth();
 
     const colorPalette = [
         theme.palette.primary.light,
@@ -47,7 +67,7 @@ export default function SessionsChart() {
         <Card variant="outlined" sx={{ width: "100%" }}>
             <CardContent>
                 <Typography component="h2" variant="subtitle2" gutterBottom>
-                    Last 30 days
+                    월별 추이
                 </Typography>
                 <Stack sx={{ justifyContent: "space-between" }}>
                     <Stack
@@ -67,7 +87,7 @@ export default function SessionsChart() {
                         variant="caption"
                         sx={{ color: "text.secondary" }}
                     >
-                        Sessions per day for the last 30 days
+                        지난 1년 전체 통계 (지난 달 기준)
                     </Typography>
                 </Stack>
                 <LineChart
@@ -83,78 +103,66 @@ export default function SessionsChart() {
                     yAxis={[{ width: 50 }]}
                     series={[
                         {
-                            id: "direct",
-                            label: "Direct",
+                            id: "users",
+                            label: "유저 수",
                             showMark: false,
                             curve: "linear",
                             stack: "total",
                             area: true,
                             stackOrder: "ascending",
-                            data: [
-                                300, 900, 600, 1200, 1500, 1800, 2400, 2100,
-                                2700, 3000, 1800, 3300, 3600, 3900, 4200, 4500,
-                                3900, 4800, 5100, 5400, 4800, 5700, 6000, 6300,
-                                6600, 6900, 7200, 7500, 7800, 8100,
-                            ],
+                            data: latestOneYearUsers,
+                            color: theme.palette.success.main,
                         },
                         {
-                            id: "referral",
-                            label: "Referral",
+                            id: "reviews",
+                            label: "리뷰 수",
                             showMark: false,
                             curve: "linear",
                             stack: "total",
                             area: true,
                             stackOrder: "ascending",
-                            data: [
-                                500, 900, 700, 1400, 1100, 1700, 2300, 2000,
-                                2600, 2900, 2300, 3200, 3500, 3800, 4100, 4400,
-                                2900, 4700, 5000, 5300, 5600, 5900, 6200, 6500,
-                                5600, 6800, 7100, 7400, 7700, 8000,
-                            ],
+                            data: latestOneYearReviews,
+                            color: theme.palette.grey[400],
                         },
                         {
-                            id: "organic",
-                            label: "Organic",
+                            id: "reports",
+                            label: "신고 수",
                             showMark: false,
                             curve: "linear",
                             stack: "total",
                             stackOrder: "ascending",
-                            data: [
-                                1000, 1500, 1200, 1700, 1300, 2000, 2400, 2200,
-                                2600, 2800, 2500, 3000, 3400, 3700, 3200, 3900,
-                                4100, 3500, 4300, 4500, 4000, 4700, 5000, 5200,
-                                4800, 5400, 5600, 5900, 6100, 6300,
-                            ],
+                            data: latestOneYearReports,
                             area: true,
+                            color: theme.palette.error.main,
                         },
                     ]}
                     height={250}
                     margin={{ left: 0, right: 20, top: 20, bottom: 0 }}
                     grid={{ horizontal: true }}
                     sx={{
-                        "& .MuiAreaElement-series-organic": {
-                            fill: "url('#organic')",
+                        "& .MuiAreaElement-series-users": {
+                            fill: "url(#users)",
                         },
-                        "& .MuiAreaElement-series-referral": {
-                            fill: "url('#referral')",
+                        "& .MuiAreaElement-series-reviews": {
+                            fill: "url('#reviews')",
                         },
-                        "& .MuiAreaElement-series-direct": {
-                            fill: "url('#direct')",
+                        "& .MuiAreaElement-series-reports": {
+                            fill: "url('#reports')",
                         },
                     }}
                     hideLegend
                 >
                     <AreaGradient
-                        color={theme.palette.primary.dark}
-                        id="organic"
+                        color={theme.palette.success.light}
+                        id="users"
                     />
                     <AreaGradient
-                        color={theme.palette.primary.main}
-                        id="referral"
+                        color={theme.palette.grey[400]}
+                        id="reviews"
                     />
                     <AreaGradient
-                        color={theme.palette.primary.light}
-                        id="direct"
+                        color={theme.palette.error.light}
+                        id="reports"
                     />
                 </LineChart>
             </CardContent>

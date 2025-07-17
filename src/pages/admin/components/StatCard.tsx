@@ -10,14 +10,20 @@ import { SparkLineChart } from "@mui/x-charts/SparkLineChart";
 import { areaElementClasses } from "@mui/x-charts/LineChart";
 import calcPercentChange from "../../../services/calcPercentChange";
 
-const latestOneYearUsers: number[] = [
+// 더미데이터
+const latestOneMonthUsers: number[] = [
     1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1350,
+    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1350,
+    1000, 1100, 1150, 1100, 1200, 1250,
 ];
-const latestOneYearReviews: number[] = [
+const latestOneMonthReviews: number[] = [
     1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1800,
+    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1800,
+    1000, 1100, 1150, 1100, 1200, 1250,
 ];
-const latestOneYearReports: number[] = [
-    550, 560, 570, 580, 600, 670, 680, 690, 700, 710, 720, 730,
+const latestOneMonthReports: number[] = [
+    550, 560, 570, 580, 600, 670, 680, 690, 700, 710, 720, 730, 550, 560, 570,
+    580, 600, 670, 680, 690, 700, 710, 720, 730, 550, 560, 570, 580, 600, 670,
 ];
 
 export type StatCardProps = {
@@ -28,27 +34,23 @@ export type StatCardProps = {
     data: number[];
 };
 
-function getLastOneYears() {
+function getLastMonthFromYesterday() {
     const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth(); // 0~11
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1); // 어제 날짜
 
-    const monthArray = [];
-    for (let i = 0; i < 12; i++) {
-        monthArray.push(i); // 월 배열
+    const days = [];
+    for (let i = 29; i >= 0; i--) {
+        const d = new Date(yesterday);
+        d.setDate(yesterday.getDate() - i);
+        const label = d.toLocaleDateString("ko-KR", {
+            month: "long",
+            day: "numeric",
+        });
+        days.push(label);
     }
 
-    const months = monthArray
-        .map((i) => {
-            const d = new Date(year, month - i, 1); // 오늘 연/월부터 역순
-            return d.toLocaleDateString("ko-KR", {
-                year: "2-digit",
-                month: "long",
-            });
-        })
-        .reverse(); // 그래프에 나타내기 위해선 역순으로 된 배열을 반대로 써야함
-
-    return months;
+    return days;
 }
 
 function AreaGradient({ color, id }: { color: string; id: string }) {
@@ -70,7 +72,7 @@ export default function StatCard({
     data,
 }: StatCardProps) {
     const theme = useTheme();
-    const latestOneYear = getLastOneYears();
+    const latestOneMonth = getLastMonthFromYesterday();
 
     const trendColors = {
         up:
@@ -98,21 +100,21 @@ export default function StatCard({
 
     // (현재 월 - 전월 값) / 전월 값 * 100
     const userPercentage = calcPercentChange(
-        latestOneYearUsers[11],
-        latestOneYearUsers[0],
+        latestOneMonthUsers[29],
+        latestOneMonthUsers[0],
     );
     const reviewNum = calcPercentChange(
-        latestOneYearReviews[11],
-        latestOneYearReviews[0],
+        latestOneMonthReviews[29],
+        latestOneMonthReviews[0],
     );
     const reportNum = calcPercentChange(
-        latestOneYearReports[11],
-        latestOneYearReports[0],
+        latestOneMonthReports[29],
+        latestOneMonthReports[0],
     );
     const trendValues = {
-        up: String(userPercentage) + "%",
-        neutral: String(reviewNum) + "%",
-        down: String(reportNum) + "%",
+        up: "+" + String(userPercentage) + "%",
+        neutral: "+" + String(reviewNum) + "%",
+        down: "+" + String(reportNum) + "%",
     };
 
     return (
@@ -121,6 +123,7 @@ export default function StatCard({
                 <Typography component="h2" variant="subtitle2" gutterBottom>
                     {title}
                 </Typography>
+
                 <Stack
                     direction="column"
                     sx={{
@@ -162,7 +165,7 @@ export default function StatCard({
                             showTooltip
                             xAxis={{
                                 scaleType: "band",
-                                data: latestOneYear, // Use the correct property 'data' for xAxis
+                                data: latestOneMonth, // Use the correct property 'data' for xAxis
                             }}
                             sx={{
                                 [`& .${areaElementClasses.root}`]: {
