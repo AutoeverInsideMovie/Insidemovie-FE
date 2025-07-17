@@ -1,16 +1,57 @@
 import * as React from "react";
+import { useState } from "react";
 import InputField from "../components/InputField";
 import Button from "../components/Button";
 import TransparentBox from "../components/TransparentBox";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Logo from "@assets/insidemovie_white.png";
 import KakaoIcon from "@assets/kakao.png";
+import { memberApi } from "../api/memberApi";
+import { ConfirmDialog } from "../components/ConfirmDialog";
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+    const handleConfirm = () => {
+        console.log("확인 클릭됨: 실제 로직 수행");
+        setIsDialogOpen(false);
+    };
+
+    const handleCancel = () => {
+        console.log("취소 클릭됨: 모달 닫기");
+        setIsDialogOpen(false);
+    };
+
+    const handleLogin = async () => {
+        try {
+            const response = await memberApi().login({ email, password });
+            const { accessToken, refreshToken } = response.data.data;
+
+            if (accessToken && refreshToken) {
+                sessionStorage.setItem("accessToken", accessToken);
+                sessionStorage.setItem("refreshToken", refreshToken);
+
+                navigate("/");
+            } else throw new Error("토큰이 존재하지 않습니다.");
+        } catch (error) {
+            alert(error.response?.data?.message);
+            setIsDialogOpen(true);
+        }
+    };
+
+    const handleKakaoLogin = async () => {
+        try {
+            const clientId = import.meta.env.VITE_KAKAO_REST_API_KEY;
+            const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
+            window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
+        } catch (error) {
+            alert(error.response?.data?.message);
+            setIsDialogOpen(true);
+        }
+    };
 
     return (
         <div className="min-h-screen flex items-center justify-center">
@@ -30,6 +71,7 @@ const Login: React.FC = () => {
                     buttonColor="kakao"
                     prefixIcon={KakaoIcon}
                     className="w-full mb-4"
+                    onClick={handleKakaoLogin}
                 />
 
                 <div className="flex items-center gap-4 text-white text-xs mb-4 opacity-70">
@@ -66,6 +108,7 @@ const Login: React.FC = () => {
                     textColor="white"
                     buttonColor="default"
                     className="w-full"
+                    onClick={handleLogin}
                 />
 
                 <p className="text-white text-center text-xs mt-6 opacity-80">
@@ -78,6 +121,14 @@ const Login: React.FC = () => {
                     </span>
                 </p>
             </TransparentBox>
+            <ConfirmDialog
+                isOpen={isDialogOpen}
+                title="정말 삭제하시겠습니까?"
+                message="삭제 후에는 복구할 수 없습니다."
+                onConfirm={handleConfirm}
+                onCancel={handleCancel}
+                isRedButton
+            />
         </div>
     );
 };

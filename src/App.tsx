@@ -13,11 +13,14 @@ import ReportPage from "./pages/admin/pages/ReportPage";
 import MemberPage from "./pages/admin/pages/MemberPage";
 import SettingsPage from "./pages/admin/pages/SettingsPage";
 import ReviewWrite from "./pages/ReviewWrite";
+import KakaoRedirect from "./pages/KakaoRedirect";
 
 const AppContent: React.FC = () => {
     const location = useLocation();
     const hideHeader =
-        location.pathname === "/login" || location.pathname === "/signup";
+        location.pathname === "/login" ||
+        location.pathname === "/signup" ||
+        location.pathname === "/admin";
 
     return (
         <>
@@ -35,6 +38,10 @@ const AppContent: React.FC = () => {
                 <Route path="/admin/member" element={<MemberPage />} />
                 <Route path="/admin/settings" element={<SettingsPage />} />
                 <Route path="/review-write" element={<ReviewWrite />} />
+                <Route
+                    path="/login/oauth2/code/kakao"
+                    element={<KakaoRedirect />}
+                />
             </Routes>
         </>
     );

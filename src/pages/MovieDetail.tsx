@@ -12,8 +12,8 @@ import Unlike from "@assets/unlike.svg?react";
 import Edit from "@assets/edit.svg?react";
 import Delete from "@assets/delete.svg?react";
 import axios from "axios";
-import type { MovieOne } from "../interfaces/MovieOne";
-import type { Review } from "../interfaces/Review";
+import type { MovieOne } from "../interfaces/movieOne";
+import type { Review } from "../interfaces/review";
 import Button from "../components/Button";
 import ReviewItem from "../components/ReviewItem";
 import { useNavigate } from "react-router-dom";
@@ -99,7 +99,7 @@ const MovieDetail: React.FC = () => {
 
     return (
         <div className="flex justify-center">
-            <div className="max-w-screen-lg w-full pt-10">
+            <div className="max-w-screen-lg w-full pt-20">
                 {/* 상단: 포스터 + 정보 */}
                 <div className="flex gap-10 text-white">
                     <img
