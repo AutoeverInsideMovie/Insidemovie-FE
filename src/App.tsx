@@ -9,6 +9,7 @@ import RecommendMovie from "./pages/RecommendMovie";
 import WeekMatch from "./pages/WeekMatch";
 import MovieDetail from "./pages/MovieDetail";
 import ReviewWrite from "./pages/ReviewWrite";
+import KakaoRedirect from "./pages/KakaoRedirect";
 
 const AppContent: React.FC = () => {
     const location = useLocation();
@@ -27,6 +28,10 @@ const AppContent: React.FC = () => {
                 <Route path="/weekmatch" element={<WeekMatch />} />
                 <Route path="/movie" element={<MovieDetail />} />
                 <Route path="/review-write" element={<ReviewWrite />} />
+                <Route
+                    path="/login/oauth2/code/kakao"
+                    element={<KakaoRedirect />}
+                />
             </Routes>
         </>
     );

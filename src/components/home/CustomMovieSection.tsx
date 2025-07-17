@@ -1,6 +1,6 @@
 import * as React from "react";
 import Poster from "../Poster";
-import type { Movie } from "../../interfaces/Movie";
+import type { Movie } from "../../interfaces/movie";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import SamplePoster from "@assets/sample_poster.png";

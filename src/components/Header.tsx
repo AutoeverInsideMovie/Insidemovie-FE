@@ -2,6 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Logo from "@assets/insidemovie_white.png";
 import Button from "./Button";
+import { memberApi } from "../api/memberApi";
+import JoyImg from "@assets/profile/joy_profile.png";
+import SadImg from "@assets/profile/sad_profile.png";
+import AngryImg from "@assets/profile/angry_profile.png";
+import FearImg from "@assets/profile/fear_profile.png";
+import DisgustImg from "@assets/profile/disgust_profile.png";
 
 const Header: React.FC = () => {
     const navigate = useNavigate();
@@ -10,6 +16,8 @@ const Header: React.FC = () => {
     const isRecommend = location.pathname === "/recommend";
     const isWeekMatch = location.pathname === "/weekmatch";
     const [scrolled, setScrolled] = useState(false);
+    const [nickname, setNickname] = useState<string | null>(null);
+    const [userImg, setUserImg] = useState<string>("");
 
     useEffect(() => {
         const handleScroll = () => {
@@ -17,6 +25,23 @@ const Header: React.FC = () => {
         };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+    console.log("nickname", nickname);
+    useEffect(() => {
+        (async () => {
+            const response = await memberApi().profile();
+            setNickname(response.data.data.nickname);
+            console.log("nickname", nickname);
+            const emotion = response.data.data.refEmotions as string; // adjust key if necessary
+            const emotionMap: Record<string, string> = {
+                joy: JoyImg,
+                sad: SadImg,
+                angry: AngryImg,
+                fear: FearImg,
+                disgust: DisgustImg,
+            };
+            setUserImg(emotionMap[emotion] || "");
+        })();
     }, []);
 
     return (
@@ -67,13 +92,22 @@ const Header: React.FC = () => {
                             </a>
                         </nav>
                     </div>
-                    <Button
-                        text={"로그인"}
-                        textColor="white"
-                        buttonColor="transparent"
-                        onClick={() => navigate("/login")}
-                        className="text-sm font-extralight"
-                    />
+                    {nickname ? (
+                        <img
+                            src={userImg}
+                            alt="Profile"
+                            className="h-10 w-10 rounded-full cursor-pointer"
+                            onClick={() => navigate("/login")}
+                        />
+                    ) : (
+                        <Button
+                            text="로그인"
+                            textColor="white"
+                            buttonColor="transparent"
+                            onClick={() => navigate("/login")}
+                            className="text-sm font-extralight"
+                        />
+                    )}
                 </div>
             </header>
             <div className="h-20" />

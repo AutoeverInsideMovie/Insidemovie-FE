@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import type { BoxOffice } from "../interfaces/BoxOffice";
+import type { BoxOffice } from "../interfaces/boxOffice";
 import Poster from "@assets/sample_poster.png";
 import BoxOfficeItem from "../components/BoxOfficeItem";
 import { useNavigate } from "react-router-dom";

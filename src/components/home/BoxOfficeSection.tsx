@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import BoxOfficeItem from "../BoxOfficeItem";
 import SamplePoster from "@assets/sample_poster.png";
-import type { BoxOffice } from "../../interfaces/BoxOffice";
+import type { BoxOffice } from "../../interfaces/boxOffice";
 import { useNavigate } from "react-router-dom";
 
 interface CustomBoxOfficeSectionProps {

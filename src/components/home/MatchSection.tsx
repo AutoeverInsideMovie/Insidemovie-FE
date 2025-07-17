@@ -2,7 +2,7 @@ import * as React from "react";
 import Poster from "../Poster";
 import ArrowRight from "@assets/arrow_right.svg?react";
 import { useEffect, useState } from "react";
-import type { Winner } from "../../interfaces/Winner";
+import type { Winner } from "../../interfaces/winner";
 import axios from "axios";
 import SamplePoster from "@assets/sample_poster.png";
 import WinnerItem from "../WinnerItem";

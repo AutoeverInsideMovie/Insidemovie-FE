@@ -3,7 +3,7 @@ import ArrowRight from "@assets/arrow_right.svg?react";
 import Poster from "../Poster";
 import Tag from "../Tag";
 import { useEffect, useState } from "react";
-import type { Movie } from "../../interfaces/Movie";
+import type { Movie } from "../../interfaces/movie";
 import axios from "axios";
 import SamplePoster from "@assets/sample_poster.png";
 import { useNavigate } from "react-router-dom";

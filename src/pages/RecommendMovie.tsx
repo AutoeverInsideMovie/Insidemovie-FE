@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import type { Movie } from "../interfaces/Movie";
+import type { Movie } from "../interfaces/movie";
 import SamplePoster from "@assets/sample_poster.png";
 import Poster from "../components/Poster";
 import Tag from "../components/Tag";
