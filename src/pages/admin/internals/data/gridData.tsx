@@ -180,7 +180,7 @@ export const rows: GridRowsProp = [
     {
         id: 1,
         status: "APPROVED",
-        content: "에라이ㅋㅋㅋ 감독 접어라 쓰레기 영화",
+        content: "(욕설이 난무하는 리뷰)",
         type: "INAPPROPRIATE_LANGUAGE",
         reporter: "선량한평론가",
         reviewer: "영화가싫다",
@@ -189,7 +189,7 @@ export const rows: GridRowsProp = [
     {
         id: 2,
         status: "APPROVED",
-        content: "성적인 영화가 좋아요",
+        content: "(성희롱을 포함한 리뷰)",
         type: "SEXUAL_CONTENT",
         reporter: "111111111",
         reviewer: "닉네임을입력하세요",
@@ -198,7 +198,7 @@ export const rows: GridRowsProp = [
     {
         id: 3,
         status: "REJECTED",
-        content: "내 취향이랑은 안 맞는 듯",
+        content: "(무례하지 않은 무고한 리뷰)",
         type: "RUDE_BEHAVIOR",
         reporter: "네다음영알못",
         reviewer: "영화는내인생",
@@ -207,7 +207,7 @@ export const rows: GridRowsProp = [
     {
         id: 4,
         status: "APPROVED",
-        content: "이 영화 좋아하는 사람은 머리가 어떻게 됨?",
+        content: "(무례한 발언을 하는 리뷰)",
         type: "RUDE_BEHAVIOR",
         reporter: "신고가좋아",
         reviewer: "네다음영알못",
@@ -216,7 +216,7 @@ export const rows: GridRowsProp = [
     {
         id: 5,
         status: "APPROVED",
-        content: "@@>>히어로즈 오브 더 스톰 지금 다운로드<<@@",
+        content: "(리뷰 공간에 적힌 광고성 글)",
         type: "ADVERTISEMENT",
         reporter: "선량한평론가",
         reviewer: "시공조아",
@@ -226,7 +226,7 @@ export const rows: GridRowsProp = [
     {
         id: 6,
         status: "APPROVED",
-        content: "절름발이가 범인임",
+        content: "절름발이가 범인",
         type: "SPOILER",
         reporter: "아직안봤는데",
         reviewer: "난이미봤는데",
@@ -235,7 +235,7 @@ export const rows: GridRowsProp = [
     {
         id: 7,
         status: "UNPROCESSED",
-        content: "ㄹ나ㅣ;ㅁㄹ;ㅓ",
+        content: "(아직 처리되지 않은 리뷰)",
         type: "RUDE_BEHAVIOR",
         reporter: "뭔데이건",
         reviewer: "1234",

@@ -6,10 +6,8 @@ import Drawer, { drawerClasses } from "@mui/material/Drawer";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
-import MenuButton from "./MenuButton";
+
 import MenuContent from "./MenuContent";
-import CardAlert from "./CardAlert";
 
 interface SideMenuMobileProps {
     open: boolean | undefined;
@@ -54,9 +52,6 @@ export default function SideMenuMobile({
                             Riley Carter
                         </Typography>
                     </Stack>
-                    <MenuButton showBadge>
-                        <NotificationsRoundedIcon />
-                    </MenuButton>
                 </Stack>
                 <Divider />
                 <Stack sx={{ flexGrow: 1 }}>
