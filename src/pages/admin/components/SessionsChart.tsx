@@ -77,17 +77,12 @@ export default function SessionsChart() {
                             alignItems: "center",
                             gap: 1,
                         }}
-                    >
-                        <Typography variant="h4" component="p">
-                            13,277
-                        </Typography>
-                        <Chip size="small" color="success" label="+35%" />
-                    </Stack>
+                    ></Stack>
                     <Typography
                         variant="caption"
                         sx={{ color: "text.secondary" }}
                     >
-                        지난 1년 전체 통계 (지난 달 기준)
+                        전체 통계 (지난 1년 - 지난 달)
                     </Typography>
                 </Stack>
                 <LineChart
@@ -96,7 +91,8 @@ export default function SessionsChart() {
                         {
                             scaleType: "point",
                             data,
-                            tickInterval: (index, i) => (i + 1) % 5 === 0,
+                            tickInterval: (months, i) =>
+                                (i + 1) % 2 === 0 && i !== 11,
                             height: 24,
                         },
                     ]}

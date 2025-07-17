@@ -90,7 +90,7 @@ interface CustomLabelProps {
 
 function CustomLabel({
     color,
-    expandable,
+    // expandable,
     children,
     ...other
 }: CustomLabelProps) {

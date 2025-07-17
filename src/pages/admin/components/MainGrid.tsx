@@ -11,7 +11,7 @@ import HighlightedCard from "./HighlightedCard";
 import PageViewsBarChart from "./PageViewsBarChart";
 import SessionsChart from "./SessionsChart";
 import StatCard, { StatCardProps } from "./StatCard";
-import Card from "@mui/material/Card";
+
 // 더미데이터
 const latestOneMonthUsers: number[] = [
     1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1350,
@@ -32,21 +32,21 @@ const data: StatCardProps[] = [
     {
         title: "유저",
         value: String(latestOneMonthUsers[29]),
-        interval: "지난 30일 일별 추이 (어제 기준)",
+        interval: "일별 추이 (지난 30일 - 어제)",
         trend: "up",
         data: latestOneMonthUsers,
     },
     {
         title: "리뷰",
         value: String(latestOneMonthReviews[29]),
-        interval: "지난 30일 일별 추이 (어제 기준)",
+        interval: "일별 추이 (지난 30일 - 어제)",
         trend: "neutral",
         data: latestOneMonthReviews,
     },
     {
         title: "신고",
         value: String(latestOneMonthReports[29]),
-        interval: "지난 30일 일별 추이 (어제 기준)",
+        interval: "일별 추이 (지난 30일 - 어제)",
         trend: "down",
         data: latestOneMonthReports,
     },
