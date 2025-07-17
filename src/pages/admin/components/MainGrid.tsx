@@ -82,17 +82,20 @@ export default function MainGrid() {
                 신고 내역
             </Typography>
             <Grid container spacing={2} columns={12}>
-                <Grid size={{ xs: 12, lg: 9 }}>
+                <Grid size={{ xs: 12, lg: 12 }}>
                     <CustomizedDataGrid />
                 </Grid>
-                <Grid size={{ xs: 12, lg: 3 }}>
-                    <Stack
-                        gap={2}
-                        direction={{ xs: "column", sm: "row", lg: "column" }}
-                    >
-                        <CustomizedTreeView />
-                    </Stack>
-                </Grid>
+            </Grid>
+            <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
+                둘러보기
+            </Typography>
+            <Grid size={{ xs: 12, lg: 12 }}>
+                <Stack
+                    gap={2}
+                    direction={{ xs: "column", sm: "row", lg: "column" }}
+                >
+                    <CustomizedTreeView />
+                </Stack>
             </Grid>
             <Copyright sx={{ my: 4 }} />
         </Box>

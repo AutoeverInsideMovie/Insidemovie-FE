@@ -169,13 +169,13 @@ export default function StatCard({
                             }}
                             sx={{
                                 [`& .${areaElementClasses.root}`]: {
-                                    fill: `url(#area-gradient-${value})`,
+                                    fill: `url(#area-gradient-${title})`,
                                 },
                             }}
                         >
                             <AreaGradient
                                 color={chartColor}
-                                id={`area-gradient-${value}`}
+                                id={`area-gradient-${title}`}
                             />
                         </SparkLineChart>
                     </Box>

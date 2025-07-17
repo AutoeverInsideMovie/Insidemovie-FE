@@ -10,6 +10,7 @@ import SelectContent from "./SelectContent";
 import MenuContent from "./MenuContent";
 // import CardAlert from './CardAlert';
 import OptionsMenu from "./OptionsMenu";
+import logo from "../../../assets/insidemovie_white_long.svg";
 
 const drawerWidth = 240;
 
@@ -40,9 +41,15 @@ export default function SideMenu() {
                     display: "flex",
                     mt: "calc(var(--template-frame-height, 0px) + 4px)",
                     p: 1.5,
+                    justifyContent: "center",
                 }}
             >
-                <SelectContent />
+                {/* <SelectContent /> */}
+                <img
+                    src={logo}
+                    alt="로고"
+                    style={{ height: "40px", objectFit: "contain" }}
+                />
             </Box>
             <Divider />
             <Box
