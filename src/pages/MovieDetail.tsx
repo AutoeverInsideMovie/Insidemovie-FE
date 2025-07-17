@@ -99,7 +99,7 @@ const MovieDetail: React.FC = () => {
 
     return (
         <div className="flex justify-center">
-            <div className="max-w-screen-lg w-full pt-10">
+            <div className="max-w-screen-lg w-full pt-20">
                 {/* 상단: 포스터 + 정보 */}
                 <div className="flex gap-10 text-white">
                     <img

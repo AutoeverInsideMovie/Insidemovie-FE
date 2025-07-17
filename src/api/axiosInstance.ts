@@ -5,7 +5,7 @@ const axiosInstance = axios.create({
     baseURL: "http://localhost:8080",
 });
 
-const token = localStorage.getItem("refreshToken");
+const token = sessionStorage.getItem("refreshToken");
 
 const reissue = async (refreshToken: string | null) => {
     return axios.post(`http://localhost:8080/api/v1/member/reissue`, {
@@ -17,11 +17,11 @@ const getToken = async (): Promise<void> => {
     try {
         const res = await reissue(token);
         if (res.data.status !== 200) {
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("refreshToken");
+            sessionStorage.removeItem("accessToken");
+            sessionStorage.removeItem("refreshToken");
         } else {
             const accessToken: string = res.data.data.accessToken;
-            localStorage.setItem("accessToken", accessToken);
+            sessionStorage.setItem("accessToken", accessToken);
         }
     } catch (error) {
         console.error("Error during token reissue:", error);
@@ -29,8 +29,7 @@ const getToken = async (): Promise<void> => {
 };
 
 axiosInstance.interceptors.request.use((config) => {
-    const token = localStorage.getItem("accessToken");
-    console.log(">>> 요청보내기 직전 토큰:", token);
+    const token = sessionStorage.getItem("accessToken");
     if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
     }

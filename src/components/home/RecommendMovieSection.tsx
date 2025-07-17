@@ -47,7 +47,6 @@ const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
             try {
                 const res = await axios.get("/mock/movie.json");
                 setMovieList(res.data);
-                console.log(res.data);
             } catch (e) {
                 console.error("맞춤 영화 조회 에러!! : ", e);
             }

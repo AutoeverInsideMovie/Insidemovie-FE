@@ -31,8 +31,8 @@ const Login: React.FC = () => {
             const { accessToken, refreshToken } = response.data.data;
 
             if (accessToken && refreshToken) {
-                localStorage.setItem("accessToken", accessToken);
-                localStorage.setItem("refreshToken", refreshToken);
+                sessionStorage.setItem("accessToken", accessToken);
+                sessionStorage.setItem("refreshToken", refreshToken);
 
                 navigate("/");
             } else throw new Error("토큰이 존재하지 않습니다.");

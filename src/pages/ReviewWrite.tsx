@@ -121,7 +121,7 @@ const ReviewWrite: React.FC = () => {
         <div className="flex justify-center">
             <div className="max-w-screen-lg w-full">
                 <div className="flex flex-col">
-                    <div className="flex justify-between items-center pt-10 py-36 pb-6">
+                    <div className="flex justify-between items-center pt-20 py-36 pb-6">
                         <h1 className="text-white text-3xl font-semibold text-left">
                             {isEditMode ? "리뷰 수정" : "리뷰 작성"}
                         </h1>

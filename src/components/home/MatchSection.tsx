@@ -22,7 +22,6 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
             try {
                 const res = await axios.get("/mock/winner.json");
                 setMovieList(res.data);
-                console.log(res.data);
             } catch (e) {
                 console.error("맞춤 영화 조회 에러!! : ", e);
             }

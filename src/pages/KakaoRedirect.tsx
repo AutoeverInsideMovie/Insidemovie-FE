@@ -26,10 +26,8 @@ const KakaoRedirect: React.FC = () => {
             axios
                 .get(`/api/v1/member/kakao-accesstoken?code=${code}`)
                 .then((res) => {
-                    console.log("카카오 응답:", res);
                     const kakaoAccessToken = res.data.data.accessToken;
 
-                    console.log("카카오 응답:", kakaoAccessToken);
                     if (!kakaoAccessToken) {
                         setDialog({
                             isOpen: true,
@@ -57,8 +55,8 @@ const KakaoRedirect: React.FC = () => {
 
                     const { accessToken, refreshToken } = res.data.data;
                     if (accessToken && refreshToken) {
-                        localStorage.setItem("accessToken", accessToken);
-                        localStorage.setItem("refreshToken", refreshToken);
+                        sessionStorage.setItem("accessToken", accessToken);
+                        sessionStorage.setItem("refreshToken", refreshToken);
 
                         navigate("/");
                     } else {

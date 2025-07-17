@@ -36,7 +36,7 @@ const RecommendMovie: React.FC = () => {
         <div>
             <div className="flex justify-center">
                 <div className="max-w-screen-lg w-full">
-                    <div className="flex flex-col pt-10">
+                    <div className="flex flex-col pt-20">
                         <h1 className="text-white text-3xl font-semibold text-left pb-3 border-b-[1px] border-box_bg_white">
                             추천 영화
                         </h1>
