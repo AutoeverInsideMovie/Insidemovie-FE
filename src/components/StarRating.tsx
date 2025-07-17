@@ -40,7 +40,7 @@ const StarRating: React.FC<StarRatingProps> = ({
                         color: "#7C7C7C", // 빈 별 색상
                     },
                     "& .MuiRating-iconHover": {
-                        color: "#FFA500", // 호버 시
+                        color: "#FFD602", // 호버 시
                     },
                 }}
             />

@@ -12,6 +12,7 @@ import Dashboard from "./pages/admin/pages/Dashboard";
 import ReportPage from "./pages/admin/pages/ReportPage";
 import MemberPage from "./pages/admin/pages/MemberPage";
 import SettingsPage from "./pages/admin/pages/SettingsPage";
+import ReviewWrite from "./pages/ReviewWrite";
 
 const AppContent: React.FC = () => {
     const location = useLocation();
@@ -33,6 +34,7 @@ const AppContent: React.FC = () => {
                 <Route path="/admin/report" element={<ReportPage />} />
                 <Route path="/admin/member" element={<MemberPage />} />
                 <Route path="/admin/settings" element={<SettingsPage />} />
+                <Route path="/review-write" element={<ReviewWrite />} />
             </Routes>
         </>
     );
