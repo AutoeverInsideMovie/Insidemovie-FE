@@ -14,7 +14,9 @@ import KakaoRedirect from "./pages/KakaoRedirect";
 const AppContent: React.FC = () => {
     const location = useLocation();
     const hideHeader =
-        location.pathname === "/login" || location.pathname === "/signup";
+        location.pathname === "/login" ||
+        location.pathname === "/signup" ||
+        location.pathname === "/admin";
 
     return (
         <>
