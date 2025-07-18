@@ -14,7 +14,7 @@
     {
         "reportId": 2,
         "reviewId": 102,
-        "reviewContent": "감독이 여자라서 별로",
+        "reviewContent": "(성희롱적인 발언)",
         "reporterId": 202,
         "reporterNickname": "공정한심사위원",
         "reportedMemberId": 302,
@@ -56,7 +56,7 @@
         "reportedMemberId": 305,
         "reportedNickname": "광고봇",
         "reason": "ADVERTISEMENT",
-        "status": "REJECTED",
+        "status": "APPROVED",
         "createdAt": "2025-07-01T14:00:00"
     },
     {
@@ -104,7 +104,7 @@
         "reportedMemberId": 309,
         "reportedNickname": "동문서답",
         "reason": "ADVERTISEMENT",
-        "status": "UNPROCESSED",
+        "status": "REJECTED",
         "createdAt": "2025-07-02T12:00:00"
     },
     {
@@ -116,7 +116,19 @@
         "reportedMemberId": 310,
         "reportedNickname": "초반까기러",
         "reason": "SPOILER",
-        "status": "REJECTED",
+        "status": "APPROVED",
         "createdAt": "2025-07-02T13:00:00"
+    },
+    {
+        "reportId": 11,
+        "reviewId": 101,
+        "reviewContent": "영화 꿀잼",
+        "reporterId": 201,
+        "reporterNickname": "정직한리뷰어",
+        "reportedMemberId": 301,
+        "reportedNickname": "신고가좋아",
+        "reason": "INAPPROPRIATE_LANGUAGE",
+        "status": "REJECTED",
+        "createdAt": "2025-07-01T10:00:00"
     }
 ]

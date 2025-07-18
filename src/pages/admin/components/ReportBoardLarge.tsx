@@ -11,11 +11,10 @@ import { updateReportStatus } from "../../../services/reportHandler";
 import { useState } from "react";
 import { mapReportsToRows } from "../../../services/mapReportsToRows";
 import mock from "../../../../public/mock/report.json";
-import { ConfirmDialog } from "../../../components/ConfirmDialog";
 
 interface ReportBoardProps {
     filtered?: boolean; // 필터 적용 여부
-
+    
 }
 
 export default function ReportBoard({ filtered = false }: ReportBoardProps) {
@@ -23,17 +22,13 @@ export default function ReportBoard({ filtered = false }: ReportBoardProps) {
     const [reportList, setReportList] = useState<GridValidRowModel[]>([
         ...rows,
     ]);
-    const [isDialogOpen, setDialogOpen] = useState(false);
-
 
     const handleDelete = (reportId: number) => {
         const updated = updateReportStatus(reportList, reportId, "APPROVED");
         setReportList(updated);
-        setDialogOpen(false);
     };
 
     const columns = getColumns(handleDelete);
-    
 
     return (
         <Box sx={{ width: "100%" }}>

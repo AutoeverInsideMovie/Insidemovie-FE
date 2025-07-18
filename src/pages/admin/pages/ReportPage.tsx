@@ -18,9 +18,9 @@ import {
     treeViewCustomizations,
 } from "../theme/customizations";
 import Grid from "@mui/material/Grid";
-import ReportBoard from "../components/ReportBoard";
 import Typography from "@mui/material/Typography";
 import Copyright from "../internals/components/Copyright";
+import ReportBoardLarge from "../components/ReportBoardLarge";
 
 const xThemeComponents = {
     ...chartsCustomizations,
@@ -74,7 +74,7 @@ export default function ReportPage(props: { disableCustomTheme?: boolean }) {
 
                             <Grid container spacing={2} columns={12}>
                                 <Grid size={{ xs: 12, lg: 12 }}>
-                                    <ReportBoard />
+                                    <ReportBoardLarge />
                                 </Grid>
                             </Grid>
 

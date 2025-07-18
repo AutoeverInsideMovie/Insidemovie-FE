@@ -123,7 +123,7 @@ export const renderDeleteButton = (status, updateReportStatus) => {
     if (status === "UNPROCESSED") {
         return (
             <Chip
-                label="리뷰 삭제"
+                label="삭제"
                 color="error"
                 variant="outlined"
                 size="small"
@@ -131,10 +131,13 @@ export const renderDeleteButton = (status, updateReportStatus) => {
                 onClick={updateReportStatus}
             />
         );
-    } else {
+    }
+};
+export const renderUpdateButton = (status, updateReportStatus) => {
+    if (status !== "UNPROCESSED") {
         return (
             <Chip
-                label="리뷰 수정"
+                label="변경"
                 color="secondary"
                 variant="outlined"
                 size="small"
@@ -149,20 +152,22 @@ export function getColumns(handleDelete: (id: number) => void): GridColDef[] {
     return [
         {
             field: "delete",
+            headerName: "간편 삭제",
             headerAlign: "center",
             align: "center",
             flex: 0.5,
-            renderHeader: () => null,
+            minWidth: 100,
+            // renderHeader: () => null,
             disableColumnMenu: true,
             sortable: false,
             renderCell: (params) =>
                 renderDeleteButton(params.row.status, () =>
+                    
                     handleDelete(params.row.id),
                 ),
         },
         {
             field: "status",
-            headerName: "상태",
         },
         {
             field: "reportStatus",
