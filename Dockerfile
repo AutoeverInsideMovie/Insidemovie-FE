@@ -1,5 +1,6 @@
 FROM node:24-alpine AS build
 WORKDIR /movie
+ENV NODE_OPTIONS=--max_old_space_size=4096
 COPY . .
 RUN npm install
 RUN npm run build
