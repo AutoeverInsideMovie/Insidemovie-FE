@@ -14,12 +14,14 @@ import MemberPage from "./pages/admin/pages/MemberPage";
 import SettingsPage from "./pages/admin/pages/SettingsPage";
 import ReviewWrite from "./pages/ReviewWrite";
 import KakaoRedirect from "./pages/KakaoRedirect";
+import SignupKakao from "./pages/SignupKakao";
 
 const AppContent: React.FC = () => {
     const location = useLocation();
     const hideHeader =
         location.pathname === "/login" ||
         location.pathname === "/signup" ||
+        location.pathname === "/signup-kakao" ||
         location.pathname === "/admin";
 
     return (
@@ -29,6 +31,7 @@ const AppContent: React.FC = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/signup-kakao" element={<SignupKakao />} />
                 <Route path="/recommend" element={<RecommendMovie />} />
                 <Route path="/boxoffice" element={<BoxOfficeMovie />} />
                 <Route path="/weekmatch" element={<WeekMatch />} />
