@@ -2,7 +2,7 @@ import * as React from "react";
 import Poster from "../Poster";
 import ArrowRight from "@assets/arrow_right.svg?react";
 import { useEffect, useState } from "react";
-import type { Winner } from "../../interfaces/Winner";
+import type { Winner } from "../../interfaces/winner";
 import axios from "axios";
 import SamplePoster from "@assets/sample_poster.png";
 import WinnerItem from "../WinnerItem";
@@ -22,7 +22,6 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
             try {
                 const res = await axios.get("/mock/winner.json");
                 setMovieList(res.data);
-                console.log(res.data);
             } catch (e) {
                 console.error("맞춤 영화 조회 에러!! : ", e);
             }
@@ -49,6 +48,7 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
                                     emotionIcon={poster.emotionIcon}
                                     emotionValue={poster.emotionValue}
                                     starValue={poster.starValue}
+                                    onClick={() => navigate("/movie")}
                                 />
                                 {idx < 2 && (
                                     <span className="text-white text-xl mx-2">
@@ -80,6 +80,7 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
                                 emotionValue={movie.emotionValue}
                                 starValue={movie.starValue}
                                 winnerWeek={movie.winnerWeek}
+                                onClick={() => navigate("/movie")}
                             />
                         ))}
                     </div>

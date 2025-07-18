@@ -1,9 +1,10 @@
 import * as React from "react";
 import Poster from "../Poster";
-import type { Movie } from "../../interfaces/Movie";
+import type { Movie } from "../../interfaces/movie";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import SamplePoster from "@assets/sample_poster.png";
+import { useNavigate } from "react-router-dom";
 
 interface CustomMovieSectionProps {
     className?: string;
@@ -12,6 +13,7 @@ interface CustomMovieSectionProps {
 const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
     className = "",
 }) => {
+    const navigate = useNavigate();
     const [movieList, setMovieList] = useState<Movie[]>([]);
 
     useEffect(() => {
@@ -19,7 +21,6 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
             try {
                 const res = await axios.get("/mock/movie.json");
                 setMovieList(res.data);
-                console.log(res.data);
             } catch (e) {
                 console.error("맞춤 영화 조회 에러!! : ", e);
             }
@@ -38,6 +39,7 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
                         emotionIcon={movie.emotionIcon}
                         emotionValue={movie.emotionValue}
                         starValue={movie.starValue}
+                        onClick={() => navigate("/movie")}
                     />
                 ))}
             </div>

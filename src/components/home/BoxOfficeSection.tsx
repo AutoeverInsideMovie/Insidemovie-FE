@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import BoxOfficeItem from "../BoxOfficeItem";
 import SamplePoster from "@assets/sample_poster.png";
-import type { BoxOffice } from "../../interfaces/BoxOffice";
+import type { BoxOffice } from "../../interfaces/boxOffice";
 import { useNavigate } from "react-router-dom";
 
 interface CustomBoxOfficeSectionProps {
@@ -22,7 +22,6 @@ const BoxOfficeSection: React.FC<CustomBoxOfficeSectionProps> = ({
             try {
                 const res = await axios.get("/mock/boxoffice.json");
                 setMovieList(res.data);
-                console.log(res.data);
             } catch (e) {
                 console.error("맞춤 영화 조회 에러!! : ", e);
             }
@@ -39,13 +38,15 @@ const BoxOfficeSection: React.FC<CustomBoxOfficeSectionProps> = ({
                 <ArrowRight />
             </h1>
             <div className="flex flex-col gap-3 overflow-x-hidden scrollbar-hide px-2">
-                {movieList.slice(0, 3).map((movie) => (
+                {movieList.slice(0, 3).map((movie, idx) => (
                     <BoxOfficeItem
+                        key={idx}
                         rank={movie.rank}
                         posterImg={SamplePoster}
                         posterName={movie.posterName}
                         starValue={movie.starValue}
                         emotions={movie.emotions}
+                        onClick={() => navigate("/movie")}
                     />
                 ))}
             </div>

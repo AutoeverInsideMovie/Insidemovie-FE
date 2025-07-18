@@ -7,7 +7,15 @@ import fearIcon from "@assets/character/fear_icon.png";
 import disgustIcon from "@assets/character/disgust_icon.png";
 import bingbongIcon from "@assets/character/bingbong_icon.png";
 import StarFull from "@assets/star_full.svg?react";
-import type { Movie } from "../interfaces/Movie";
+
+interface PosterProps {
+    posterImg: string;
+    posterName: string;
+    emotionIcon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
+    emotionValue: number;
+    starValue: number;
+    onClick?: () => void;
+}
 
 const emotionMap = {
     joy: joyIcon,
@@ -18,15 +26,16 @@ const emotionMap = {
     bingbong: bingbongIcon,
 };
 
-const Poster: React.FC<Movie> = ({
+const Poster: React.FC<PosterProps> = ({
     posterImg,
     posterName,
     emotionIcon = "bingbong",
     emotionValue = 0,
     starValue = 0,
+    onClick,
 }) => {
     return (
-        <div className="px-1 py-3">
+        <div className="px-1 py-3" onClick={onClick}>
             <TransparentBox className="w-[180px] bg-box_bg_white rounded-xl shadow-md cursor-pointer flex flex-col transform transition-transform duration-200 hover:scale-105">
                 <img
                     src={posterImg}

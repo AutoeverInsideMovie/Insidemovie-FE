@@ -9,13 +9,14 @@ import RecommendMovieSection from "../components/home/RecommendMovieSection";
 const Home: React.FC = () => {
     return (
         <div className="min-h-screen flex justify-center flex-col items-center px-4">
-            <div className="max-w-screen-lg w-full flex flex-col items-center">
-                <SearchSection className="mt-20" />
-                <EmotionSection className="mt-20" />
-                <CustomMovieSection className="mt-20" />
-                <RecommendMovieSection className="mt-20" />
-                <BoxOfficeSection className="mt-20" />
-                <MatchSection className="mt-20" />
+            <div className="max-w-screen-lg w-full flex flex-col items-center mb-52">
+                <SearchSection className="mt-32" />
+                <EmotionSection className="mt-32" />
+                <CustomMovieSection className="mt-10" />
+                <RecommendMovieSection className="mt-32" />
+                <BoxOfficeSection className="mt-32" />
+                <MatchSection className="mt-32" />
+                {/*<section className="snap-start h-screen"></section>*/}
             </div>
         </div>
     );

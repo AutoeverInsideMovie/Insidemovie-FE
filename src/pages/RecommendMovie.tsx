@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import type { Movie } from "../interfaces/Movie";
+import type { Movie } from "../interfaces/movie";
 import SamplePoster from "@assets/sample_poster.png";
 import Poster from "../components/Poster";
 import Tag from "../components/Tag";
+import { useNavigate } from "react-router-dom";
 
 const RecommendMovie: React.FC = () => {
+    const navigate = useNavigate();
     const [movieList, setMovieList] = useState<Movie[]>([]);
     const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
     const tagList = ["hello", "ㄷㄷ", "태그", "스포츠", "안녕"];
@@ -34,7 +36,7 @@ const RecommendMovie: React.FC = () => {
         <div>
             <div className="flex justify-center">
                 <div className="max-w-screen-lg w-full">
-                    <div className="flex flex-col pt-10">
+                    <div className="flex flex-col pt-20">
                         <h1 className="text-white text-3xl font-semibold text-left pb-3 border-b-[1px] border-box_bg_white">
                             추천 영화
                         </h1>
@@ -58,6 +60,7 @@ const RecommendMovie: React.FC = () => {
                                     emotionIcon={poster.emotionIcon}
                                     emotionValue={poster.emotionValue}
                                     starValue={poster.starValue}
+                                    onClick={() => navigate("/movie")}
                                 />
                             ))}
                         </div>

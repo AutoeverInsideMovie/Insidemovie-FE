@@ -4,7 +4,6 @@ pipeline {
     options {
         skipDefaultCheckout(true)
     }
-
     environment {
         IMAGE_NAME = 'ssafysong/inside-movie'
         TAG = 'fe'

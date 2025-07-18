@@ -1,15 +1,28 @@
 import React from "react";
 import StarRating from "./StarRating";
-import type { Winner } from "../interfaces/Winner";
 
-const WinnerItem: React.FC<Winner> = ({
+interface WinnerItemProps {
+    posterImg: string;
+    posterName: string;
+    emotionIcon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
+    emotionValue: number;
+    starValue: number;
+    winnerWeek: string;
+    onClick?: () => void;
+}
+
+const WinnerItem: React.FC<WinnerItemProps> = ({
     posterImg,
     posterName,
     starValue,
     winnerWeek,
+    onClick,
 }) => {
     return (
-        <div className="flex w-full rounded-3xl mb-3 bg-box_bg_white items-center cursor-pointer transform transition-all duration-200 hover:bg-box_bg_white/30">
+        <div
+            className="flex w-full rounded-3xl mb-3 bg-box_bg_white items-center cursor-pointer transform transition-all duration-200 hover:bg-box_bg_white/30"
+            onClick={onClick}
+        >
             <img
                 src={posterImg}
                 alt={posterName}

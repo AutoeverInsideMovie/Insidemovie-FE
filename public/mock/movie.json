@@ -1,5 +1,14 @@
 [
   {
+    "id": 1,
+    "posterImg": "/assets/sample_poster.png",
+    "posterName": "인사이드 아웃인사이드 아웃인사이드 아웃인사이드 아웃인사이드 아웃인사이드 아웃",
+    "emotionIcon": "joy",
+    "emotionValue": 40,
+    "starValue": 4.5
+  },
+  {
+    "id": 1,
     "posterImg": "/assets/sample_poster.png",
     "posterName": "인사이드 아웃",
     "emotionIcon": "joy",
@@ -7,6 +16,7 @@
     "starValue": 4.5
   },
   {
+    "id": 1,
     "posterImg": "/assets/sample_poster.png",
     "posterName": "인사이드 아웃",
     "emotionIcon": "joy",
@@ -14,6 +24,7 @@
     "starValue": 4.5
   },
   {
+    "id": 1,
     "posterImg": "/assets/sample_poster.png",
     "posterName": "인사이드 아웃",
     "emotionIcon": "joy",
@@ -21,6 +32,7 @@
     "starValue": 4.5
   },
   {
+    "id": 1,
     "posterImg": "/assets/sample_poster.png",
     "posterName": "인사이드 아웃",
     "emotionIcon": "joy",
@@ -28,6 +40,7 @@
     "starValue": 4.5
   },
   {
+    "id": 1,
     "posterImg": "/assets/sample_poster.png",
     "posterName": "인사이드 아웃",
     "emotionIcon": "joy",
@@ -35,6 +48,15 @@
     "starValue": 4.5
   },
   {
+    "id": 1,
+    "posterImg": "/assets/sample_poster.png",
+    "posterName": "인사이드 아웃인사이드 아웃인사이드 아웃인사이드 아웃인사이드 아웃",
+    "emotionIcon": "joy",
+    "emotionValue": 40,
+    "starValue": 4.5
+  },
+  {
+    "id": 1,
     "posterImg": "/assets/sample_poster.png",
     "posterName": "인사이드 아웃",
     "emotionIcon": "joy",
@@ -42,6 +64,7 @@
     "starValue": 4.5
   },
   {
+    "id": 1,
     "posterImg": "/assets/sample_poster.png",
     "posterName": "인사이드 아웃",
     "emotionIcon": "joy",
@@ -49,20 +72,7 @@
     "starValue": 4.5
   },
   {
-    "posterImg": "/assets/sample_poster.png",
-    "posterName": "인사이드 아웃",
-    "emotionIcon": "joy",
-    "emotionValue": 40,
-    "starValue": 4.5
-  },
-  {
-    "posterImg": "/assets/sample_poster.png",
-    "posterName": "인사이드 아웃",
-    "emotionIcon": "joy",
-    "emotionValue": 40,
-    "starValue": 4.5
-  },
-  {
+    "id": 1,
     "posterImg": "/assets/sample_poster.png",
     "posterName": "인사이드 아웃",
     "emotionIcon": "joy",
