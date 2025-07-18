@@ -9,7 +9,6 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import AppNavbar from "../components/AppNavbar";
 import Header from "../components/Header";
-import MainGrid from "../components/MainGrid";
 import SideMenu from "../components/SideMenu";
 import AppTheme from "../shared-theme/AppTheme";
 import {
@@ -18,6 +17,10 @@ import {
     datePickersCustomizations,
     treeViewCustomizations,
 } from "../theme/customizations";
+import Grid from "@mui/material/Grid";
+import ReportBoard from "../components/ReportBoard";
+import Typography from "@mui/material/Typography";
+import Copyright from "../internals/components/Copyright";
 
 const xThemeComponents = {
     ...chartsCustomizations,
@@ -50,11 +53,33 @@ export default function ReportPage(props: { disableCustomTheme?: boolean }) {
                             alignItems: "center",
                             mx: 3,
                             pb: 5,
-                            mt: { xs: 8, md: 0 },
+                            mt: { xs: 12, md: 0 },
                         }}
                     >
                         <Header />
-                        <MainGrid />
+                        <Box
+                            sx={{
+                                width: "100%",
+                                minHeight: "80vh",
+                                maxWidth: { sm: "100%", md: "1700px" },
+                            }}
+                        >
+                            <Typography
+                                component="h2"
+                                variant="h6"
+                                sx={{ mb: 2 }}
+                            >
+                                신고 관리
+                            </Typography>
+
+                            <Grid container spacing={2} columns={12}>
+                                <Grid size={{ xs: 12, lg: 12 }}>
+                                    <ReportBoard />
+                                </Grid>
+                            </Grid>
+
+                            <Copyright sx={{ my: 4 }} />
+                        </Box>
                     </Stack>
                 </Box>
             </Box>
