@@ -14,7 +14,6 @@ import mock from "../../../../public/mock/report.json";
 
 interface ReportBoardProps {
     filtered?: boolean; // 필터 적용 여부
-    
 }
 
 export default function ReportBoard({ filtered = false }: ReportBoardProps) {
@@ -23,12 +22,22 @@ export default function ReportBoard({ filtered = false }: ReportBoardProps) {
         ...rows,
     ]);
 
-    const handleDelete = (reportId: number) => {
+    const handleApprove = (reportId: number) => {
         const updated = updateReportStatus(reportList, reportId, "APPROVED");
         setReportList(updated);
     };
 
-    const columns = getColumns(handleDelete);
+    const handleReject = (reportId: number) => {
+        const updated = updateReportStatus(reportList, reportId, "REJECTED");
+        setReportList(updated);
+    };
+
+    const handleUnprocess = (reportId: number) => {
+        const updated = updateReportStatus(reportList, reportId, "UNPROCESSED");
+        setReportList(updated);
+    };
+
+    const columns = getColumns(handleApprove);
 
     return (
         <Box sx={{ width: "100%" }}>

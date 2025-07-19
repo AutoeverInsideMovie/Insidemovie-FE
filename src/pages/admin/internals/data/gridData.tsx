@@ -119,7 +119,7 @@ export function renderAvatar(
     );
 }
 
-export const renderDeleteButton = (status, updateReportStatus) => {
+export const renderButton = (status, updateReportStatus) => {
     if (status === "UNPROCESSED") {
         return (
             <Chip
@@ -148,10 +148,10 @@ export const renderUpdateButton = (status, updateReportStatus) => {
     }
 };
 
-export function getColumns(handleDelete: (id: number) => void): GridColDef[] {
+export function getColumns(handleStatus: (id: number) => void): GridColDef[] {
     return [
         {
-            field: "delete",
+            field: "button",
             headerName: "간편 삭제",
             headerAlign: "center",
             align: "center",
@@ -161,9 +161,8 @@ export function getColumns(handleDelete: (id: number) => void): GridColDef[] {
             disableColumnMenu: true,
             sortable: false,
             renderCell: (params) =>
-                renderDeleteButton(params.row.status, () =>
-                    
-                    handleDelete(params.row.id),
+                renderButton(params.row.status, () =>
+                    handleStatus(params.row.id),
                 ),
         },
         {

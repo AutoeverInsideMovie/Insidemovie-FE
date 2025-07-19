@@ -16,7 +16,7 @@ interface ReportBoardProps {
 }
 
 export default function ReportBoard({ filtered = false }: ReportBoardProps) {
-    const [fetchReport, setFetchReport] = useState<Report[] | null>(null);
+    const [reportList, setReportList] = useState<Report[] | null>(null);
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -24,18 +24,15 @@ export default function ReportBoard({ filtered = false }: ReportBoardProps) {
                     // http://localhost:8080/api/v1/admin/reports?page=0&size=10,
                     "/mock/report.json",
                 );
-                setFetchReport(res.data);
+                setReportList(res.data);
             } catch (err) {
                 console.error("대시보드 데이터 불러오기 실패:", err);
             }
         };
         fetchData();
     }, []);
-
-    const rows: GridRowsProp = fetchReport ? mapReportsToRows(fetchReport) : [];
-    const [reportList, setReportList] = useState<GridValidRowModel[]>([
-        ...rows,
-    ]);
+    const rows: GridRowsProp = reportList ? mapReportsToRows(reportList) : [];
+    
     const handleDelete = (reportId: number) => {
         const updated = updateReportStatus(reportList, reportId, "APPROVED");
         setReportList(updated);
