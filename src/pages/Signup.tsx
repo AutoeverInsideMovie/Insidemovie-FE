@@ -4,7 +4,7 @@ import Button from "../components/Button";
 import TransparentBox from "../components/TransparentBox";
 import BackgroundBubble from "@assets/background_bubble.svg?react";
 import SearchIcon from "@assets/search.svg?react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Logo from "@assets/insidemovie_white.png";
 import { memberApi } from "../api/memberApi";
@@ -17,6 +17,12 @@ import angryIcon from "@assets/character/angry_icon.png";
 import fearIcon from "@assets/character/fear_icon.png";
 import disgustIcon from "@assets/character/disgust_icon.png";
 
+import joyProfile from "@assets/profile/joy_profile.png";
+import sadProfile from "@assets/profile/sad_profile.png";
+import angryProfile from "@assets/profile/angry_profile.png";
+import fearProfile from "@assets/profile/fear_profile.png";
+import disgustProfile from "@assets/profile/disgust_profile.png";
+
 const emotionMap = {
     joy: joyIcon,
     sad: sadIcon,
@@ -24,15 +30,30 @@ const emotionMap = {
     fear: fearIcon,
     disgust: disgustIcon,
 };
+
 const emotionColorMap = {
-    joy: "bg-joy_yellow",
-    sad: "bg-sad_blue",
-    angry: "bg-angry_red",
-    fear: "bg-fear_purple",
-    disgust: "bg-disgust_green",
+    joy: "text-joy_yellow",
+    sad: "text-sad_blue",
+    angry: "text-angry_red",
+    fear: "text-fear_purple",
+    disgust: "text-disgust_green",
 };
 
-// TODO : 에러메시지 반환 결과 출력 방법 논의 후 적용
+const emotionLabelMap: Record<keyof typeof emotionMap, string> = {
+    joy: "기쁨",
+    sad: "슬픔",
+    angry: "버럭",
+    fear: "소심",
+    disgust: "까칠",
+};
+
+const profileImgMap: Record<keyof typeof emotionMap, string> = {
+    joy: joyProfile,
+    sad: sadProfile,
+    angry: angryProfile,
+    fear: fearProfile,
+    disgust: disgustProfile,
+};
 
 const Signup: React.FC = () => {
     const navigate = useNavigate();
@@ -45,9 +66,14 @@ const Signup: React.FC = () => {
     const [passwordError, setPasswordError] = useState("");
     const [passwordConfirmError, setPasswordConfirmError] = useState("");
     const [nicknameError, setNicknameError] = useState("");
+
+    // Dialog
+    const [dialogTitle, setDialogTitle] = useState<string>("");
+    const [dialogIsRedButton, setDialogIsRedButton] = useState<boolean>(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [message, setMessage] = useState("");
 
+    // Search Movie
     const [searchTerm, setSearchTerm] = useState("");
     const [searchResults, setSearchResults] = useState<
         Array<{
@@ -66,7 +92,13 @@ const Signup: React.FC = () => {
         }>
     >([]);
 
-    // Emotion averages for selected movies
+    // 무한 스크롤
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const [loadingMovies, setLoadingMovies] = useState(false);
+    const resultsRef = useRef<HTMLDivElement | null>(null);
+
+    // 선탹한 영화의 감정 평균 값
     const [emotionAverages, setEmotionAverages] = useState<{
         joy: number;
         sad: number;
@@ -75,6 +107,38 @@ const Signup: React.FC = () => {
         disgust: number;
     }>({ joy: 0, sad: 0, angry: 0, fear: 0, disgust: 0 });
 
+    // 대표 감정 값
+    const [dominantEmotion, setDominantEmotion] =
+        useState<keyof typeof emotionLabelMap>("joy");
+
+    // 대표 감정 찾기
+    useEffect(() => {
+        // 영화 선택 안됨
+        if (selectedMovies.length === 0) {
+            setDominantEmotion("joy");
+            return;
+        }
+        const entries = Object.entries(emotionAverages) as [
+            keyof typeof emotionAverages,
+            number,
+        ][];
+        const values = entries.map(([, v]) => v);
+        const maxValue = Math.max(...values);
+
+        // 모두 0인 경우
+        if (maxValue === 0) {
+            setDominantEmotion("joy");
+            return;
+        }
+
+        // 대표 감정 값 찾기
+        const topEmotions = entries
+            .filter(([, v]) => v === maxValue)
+            .map(([k]) => k);
+        setDominantEmotion(topEmotions[0]);
+    }, [emotionAverages, selectedMovies]);
+
+    // 감정 선택 시 마다 평균 감정 계산
     useEffect(() => {
         const fetchEmotions = async () => {
             if (selectedMovies.length === 0) {
@@ -124,15 +188,6 @@ const Signup: React.FC = () => {
         };
         fetchEmotions();
     }, [selectedMovies]);
-    const isStep2Disabled = selectedMovies.length === 0;
-
-    const handleConfirm = () => {
-        setIsDialogOpen(false);
-    };
-
-    const handleCancel = () => {
-        setIsDialogOpen(false);
-    };
 
     // 이메일 확인
     const validateEmail = (email: string) => {
@@ -149,6 +204,7 @@ const Signup: React.FC = () => {
         return regex.test(trimmed);
     };
 
+    // 이메일 필드
     const handleEmailChange = (value: string) => {
         setEmail(value);
         setEmailError(
@@ -156,6 +212,7 @@ const Signup: React.FC = () => {
         );
     };
 
+    // 비밀번호 필드
     const handlePasswordChange = (value: string) => {
         setPassword(value);
         setPasswordError(
@@ -169,6 +226,7 @@ const Signup: React.FC = () => {
         );
     };
 
+    // 비밀번호 확인 필드
     const handlePasswordConfirmChange = (value: string) => {
         setPasswordConfirm(value);
         setPasswordConfirmError(
@@ -176,16 +234,30 @@ const Signup: React.FC = () => {
         );
     };
 
+    // 닉네임 필드
     const handleNicknameChange = (value: string) => {
         setNickname(value);
 
+        // 길이 검증
         if (value.length < 2 || value.length > 20) {
             setNicknameError("닉네임은 2~20자 이내여야 합니다.");
-        } else {
-            setNicknameError("");
+            return;
         }
+
+        // 중복 확인 API 호출
+        memberApi()
+            .checkNickname({ nickname: value })
+            .then((res) => {
+                const { duplicated } = res.data.data;
+                if (duplicated) setNicknameError("이미 사용중인 닉네임입니다.");
+                else setNicknameError("");
+            })
+            .catch((error) => {
+                setNicknameError(error.response?.data?.message);
+            });
     };
 
+    // Step 1 Check
     const isStep1Disabled =
         !email ||
         !password ||
@@ -194,43 +266,105 @@ const Signup: React.FC = () => {
         !!passwordError ||
         !!passwordConfirmError;
 
+    // Step 2 Check
+    const isStep2Disabled = selectedMovies.length === 0;
+
+    // Step 3 Check
     const isStep3Disabled = !nickname || !!nicknameError;
 
+    // 페이지 초기화
+    useEffect(() => {
+        setPage(0);
+        setHasMore(true);
+    }, [searchTerm]);
+
+    // 영화 출력
     useEffect(() => {
         const fetchMovies = async () => {
-            if (!searchTerm) {
-                setSearchResults([]);
-                return;
-            }
+            setLoadingMovies(true);
             try {
-                const res = await movieApi().searchTitle({
-                    title: searchTerm,
-                    page: 0,
-                    pageSize: 10,
-                });
-                setSearchResults(res.data.data.content);
+                if (!searchTerm) {
+                    // Popular movies: 8 items only
+                    const res = await movieApi().getPopularMovies({
+                        page: 0,
+                        pageSize: 8,
+                    });
+                    const mapped = res.data.data.results.map((m: any) => ({
+                        id: m.id,
+                        posterPath: m.poster_path,
+                        title: m.title,
+                        voteAverage: m.vote_average,
+                    }));
+                    setSearchResults(mapped);
+                    setHasMore(false);
+                } else {
+                    // Search with infinite scroll
+                    const res = await movieApi().searchTitle({
+                        title: searchTerm,
+                        page,
+                        pageSize: 10,
+                    });
+                    const { content, last } = res.data.data;
+                    setSearchResults((prev) =>
+                        page === 0 ? content : [...prev, ...content],
+                    );
+                    setHasMore(!last);
+                }
             } catch (err) {
                 console.error(err);
+                setHasMore(false);
+            } finally {
+                setLoadingMovies(false);
             }
         };
         fetchMovies();
-    }, [searchTerm]);
+    }, [searchTerm, page]);
 
+    // Infinite scroll handler
+    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+        const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+        if (
+            scrollHeight - scrollTop <= clientHeight + 50 &&
+            hasMore &&
+            !loadingMovies
+        ) {
+            setPage((prev) => prev + 1);
+        }
+    };
+
+    // 회원가입
     const handleSignup = async () => {
         try {
+            // 1) 회원가입
             const response = await memberApi().signup({
                 email,
                 password,
                 checkedPassword: passwordConfirm,
                 nickname,
             });
-
             const { memberId } = response.data.data;
-            console.log("MemberId", memberId);
-            navigate("/login", { replace: true });
+
+            // 2) 초기 감정 상태 등록
+            await memberApi().registerEmotions({
+                memberId,
+                joy: emotionAverages.joy,
+                sadness: emotionAverages.sad,
+                anger: emotionAverages.angry,
+                fear: emotionAverages.fear,
+                neutral: emotionAverages.disgust,
+            });
+
+            // 3) 모두 성공 시 로그인 화면으로 이동
+            setDialogTitle("회원가입 성공");
+            setMessage("회원가입이 정상적으로 완료되었습니다.");
+            setDialogIsRedButton(false);
+            setIsDialogOpen(true);
         } catch (error) {
-            // 에러 처리: 메시지 보여주거나 console.log
-            setMessage(error.response?.data?.message || error);
+            setDialogTitle("회원가입 실패");
+            setMessage(
+                error.response?.data?.message || "회원가입에 실패했습니다.",
+            );
+            setDialogIsRedButton(true);
             setIsDialogOpen(true);
         }
     };
@@ -415,11 +549,13 @@ const Signup: React.FC = () => {
                                     ))}
                                 </div>
                                 <div
-                                    className="grid grid-cols-4 grid-rows-2 gap-4 mb-8 h-64 overflow-y-auto bg-box_bg_white p-2 rounded-3xl hide-scrollbar"
+                                    className="grid grid-cols-4 gap-4 mb-8 h-64 overflow-y-auto bg-box_bg_white p-2 rounded-3xl hide-scrollbar"
                                     style={{
                                         msOverflowStyle: "none",
                                         scrollbarWidth: "none",
                                     }}
+                                    ref={resultsRef}
+                                    onScroll={handleScroll}
                                 >
                                     {searchResults.map((movie) => {
                                         const isSelected = selectedMovies.some(
@@ -439,7 +575,7 @@ const Signup: React.FC = () => {
                                                             : [...prev, movie],
                                                     );
                                                 }}
-                                                className={`cursor-pointer rounded overflow-hidden border-2 ${
+                                                className={`cursor-pointer rounded border-2 h-48 flex flex-col items-center justify-start ${
                                                     isSelected
                                                         ? "border-movie_point"
                                                         : "border-transparent"
@@ -448,14 +584,20 @@ const Signup: React.FC = () => {
                                                 <img
                                                     src={movie.posterPath}
                                                     alt={movie.title}
-                                                    className="w-full h-auto"
+                                                    className="w-full object-contain"
                                                 />
-                                                <p className="text-white text-center mt-2 text-sm">
+                                                <p className="text-white text-center mt-1 text-sm line-clamp-2 overflow-hidden">
                                                     {movie.title}
                                                 </p>
                                             </div>
                                         );
                                     })}
+                                    {/* Optionally, loading indicator */}
+                                    {loadingMovies && (
+                                        <div className="col-span-4 text-center text-xs text-gray-400 py-2">
+                                            불러오는 중...
+                                        </div>
+                                    )}
                                 </div>
                                 <Button
                                     text="선택완료"
@@ -477,9 +619,10 @@ const Signup: React.FC = () => {
                                     <span className="text-white font-bold">
                                         당신의 감정은{" "}
                                     </span>
-                                    {/* TODO : 감정 결과 별 이름 반환 */}
-                                    <span className="text-joy_yellow font-bold">
-                                        기쁨
+                                    <span
+                                        className={`${emotionColorMap[dominantEmotion]} font-bold`}
+                                    >
+                                        {emotionLabelMap[dominantEmotion]}
                                     </span>
                                     <span className="text-white">이네요.</span>
                                     <p className="text-sm mt-1 font-light">
@@ -488,12 +631,10 @@ const Signup: React.FC = () => {
                                     </p>
                                 </div>
 
-                                {/* Profile Preview */}
                                 <div className="bg-box_bg_white w-full rounded-3xl py-5 px-6 flex flex-col items-center gap-3 mb-8">
-                                    {/* TODO : 감정 결과 별 이미지 반환 */}
                                     <img
-                                        src="/src/assets/profile/joy_profile.png"
-                                        alt="Emotion Joy"
+                                        src={profileImgMap[dominantEmotion]}
+                                        alt={`Emotion ${emotionLabelMap[dominantEmotion]}`}
                                         className="w-36 h-36 rounded-full"
                                     />
                                     <p className="text-white text-xs font-light">
@@ -501,8 +642,6 @@ const Signup: React.FC = () => {
                                     </p>
                                 </div>
 
-                                {/* Nickname Input */}
-                                {/* TODO : 닉네임 중복 확인 */}
                                 <InputField
                                     type="text"
                                     placeholder="닉네임"
@@ -530,12 +669,18 @@ const Signup: React.FC = () => {
             </div>
             <ConfirmDialog
                 isOpen={isDialogOpen}
-                title="회원가입 실패"
+                title={dialogTitle}
                 message={message}
-                onConfirm={handleConfirm}
                 showCancel={false}
-                onCancel={handleCancel}
-                isRedButton={true}
+                isRedButton={dialogIsRedButton}
+                onConfirm={() => {
+                    setIsDialogOpen(false);
+                    // 성공 시 로그인으로, 실패 시 다이얼로그만 닫기
+                    if (dialogTitle === "회원가입 성공") {
+                        navigate("/login", { replace: true });
+                    }
+                }}
+                onCancel={() => setIsDialogOpen(false)}
             />
         </div>
     );
