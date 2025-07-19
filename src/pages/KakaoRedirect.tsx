@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "../api/axiosInstance";
-// import axios from "axios";
 import { ConfirmDialog } from "../components/ConfirmDialog";
 import { useNavigate } from "react-router-dom";
 
@@ -19,6 +18,7 @@ const KakaoRedirect: React.FC = () => {
     const [dialog, setDialog] = useState<DialogState>({ isOpen: false });
 
     useEffect(() => {
+        let signupToken: string | null = null;
         const code = new URL(window.location.href).searchParams.get("code");
 
         if (code) {
@@ -27,6 +27,7 @@ const KakaoRedirect: React.FC = () => {
                 .get(`/api/v1/member/kakao-accesstoken?code=${code}`)
                 .then((res) => {
                     const kakaoAccessToken = res.data.data.accessToken;
+                    signupToken = kakaoAccessToken;
 
                     if (!kakaoAccessToken) {
                         setDialog({
@@ -76,17 +77,25 @@ const KakaoRedirect: React.FC = () => {
                     }
                 })
                 .catch((error) => {
-                    setDialog({
-                        isOpen: true,
-                        title: "로그인 오류",
-                        message: "카카오 로그인 중 문제가 발생했습니다.",
-                        showCancel: false,
-                        isRedButton: true,
-                        onConfirm: () => {
-                            setDialog({ isOpen: false });
-                            navigate("/login");
-                        },
-                    });
+                    if (error.response?.status === 400) {
+                        // 신규 회원: 추가 정보 입력 페이지로 이동
+                        navigate("/signup-kakao", {
+                            state: { accessToken: signupToken },
+                        });
+                        return;
+                    } else {
+                        setDialog({
+                            isOpen: true,
+                            title: "로그인 오류",
+                            message: "카카오 로그인 중 문제가 발생했습니다.",
+                            showCancel: false,
+                            isRedButton: true,
+                            onConfirm: () => {
+                                setDialog({ isOpen: false });
+                                navigate("/login");
+                            },
+                        });
+                    }
                     // console.error("카카오 로그인 실패", err);
                     // alert("로그인 중 오류가 발생했습니다.");
                     // navigate("/login");
