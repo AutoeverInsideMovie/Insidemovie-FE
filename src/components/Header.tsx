@@ -11,6 +11,7 @@ import AngryImg from "@assets/profile/angry_profile.png";
 import FearImg from "@assets/profile/fear_profile.png";
 import DisgustImg from "@assets/profile/disgust_profile.png";
 import BingBong from "@assets/profile/bingbong_profile.png";
+import { ConfirmDialog } from "./ConfirmDialog";
 
 const Header: React.FC = () => {
     const navigate = useNavigate();
@@ -23,6 +24,7 @@ const Header: React.FC = () => {
     const [userImg, setUserImg] = useState<string>("");
 
     const [menuOpen, setMenuOpen] = useState(false);
+    const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -144,18 +146,7 @@ const Header: React.FC = () => {
                                 </button>
                                 <button
                                     className="flex items-center w-full px-6 py-3 hover:bg-grey_100 hover:rounded-xl text-error_red"
-                                    onClick={() => {
-                                        // 로그아웃 로직
-                                        sessionStorage.removeItem(
-                                            "accessToken",
-                                        );
-                                        sessionStorage.removeItem(
-                                            "refreshToken",
-                                        );
-                                        navigate("/");
-                                        window.location.reload();
-                                        setMenuOpen(false);
-                                    }}
+                                    onClick={() => setLogoutDialogOpen(true)}
                                 >
                                     <Logout className="mr-2" /> 로그아웃
                                 </button>
@@ -173,6 +164,22 @@ const Header: React.FC = () => {
                 </div>
             </header>
             <div className={`${scrolled ? "h-20" : "h-24"}`} />
+            <ConfirmDialog
+                isOpen={logoutDialogOpen}
+                title="로그아웃"
+                message="로그아웃 하시겠습니까?"
+                isRedButton={true}
+                showCancel={true}
+                onConfirm={() => {
+                    sessionStorage.removeItem("accessToken");
+                    sessionStorage.removeItem("refreshToken");
+                    navigate("/");
+                    window.location.reload();
+                    setMenuOpen(false);
+                    setLogoutDialogOpen(false);
+                }}
+                onCancel={() => setLogoutDialogOpen(false)}
+            />
         </>
     );
 };
