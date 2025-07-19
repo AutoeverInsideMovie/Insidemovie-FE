@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Button from "./Button";
 
 interface ConfirmDialogProps {
     isOpen: boolean;
@@ -35,33 +36,43 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             onClick={() => onCancel()}
         >
             <div
-                className="bg-white rounded-2xl max-w-md w-full p-6 shadow-lg"
+                className="bg-grey_100 rounded-3xl max-w-md w-full p-6 shadow-lg"
                 onClick={(e) => e.stopPropagation()}
             >
-                <h3 className="text-lg font-medium mb-2">{title}</h3>
-                {message && <p className="text-gray-600 mb-4">{message}</p>}
-                <div className="flex justify-end space-x-3">
+                <h3 className="text-xl font-bold mb-2 text-center">{title}</h3>
+                {message && (
+                    <p className="text-gray-600 text-sm font-medium mb-4 text-center">
+                        {message}
+                    </p>
+                )}
+                <div className="flex justify-center space-x-3 px-3">
                     {showCancel && (
-                        <button
+                        <Button
+                            text={"취소"}
+                            textColor={"black"}
+                            buttonColor={"white"}
+                            disabled={false}
+                            prefixIcon={null}
                             onClick={onCancel}
-                            className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
-                        >
-                            취소
-                        </button>
+                            className="shadow-xl hover:bg-white/70 transition w-full"
+                        />
                     )}
-                    <button
+                    <Button
+                        text={"확인"}
+                        textColor={"black"}
+                        buttonColor={"default"}
+                        disabled={false}
+                        prefixIcon={null}
                         onClick={onConfirm}
                         className={`
-                            px-4 py-2 rounded text-white transition
+                            text-white transition w-full
                             ${
                                 isRedButton
-                                    ? "bg-red-600 hover:bg-red-700"
-                                    : "bg-blue-800 hover:bg-blue-900"
+                                    ? "bg-error_red hover:bg-error_red/70"
+                                    : ""
                             }
                         `}
-                    >
-                        확인
-                    </button>
+                    />
                 </div>
             </div>
         </div>
