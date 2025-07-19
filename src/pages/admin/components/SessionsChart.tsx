@@ -1,22 +1,15 @@
-import * as React from "react";
 import { useTheme } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import { LineChart } from "@mui/x-charts/LineChart";
 
-// 더미데이터
-const latestOneYearUsers: number[] = [
-    1000, 1500, 1200, 1700, 1300, 2000, 2400, 2200, 2600, 2800, 2500, 2600,
-];
-const latestOneYearReviews: number[] = [
-    500, 900, 700, 1400, 1100, 1700, 2300, 2000, 2600, 2900, 2300, 2400,
-];
-const latestOneYearReports: number[] = [
-    300, 900, 600, 1200, 1500, 1800, 2400, 2100, 2700, 3000, 1800, 1850,
-];
+interface SessionsChartProps {
+    MonthlytotalMembers: number[];
+    MonthlytotalReviews: number[];
+    MonthlyconcealedReviews: number[];
+}
 
 function AreaGradient({ color, id }: { color: string; id: string }) {
     return (
@@ -53,7 +46,11 @@ function getLastYearFromLastMonth() {
 
     return months;
 }
-export default function SessionsChart() {
+export default function SessionsChart({
+    MonthlytotalMembers,
+    MonthlytotalReviews,
+    MonthlyconcealedReviews,
+}: SessionsChartProps) {
     const theme = useTheme();
     const data = getLastYearFromLastMonth();
 
@@ -69,6 +66,7 @@ export default function SessionsChart() {
                 <Typography component="h2" variant="subtitle2" gutterBottom>
                     월별 추이
                 </Typography>
+
                 <Stack sx={{ justifyContent: "space-between" }}>
                     <Stack
                         direction="row"
@@ -106,7 +104,7 @@ export default function SessionsChart() {
                             stack: "total",
                             area: true,
                             stackOrder: "ascending",
-                            data: latestOneYearUsers,
+                            data: MonthlytotalMembers,
                             color: theme.palette.success.main,
                         },
                         {
@@ -117,7 +115,7 @@ export default function SessionsChart() {
                             stack: "total",
                             area: true,
                             stackOrder: "ascending",
-                            data: latestOneYearReviews,
+                            data: MonthlytotalReviews,
                             color: theme.palette.grey[400],
                         },
                         {
@@ -127,7 +125,7 @@ export default function SessionsChart() {
                             curve: "linear",
                             stack: "total",
                             stackOrder: "ascending",
-                            data: latestOneYearReports,
+                            data: MonthlyconcealedReviews,
                             area: true,
                             color: theme.palette.error.main,
                         },

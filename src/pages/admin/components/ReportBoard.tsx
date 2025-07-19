@@ -6,35 +6,45 @@ import {
 } from "@mui/x-data-grid";
 import { getColumns } from "../internals/data/gridData";
 import Box from "@mui/material/Box";
-
 import { updateReportStatus } from "../../../services/reportHandler";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { mapReportsToRows } from "../../../services/mapReportsToRows";
-import mock from "../../../../public/mock/report.json";
-import { ConfirmDialog } from "../../../components/ConfirmDialog";
-
+import axios from "axios";
+import type { Report } from "../../../types/reportTypes"; // Report 타입 정의
 interface ReportBoardProps {
-    filtered?: boolean; // 필터 적용 여부
-
+    filtered?: boolean; // 필터 적용 여부(미처리만 보여주기)
 }
 
 export default function ReportBoard({ filtered = false }: ReportBoardProps) {
-    const rows: GridRowsProp = mapReportsToRows(mock);
+    const [fetchReport, setFetchReport] = useState<Report[] | null>(null);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await axios.get<Report[] | null>(
+                    // http://localhost:8080/api/v1/admin/reports?page=0&size=10,
+                    "/mock/report.json",
+                );
+                setFetchReport(res.data);
+            } catch (err) {
+                console.error("대시보드 데이터 불러오기 실패:", err);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const rows: GridRowsProp = fetchReport ? mapReportsToRows(fetchReport) : [];
     const [reportList, setReportList] = useState<GridValidRowModel[]>([
         ...rows,
     ]);
-    const [isDialogOpen, setDialogOpen] = useState(false);
-
-
     const handleDelete = (reportId: number) => {
         const updated = updateReportStatus(reportList, reportId, "APPROVED");
         setReportList(updated);
-        setDialogOpen(false);
     };
 
     const columns = getColumns(handleDelete);
-    
-
+    if (!fetchReport) {
+        return <div className="text-white text-center">Loading...</div>;
+    }
     return (
         <Box sx={{ width: "100%" }}>
             <DataGrid
@@ -53,7 +63,7 @@ export default function ReportBoard({ filtered = false }: ReportBoardProps) {
                         sortModel: [
                             {
                                 field: "submissionTime",
-                                sort: "desc", // 오름차순은 "asc"
+                                sort: "desc",
                             },
                         ],
                     },
@@ -64,8 +74,8 @@ export default function ReportBoard({ filtered = false }: ReportBoardProps) {
                                 items: [
                                     {
                                         field: "status",
-                                        operator: "equals", // 연산자
-                                        value: "UNPROCESSED", // 필터 값
+                                        operator: "equals",
+                                        value: "UNPROCESSED",
                                     },
                                 ],
                             },

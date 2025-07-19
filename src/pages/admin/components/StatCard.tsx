@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -9,7 +8,6 @@ import Typography from "@mui/material/Typography";
 import { SparkLineChart } from "@mui/x-charts/SparkLineChart";
 import { areaElementClasses } from "@mui/x-charts/LineChart";
 import calcPercentChange from "../../../services/calcPercentChange";
-import axios from "axios";
 
 export type StatCardProps = {
     title: string;
@@ -18,12 +16,6 @@ export type StatCardProps = {
     trend: "up" | "down" | "neutral";
     data: number[];
 };
-
-interface DashboardDataDTO {
-    totalMembers: number[];
-    totalReviews: number[];
-    concealedReviews: number[];
-}
 
 function getLastMonthFromYesterday() {
     const today = new Date();
@@ -64,26 +56,6 @@ export default function StatCard({
 }: StatCardProps) {
     const theme = useTheme();
     const latestOneMonth = getLastMonthFromYesterday();
-    const [dashboardState, setDashboardState] =
-        useState<DashboardDataDTO>(null);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await axios.get<DashboardDataDTO | null>(
-                    `/mock/latestOneMonth.json?ts=${Date.now()}`,
-                );
-                setDashboardState(res.data);
-            } catch (err) {
-                console.error("대시보드 데이터 불러오기 실패:", err);
-            }
-        };
-        fetchData();
-    }, []);
-
-    if (!dashboardState) {
-        return <div className="text-white text-center">Loading...</div>;
-    }
 
     const trendColors = {
         up:
@@ -110,22 +82,11 @@ export default function StatCard({
     const chartColor = trendColors[trend];
 
     // (현재 월 - 전월 값) / 전월 값 * 100
-    const userPercentage = calcPercentChange(
-        dashboardState.totalMembers[29],
-        dashboardState.totalMembers[0],
-    );
-    const reviewNum = calcPercentChange(
-        dashboardState.totalReviews[29],
-        dashboardState.totalReviews[0],
-    );
-    const reportNum = calcPercentChange(
-        dashboardState.concealedReviews[29],
-        dashboardState.concealedReviews[0],
-    );
+    const Percentage = calcPercentChange(data[29], data[0]);
     const trendValues = {
-        up: "+" + String(userPercentage) + "%",
-        neutral: "+" + String(reviewNum) + "%",
-        down: "+" + String(reportNum) + "%",
+        up: "+" + String(Percentage) + "%",
+        down: "+" + String(Percentage) + "%",
+        neutral: "+" + String(Percentage) + "%",
     };
 
     return (

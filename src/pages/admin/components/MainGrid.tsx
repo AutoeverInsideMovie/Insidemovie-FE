@@ -4,61 +4,73 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Copyright from "../internals/components/Copyright";
-import ChartUserByCountry from "./ChartUserByCountry";
 import CustomizedTreeView from "./CustomizedTreeView";
 import ReportBoard from "./ReportBoard";
-import HighlightedCard from "./HighlightedCard";
 import PageViewsBarChart from "./PageViewsBarChart";
 import SessionsChart from "./SessionsChart";
-import StatCard, { StatCardProps } from "./StatCard";
+import StatCard, { type StatCardProps } from "./StatCard";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-// 더미데이터
-const latestOneMonthUsers: number[] = [
-    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1350,
-    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1350,
-    1000, 1100, 1150, 1100, 1200, 1250,
-];
-const latestOneMonthReviews: number[] = [
-    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1800,
-    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1800,
-    1000, 1100, 1150, 1100, 1200, 1250,
-];
-const latestOneMonthReports: number[] = [
-    550, 560, 570, 580, 600, 670, 680, 690, 700, 710, 720, 730, 550, 560, 570,
-    580, 600, 670, 680, 690, 700, 710, 720, 730, 550, 560, 570, 580, 600, 670,
-];
-
-const data: StatCardProps[] = [
-    {
-        title: "유저",
-        value: String(latestOneMonthUsers[29]),
-        interval: "일별 추이 (지난 30일 - 어제)",
-        trend: "up",
-        data: latestOneMonthUsers,
-    },
-    {
-        title: "리뷰",
-        value: String(latestOneMonthReviews[29]),
-        interval: "일별 추이 (지난 30일 - 어제)",
-        trend: "neutral",
-        data: latestOneMonthReviews,
-    },
-    {
-        title: "신고",
-        value: String(latestOneMonthReports[29]),
-        interval: "일별 추이 (지난 30일 - 어제)",
-        trend: "down",
-        data: latestOneMonthReports,
-    },
-];
+interface DashboardDataDTO {
+    totalMembers: number[];
+    totalReviews: number[];
+    concealedReviews: number[];
+    MonthlytotalMembers: number[];
+    MonthlytotalReviews: number[];
+    MonthlyconcealedReviews: number[];
+}
 
 export default function MainGrid() {
     const navigate = useNavigate();
     const handleClick = () => {
         navigate("/admin/report"); // 이동할 경로 입력
     };
+    const [dashboardState, setDashboardState] =
+        useState<DashboardDataDTO>(null);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await axios.get<DashboardDataDTO | null>(
+                    // "http://localhost:8080/api/v1/admin/dashboard",
+                    "/mock/dashBoardData.json",
+                );
+                setDashboardState(res.data);
+            } catch (err) {
+                console.error("대시보드 데이터 불러오기 실패:", err);
+            }
+        };
+        fetchData();
+    }, []);
+
+    if (!dashboardState) {
+        return <div className="text-white text-center">Loading...</div>;
+    }
+    const data: StatCardProps[] = [
+        {
+            title: "유저",
+            value: String(dashboardState.totalMembers[29]),
+            interval: "일별 추이 (지난 30일 - 어제)",
+            trend: "up",
+            data: dashboardState.totalMembers,
+        },
+        {
+            title: "리뷰",
+            value: String(dashboardState.totalReviews[29]),
+            interval: "일별 추이 (지난 30일 - 어제)",
+            trend: "neutral",
+            data: dashboardState.totalReviews,
+        },
+        {
+            title: "신고",
+            value: String(dashboardState.concealedReviews[29]),
+            interval: "일별 추이 (지난 30일 - 어제)",
+            trend: "down",
+            data: dashboardState.concealedReviews,
+        },
+    ];
     return (
         <Box sx={{ width: "100%", maxWidth: { sm: "100%", md: "1700px" } }}>
             {/* cards */}
@@ -78,7 +90,13 @@ export default function MainGrid() {
                     </Grid>
                 ))}
                 <Grid size={{ xs: 12, md: 6 }}>
-                    <SessionsChart />
+                    <SessionsChart
+                        MonthlytotalMembers={dashboardState.MonthlytotalMembers}
+                        MonthlytotalReviews={dashboardState.MonthlytotalReviews}
+                        MonthlyconcealedReviews={
+                            dashboardState.MonthlyconcealedReviews
+                        }
+                    />
                 </Grid>
                 <Grid size={{ xs: 12, md: 6 }}>
                     <PageViewsBarChart />
