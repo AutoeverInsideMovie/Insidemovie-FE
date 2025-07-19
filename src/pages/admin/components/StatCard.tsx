@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -9,22 +9,7 @@ import Typography from "@mui/material/Typography";
 import { SparkLineChart } from "@mui/x-charts/SparkLineChart";
 import { areaElementClasses } from "@mui/x-charts/LineChart";
 import calcPercentChange from "../../../services/calcPercentChange";
-
-// 더미데이터
-const latestOneMonthUsers: number[] = [
-    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1350,
-    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1350,
-    1000, 1100, 1150, 1100, 1200, 1250,
-];
-const latestOneMonthReviews: number[] = [
-    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1800,
-    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1800,
-    1000, 1100, 1150, 1100, 1200, 1250,
-];
-const latestOneMonthReports: number[] = [
-    550, 560, 570, 580, 600, 670, 680, 690, 700, 710, 720, 730, 550, 560, 570,
-    580, 600, 670, 680, 690, 700, 710, 720, 730, 550, 560, 570, 580, 600, 670,
-];
+import axios from "axios";
 
 export type StatCardProps = {
     title: string;
@@ -33,6 +18,12 @@ export type StatCardProps = {
     trend: "up" | "down" | "neutral";
     data: number[];
 };
+
+interface DashboardDataDTO {
+    totalMembers: number[];
+    totalReviews: number[];
+    concealedReviews: number[];
+}
 
 function getLastMonthFromYesterday() {
     const today = new Date();
@@ -73,6 +64,26 @@ export default function StatCard({
 }: StatCardProps) {
     const theme = useTheme();
     const latestOneMonth = getLastMonthFromYesterday();
+    const [dashboardState, setDashboardState] =
+        useState<DashboardDataDTO>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await axios.get<DashboardDataDTO | null>(
+                    `/mock/latestOneMonth.json?ts=${Date.now()}`,
+                );
+                setDashboardState(res.data);
+            } catch (err) {
+                console.error("대시보드 데이터 불러오기 실패:", err);
+            }
+        };
+        fetchData();
+    }, []);
+
+    if (!dashboardState) {
+        return <div className="text-white text-center">Loading...</div>;
+    }
 
     const trendColors = {
         up:
@@ -100,16 +111,16 @@ export default function StatCard({
 
     // (현재 월 - 전월 값) / 전월 값 * 100
     const userPercentage = calcPercentChange(
-        latestOneMonthUsers[29],
-        latestOneMonthUsers[0],
+        dashboardState.totalMembers[29],
+        dashboardState.totalMembers[0],
     );
     const reviewNum = calcPercentChange(
-        latestOneMonthReviews[29],
-        latestOneMonthReviews[0],
+        dashboardState.totalReviews[29],
+        dashboardState.totalReviews[0],
     );
     const reportNum = calcPercentChange(
-        latestOneMonthReports[29],
-        latestOneMonthReports[0],
+        dashboardState.concealedReviews[29],
+        dashboardState.concealedReviews[0],
     );
     const trendValues = {
         up: "+" + String(userPercentage) + "%",

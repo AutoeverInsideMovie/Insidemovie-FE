@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Avatar from "@mui/material/Avatar";
 import MuiDrawer, { drawerClasses } from "@mui/material/Drawer";
@@ -6,9 +5,7 @@ import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import SelectContent from "./SelectContent";
 import MenuContent from "./MenuContent";
-// import CardAlert from './CardAlert';
 import OptionsMenu from "./OptionsMenu";
 import logoLight from "../../../assets/insidemovie_white_long.svg";
 import logoDark from "../../../assets/insidemovie_dark_long.svg";
@@ -28,9 +25,9 @@ const Drawer = styled(MuiDrawer)({
 });
 
 export default function SideMenu() {
-    const { mode } = useColorScheme();
-
-    const logo = mode === "light" ? logoDark : logoLight;
+    const { mode, systemMode } = useColorScheme();
+    const appliedMode = mode === "system" ? systemMode : mode;
+    const logo = appliedMode === "light" ? logoDark : logoLight;
     console.log(logo);
     return (
         <Drawer
@@ -50,7 +47,6 @@ export default function SideMenu() {
                     justifyContent: "center",
                 }}
             >
-                {/* <SelectContent /> */}
                 <img
                     src={logo}
                     alt="로고"
@@ -67,7 +63,6 @@ export default function SideMenu() {
                 }}
             >
                 <MenuContent />
-                {/* <CardAlert /> */}
             </Box>
             <Stack
                 direction="row"
