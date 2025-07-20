@@ -31,13 +31,20 @@ export default function MainGrid() {
     const [dashboardState, setDashboardState] =
         useState<DashboardDataDTO>(null);
     useEffect(() => {
+        const token = sessionStorage.getItem("accessToken");
+        console.log("토큰 : ", token);
         const fetchData = async () => {
             try {
-                const res = await axios.get<DashboardDataDTO | null>(
+                const res = await axios.get(
                     "http://localhost:8080/api/v1/admin/dashboard",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    },
                     // "/mock/dashBoardData.json",
                 );
-                setDashboardState(res.data);
+                setDashboardState(res.data.data);
             } catch (err) {
                 console.error("대시보드 데이터 불러오기 실패:", err);
             }

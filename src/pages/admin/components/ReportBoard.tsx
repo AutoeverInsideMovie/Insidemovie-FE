@@ -18,13 +18,20 @@ interface ReportBoardProps {
 export default function ReportBoard({ filtered = false }: ReportBoardProps) {
     const [reportList, setReportList] = useState<Report[] | null>(null);
     useEffect(() => {
+        const token = sessionStorage.getItem("accessToken");
+        console.log("토큰 : ", token);
         const fetchData = async () => {
             try {
-                const res = await axios.get<Report[] | null>(
+                const res = await axios.get(
                     "http://localhost:8080/api/v1/admin/reports?page=0&size=10",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    },
                     // "/mock/report.json",
                 );
-                setReportList(res.data);
+                setReportList(res.data.content);
             } catch (err) {
                 console.error("신고 페이지 데이터 불러오기 실패:", err);
             }
