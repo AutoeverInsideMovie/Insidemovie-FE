@@ -32,7 +32,7 @@ const MyPage: React.FC = () => {
         anger: angryProfile,
         sadness: sadnessProfile,
         fear: fearProfile,
-        neutral: disgustProfile,
+        disgust: disgustProfile,
     };
 
     const [isEditMode, setIsEditMode] = useState(false);

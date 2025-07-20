@@ -41,7 +41,7 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
                 sadness: sadNorm,
                 anger: angryNorm,
                 fear: fearNorm,
-                neutral: disgustNorm,
+                disgust: disgustNorm,
             });
             console.log(
                 `requestData: joy - ${joyNorm}, sad - ${sadNorm}, angry - ${angryNorm}, fear - ${fearNorm}, disgust - ${disgustNorm}`,

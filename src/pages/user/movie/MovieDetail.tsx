@@ -59,7 +59,7 @@ const MovieDetail: React.FC = () => {
         anger: number;
         sadness: number;
         fear: number;
-        neutral: number;
+        disgust: number;
         dominantEmotion: string;
     } | null>(null);
     const isLogin = false;
@@ -172,7 +172,7 @@ const MovieDetail: React.FC = () => {
                                 { icon: "fear", value: emotionStats.fear },
                                 {
                                     icon: "disgust",
-                                    value: emotionStats.neutral,
+                                    value: emotionStats.disgust,
                                 },
                                 // optional: use dominantEmotion if you have it
                             ].map((e, i) => (

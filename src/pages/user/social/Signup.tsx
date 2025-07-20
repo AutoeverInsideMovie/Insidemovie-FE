@@ -174,7 +174,7 @@ const Signup: React.FC = () => {
                     anger: 0,
                     sadness: 0,
                     fear: 0,
-                    neutral: 0,
+                    disgust: 0,
                 };
 
                 responses.forEach((res) => {
@@ -183,7 +183,7 @@ const Signup: React.FC = () => {
                     totals.anger += Number(d.anger) || 0;
                     totals.sadness += Number(d.sadness) || 0;
                     totals.fear += Number(d.fear) || 0;
-                    totals.neutral += Number(d.neutral) || 0;
+                    totals.disgust += Number(d.disgust) || 0;
                 });
                 const count = selectedMovies.length || 1; // 0 나누기 방지
                 setEmotionAverages({
@@ -191,7 +191,7 @@ const Signup: React.FC = () => {
                     angry: totals.anger / count, // 또는 field 이름에 맞춰 상태에 저장
                     sad: totals.sadness / count,
                     fear: totals.fear / count,
-                    disgust: totals.neutral / count, // neutral을 disgust에 매핑하거나 상태명 변경
+                    disgust: totals.disgust / count,
                 });
             } catch (err) {
                 console.error("Emotion fetch error", err);
@@ -362,7 +362,7 @@ const Signup: React.FC = () => {
                 sadness: emotionAverages.sad,
                 anger: emotionAverages.angry,
                 fear: emotionAverages.fear,
-                neutral: emotionAverages.disgust,
+                disgust: emotionAverages.disgust,
             });
 
             // 3) 모두 성공 시 로그인 화면으로 이동
