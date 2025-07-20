@@ -27,16 +27,6 @@ export default function ReportBoard({ filtered = false }: ReportBoardProps) {
         setReportList(updated);
     };
 
-    const handleReject = (reportId: number) => {
-        const updated = updateReportStatus(reportList, reportId, "REJECTED");
-        setReportList(updated);
-    };
-
-    const handleUnprocess = (reportId: number) => {
-        const updated = updateReportStatus(reportList, reportId, "UNPROCESSED");
-        setReportList(updated);
-    };
-
     const columns = getColumns(handleApprove);
 
     return (

@@ -34,8 +34,8 @@ export default function MainGrid() {
         const fetchData = async () => {
             try {
                 const res = await axios.get<DashboardDataDTO | null>(
-                    // "http://localhost:8080/api/v1/admin/dashboard",
-                    "/mock/dashBoardData.json",
+                    "http://localhost:8080/api/v1/admin/dashboard",
+                    // "/mock/dashBoardData.json",
                 );
                 setDashboardState(res.data);
             } catch (err) {
@@ -99,7 +99,13 @@ export default function MainGrid() {
                     />
                 </Grid>
                 <Grid size={{ xs: 12, md: 6 }}>
-                    <PageViewsBarChart />
+                    <PageViewsBarChart
+                        MonthlytotalMembers={dashboardState.MonthlytotalMembers}
+                        MonthlytotalReviews={dashboardState.MonthlytotalReviews}
+                        MonthlyconcealedReviews={
+                            dashboardState.MonthlyconcealedReviews
+                        }
+                    />
                 </Grid>
             </Grid>
             <Typography

@@ -21,31 +21,33 @@ export default function ReportBoard({ filtered = false }: ReportBoardProps) {
         const fetchData = async () => {
             try {
                 const res = await axios.get<Report[] | null>(
-                    // http://localhost:8080/api/v1/admin/reports?page=0&size=10,
-                    "/mock/report.json",
+                    "http://localhost:8080/api/v1/admin/reports?page=0&size=10",
+                    // "/mock/report.json",
                 );
                 setReportList(res.data);
             } catch (err) {
-                console.error("대시보드 데이터 불러오기 실패:", err);
+                console.error("신고 페이지 데이터 불러오기 실패:", err);
             }
         };
         fetchData();
     }, []);
-    const rows: GridRowsProp = reportList ? mapReportsToRows(reportList) : [];
-    
+    const rows: GridRowsProp = mapReportsToRows(reportList);
+
     const handleDelete = (reportId: number) => {
-        const updated = updateReportStatus(reportList, reportId, "APPROVED");
+        const updated = reportList?.map((r) =>
+            r.reportId === reportId ? { ...r, status: "APPROVED" } : r,
+        );
         setReportList(updated);
     };
 
     const columns = getColumns(handleDelete);
-    if (!fetchReport) {
+    if (!reportList) {
         return <div className="text-white text-center">Loading...</div>;
     }
     return (
         <Box sx={{ width: "100%" }}>
             <DataGrid
-                rows={reportList}
+                rows={rows}
                 columns={columns}
                 getRowClassName={(params) =>
                     params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"

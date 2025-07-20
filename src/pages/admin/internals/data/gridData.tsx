@@ -131,10 +131,7 @@ export const renderButton = (status, updateReportStatus) => {
                 onClick={updateReportStatus}
             />
         );
-    }
-};
-export const renderUpdateButton = (status, updateReportStatus) => {
-    if (status !== "UNPROCESSED") {
+    } else if (status !== "UNPROCESSED") {
         return (
             <Chip
                 label="변경"

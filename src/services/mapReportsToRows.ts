@@ -1,8 +1,6 @@
 import type { Report } from "../types/reportTypes"; // Report 타입 정의
 import dateFormat from "./dateFormating";
-import {
-    statusDisplayMap,
-} from "../pages/admin/internals/data/gridData";
+import { statusDisplayMap } from "../pages/admin/internals/data/gridData";
 
 import type { GridRowsProp } from "@mui/x-data-grid";
 import type { ReportStatus } from "types/reportStatus";
