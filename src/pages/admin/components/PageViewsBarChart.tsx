@@ -1,27 +1,16 @@
 import * as React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { alpha, useTheme } from "@mui/material/styles";
 
-// 더미데이터
-const latestOneMonthUsers: number[] = [
-    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1350,
-    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1350,
-    1000, 1100, 1150, 1100, 1200, 1250,
-];
-const latestOneMonthReviews: number[] = [
-    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1800,
-    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1800,
-    1000, 1100, 1150, 1100, 1200, 1250,
-];
-const latestOneMonthReports: number[] = [
-    550, 560, 570, 580, 600, 670, 680, 690, 700, 710, 720, 730, 550, 560, 570,
-    580, 600, 670, 680, 690, 700, 710, 720, 730, 550, 560, 570, 580, 600, 670,
-];
+interface PageViewBarChartProps {
+    MonthlytotalMembers: number[];
+    MonthlytotalReviews: number[];
+    MonthlyconcealedReviews: number[];
+}
 
 function getLastWeekFromYesterday() {
     const today = new Date();
@@ -42,7 +31,11 @@ function getLastWeekFromYesterday() {
     return days;
 }
 
-export default function PageViewsBarChart() {
+export default function PageViewsBarChart({
+    MonthlytotalMembers,
+    MonthlytotalReviews,
+    MonthlyconcealedReviews,
+}: PageViewBarChartProps) {
     const theme = useTheme();
     const latestOneWeek = getLastWeekFromYesterday();
     const colorPalette = [
@@ -50,6 +43,12 @@ export default function PageViewsBarChart() {
         (theme.vars || theme).palette.primary.main,
         (theme.vars || theme).palette.primary.light,
     ];
+    const safeSlice = (arr: number[]) => {
+        if (arr.length < 29) {
+            return arr.slice(-7);
+        }
+        return arr.slice(22, 29);
+    };
     return (
         <Card variant="outlined" sx={{ width: "100%" }}>
             <CardContent>
@@ -88,21 +87,21 @@ export default function PageViewsBarChart() {
                         {
                             id: "users",
                             label: "유저 수",
-                            data: latestOneMonthUsers.slice(22, 29),
+                            data: safeSlice(MonthlytotalMembers),
                             stack: "A",
                             color: alpha(theme.palette.success.main, 0.8),
                         },
                         {
                             id: "reviews",
                             label: "리뷰 수",
-                            data: latestOneMonthReviews.slice(22, 29),
+                            data: safeSlice(MonthlytotalReviews),
                             stack: "B",
                             color: alpha(theme.palette.grey[400], 0.8),
                         },
                         {
                             id: "reports",
                             label: "신고 수",
-                            data: latestOneMonthReports.slice(22, 29),
+                            data: safeSlice(MonthlyconcealedReviews),
                             stack: "C",
                             color: alpha(theme.palette.error.main, 0.8),
                         },

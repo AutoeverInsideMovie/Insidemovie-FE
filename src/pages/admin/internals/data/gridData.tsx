@@ -1,9 +1,11 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
-import { GridCellParams, GridRowsProp, GridColDef } from "@mui/x-data-grid";
-type ReportStatus = "APPROVED" | "REJECTED" | "UNPROCESSED";
-const statusDisplayMap: Record<
+import type { GridCellParams, GridColDef } from "@mui/x-data-grid";
+import type { ReportStatus } from "../../../../types/reportStatus";
+import axios from "axios";
+
+export const statusDisplayMap: Record<
     ReportStatus,
     {
         statusLabel: string;
@@ -12,17 +14,17 @@ const statusDisplayMap: Record<
         resultColor: "success" | "error" | "default";
     }
 > = {
-    APPROVED: {
+    ACCEPTED: {
         statusLabel: "처리",
         resultLabel: "삭제",
         statusColor: "default",
-        resultColor: "success",
+        resultColor: "error",
     },
     REJECTED: {
         statusLabel: "처리",
-        resultLabel: "거부",
+        resultLabel: "유지",
         statusColor: "default",
-        resultColor: "error",
+        resultColor: "success",
     },
     UNPROCESSED: {
         statusLabel: "미처리",
@@ -34,24 +36,28 @@ const statusDisplayMap: Record<
 
 function renderStatus(status: ReportStatus) {
     const config = statusDisplayMap[status];
+    if (!config) {
+        console.warn(`Unknown status: ${status}`);
+        return <Chip label="알 수 없음" color="default" size="small" />;
+    }
     if (config.statusColor === "warning") {
         return (
             <Chip
                 label={config.statusLabel}
                 size="small"
                 sx={{
-                    backgroundColor: "#fff9c4", // 연한 노랑 (파스텔톤)
-                    border: "1px solid #D4AF37", // 보더 추가!
+                    backgroundColor: "#fff9c4",
+                    border: "1px solid #D4AF37",
                     fontWeight: "bold",
                     boxShadow: "none",
                     "& .MuiChip-label": {
-                        color: "#D4AF37", // 여기서 진짜 텍스트 색 지정
+                        color: "#D4AF37",
                     },
                 }}
             />
         );
     }
-
+    console.log("renderStatus called with:", status);
     return (
         <Chip
             label={config.statusLabel}
@@ -113,143 +119,223 @@ export function renderAvatar(
     );
 }
 
-export const columns: GridColDef[] = [
-    {
-        field: "reportStatus",
-        headerName: "처리 상태",
-        headerAlign: "center",
-        align: "center",
-        flex: 0.5,
-        minWidth: 80,
-        renderCell: (params) => renderStatus(params.row.status as ReportStatus),
-    },
-    {
-        field: "reportResult",
-        headerName: "처리 결과",
-        headerAlign: "center",
-        align: "center",
-        flex: 0.5,
-        minWidth: 80,
-        renderCell: (params) => renderResult(params.row.status as ReportStatus),
-    },
-    {
-        field: "content",
-        headerName: "리뷰",
-        headerAlign: "center",
-        flex: 2,
-        minWidth: 200,
-    },
+export const renderButtonSimple = (
+    reportId: number,
+    currentStatus: ReportStatus,
+    handleStatusChange: (id: number, newStatus: ReportStatus) => void,
+) => {
+    const handleClick = async (newStatus: ReportStatus) => {
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+            console.error("토큰이 없습니다.");
+            return;
+        }
+        let statusParam = "";
+        if (newStatus === "REJECTED") {
+            statusParam = "reject";
+        } else if (newStatus === "ACCEPTED") {
+            statusParam = "accept";
+        } else if (newStatus === "UNPROCESSED") {
+            statusParam = "unprocessed";
+        }
 
-    {
-        field: "type",
-        headerName: "종류",
-        headerAlign: "center",
-        align: "center",
-        flex: 0.5,
-        minWidth: 100,
-        renderCell: (params) => renderType(params.value as ReportType),
-    },
-    {
-        field: "reviewer",
-        headerName: "작성자",
-        headerAlign: "center",
-        align: "center",
-        flex: 1,
-        minWidth: 80,
-    },
-
-    {
-        field: "reporter",
-        headerName: "신고자",
-        headerAlign: "center",
-        align: "center",
-        flex: 1,
-        minWidth: 100,
-    },
-    {
-        field: "submissionTime",
-        headerName: "접수 시간",
-        headerAlign: "center",
-        align: "center",
-        flex: 1.5,
-        minWidth: 150,
-    },
-];
-
-export const rows: GridRowsProp = [
-    {
-        id: 1,
-        status: "APPROVED",
-        content: "(욕설이 난무하는 리뷰)",
-        type: "INAPPROPRIATE_LANGUAGE",
-        reporter: "선량한평론가",
-        reviewer: "영화가싫다",
-        submissionTime: "2025-07-15 09:30:00",
-    },
-    {
-        id: 2,
-        status: "APPROVED",
-        content: "(성희롱을 포함한 리뷰)",
-        type: "SEXUAL_CONTENT",
-        reporter: "111111111",
-        reviewer: "닉네임을입력하세요",
-        submissionTime: "2025-06-20 14:45:00",
-    },
-    {
-        id: 3,
-        status: "REJECTED",
-        content: "(무례하지 않은 무고한 리뷰)",
-        type: "RUDE_BEHAVIOR",
-        reporter: "네다음영알못",
-        reviewer: "영화는내인생",
-        submissionTime: "2024-12-01 19:00:00",
-    },
-    {
-        id: 4,
-        status: "APPROVED",
-        content: "(무례한 발언을 하는 리뷰)",
-        type: "RUDE_BEHAVIOR",
-        reporter: "신고가좋아",
-        reviewer: "네다음영알못",
-        submissionTime: "2025-01-10 08:15:00",
-    },
-    {
-        id: 5,
-        status: "APPROVED",
-        content: "(리뷰 공간에 적힌 광고성 글)",
-        type: "ADVERTISEMENT",
-        reporter: "선량한평론가",
-        reviewer: "시공조아",
-        submissionTime: "2025-07-16 16:00:00",
-    },
-
-    {
-        id: 6,
-        status: "APPROVED",
-        content: "절름발이가 범인",
-        type: "SPOILER",
-        reporter: "아직안봤는데",
-        reviewer: "난이미봤는데",
-        submissionTime: "2025-07-16 23:15:00",
-    },
-    {
-        id: 7,
-        status: "UNPROCESSED",
-        content: "(아직 처리되지 않은 리뷰)",
-        type: "RUDE_BEHAVIOR",
-        reporter: "뭔데이건",
-        reviewer: "1234",
-        submissionTime: "2025-07-16 23:15:00",
-    },
-];
-
-const mappedRows = rows.map((row) => {
-    const config = statusDisplayMap[row.status as ReportStatus];
-    return {
-        ...row,
-        reportStatus: config.statusLabel,
-        reportResult: config.resultLabel,
+        try {
+            await axios.patch(
+                `http://localhost:8080/api/v1/admin/reports/${reportId}/${statusParam}`,
+                { status: newStatus },
+                { headers: { Authorization: `Bearer ${token}` } },
+            );
+            handleStatusChange(reportId, newStatus);
+        } catch (err) {
+            console.error("상태 변경 실패 : ", err);
+        }
     };
-});
 
-export default mappedRows;
+    if (currentStatus === "UNPROCESSED") {
+        return (
+            <>
+                <Chip
+                    label="삭제"
+                    color="error"
+                    variant="outlined"
+                    size="small"
+                    clickable
+                    onClick={() => handleClick("ACCEPTED")}
+                />
+                <Chip
+                    label="유지"
+                    color="success"
+                    variant="outlined"
+                    size="small"
+                    clickable
+                    onClick={() => handleClick("REJECTED")}
+                />
+            </>
+        );
+    } else {
+        return (
+            <>
+                <Chip
+                    label="보류"
+                    color="primary"
+                    variant="outlined"
+                    size="small"
+                    clickable
+                    onClick={() => handleClick("UNPROCESSED")}
+                />
+            </>
+        );
+    }
+};
+
+export function getSimpleColumns(
+    handleStatus: (reportId: number, newStatus: ReportStatus) => void,
+): GridColDef[] {
+    return [
+        {
+            field: "button",
+            headerName: "간편 관리",
+            headerAlign: "center",
+            align: "center",
+            flex: 0.5,
+            minWidth: 100,
+            disableColumnMenu: true,
+            sortable: false,
+            renderCell: (params) =>
+                renderButtonSimple(
+                    params.row.id,
+                    params.row.status,
+                    handleStatus,
+                ),
+        },
+        {
+            field: "status",
+        },
+        {
+            field: "reportStatus",
+            headerName: "처리 상태",
+            headerAlign: "center",
+            align: "center",
+            flex: 0.5,
+            minWidth: 80,
+            renderCell: (params) => renderStatus(params.row.status),
+        },
+        {
+            field: "reportResult",
+            headerName: "처리 결과",
+            headerAlign: "center",
+            align: "center",
+            flex: 0.5,
+            minWidth: 80,
+            renderCell: (params) => renderResult(params.row.status),
+        },
+        {
+            field: "content",
+            headerName: "리뷰",
+            headerAlign: "center",
+            flex: 2,
+            minWidth: 200,
+        },
+        {
+            field: "type",
+            headerName: "종류",
+            headerAlign: "center",
+            align: "center",
+            flex: 0.5,
+            minWidth: 100,
+            renderCell: (params) => renderType(params.value),
+        },
+        {
+            field: "reviewer",
+            headerName: "작성자",
+            headerAlign: "center",
+            align: "center",
+            flex: 0.5,
+            minWidth: 80,
+        },
+        {
+            field: "submissionTime",
+            headerName: "접수 시간",
+            headerAlign: "center",
+            align: "center",
+            flex: 1,
+            minWidth: 150,
+        },
+    ];
+}
+
+export function getColumns(
+    handleStatus: (reportId: number, newStatus: ReportStatus) => void,
+): GridColDef[] {
+    return [
+        {
+            field: "button",
+            headerName: "간편 관리",
+            headerAlign: "center",
+            align: "center",
+            flex: 0.5,
+            minWidth: 100,
+            disableColumnMenu: true,
+            sortable: false,
+            renderCell: (params) =>
+                renderButtonSimple(
+                    params.row.id,
+                    params.row.status,
+                    handleStatus,
+                ),
+        },
+        {
+            field: "status",
+        },
+        {
+            field: "reportStatus",
+            headerName: "처리 상태",
+            headerAlign: "center",
+            align: "center",
+            flex: 0.5,
+            minWidth: 80,
+            renderCell: (params) => renderStatus(params.row.status),
+        },
+        {
+            field: "reportResult",
+            headerName: "처리 결과",
+            headerAlign: "center",
+            align: "center",
+            flex: 0.5,
+            minWidth: 80,
+            renderCell: (params) => renderResult(params.row.status),
+        },
+        {
+            field: "content",
+            headerName: "리뷰",
+            headerAlign: "center",
+            flex: 2,
+            minWidth: 200,
+        },
+        {
+            field: "type",
+            headerName: "종류",
+            headerAlign: "center",
+            align: "center",
+            flex: 0.5,
+            minWidth: 100,
+            renderCell: (params) => renderType(params.value),
+        },
+        {
+            field: "reviewer",
+            headerName: "작성자",
+            headerAlign: "center",
+            align: "center",
+            flex: 0.5,
+            minWidth: 80,
+        },
+        {
+            field: "submissionTime",
+            headerName: "접수 시간",
+            headerAlign: "center",
+            align: "center",
+            flex: 1,
+            minWidth: 150,
+        },
+    ];
+}

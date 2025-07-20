@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -9,22 +8,6 @@ import Typography from "@mui/material/Typography";
 import { SparkLineChart } from "@mui/x-charts/SparkLineChart";
 import { areaElementClasses } from "@mui/x-charts/LineChart";
 import calcPercentChange from "../../../services/calcPercentChange";
-
-// 더미데이터
-const latestOneMonthUsers: number[] = [
-    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1350,
-    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1350,
-    1000, 1100, 1150, 1100, 1200, 1250,
-];
-const latestOneMonthReviews: number[] = [
-    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1800,
-    1000, 1100, 1150, 1100, 1200, 1250, 1260, 1270, 1280, 1290, 1300, 1800,
-    1000, 1100, 1150, 1100, 1200, 1250,
-];
-const latestOneMonthReports: number[] = [
-    550, 560, 570, 580, 600, 670, 680, 690, 700, 710, 720, 730, 550, 560, 570,
-    580, 600, 670, 680, 690, 700, 710, 720, 730, 550, 560, 570, 580, 600, 670,
-];
 
 export type StatCardProps = {
     title: string;
@@ -99,22 +82,11 @@ export default function StatCard({
     const chartColor = trendColors[trend];
 
     // (현재 월 - 전월 값) / 전월 값 * 100
-    const userPercentage = calcPercentChange(
-        latestOneMonthUsers[29],
-        latestOneMonthUsers[0],
-    );
-    const reviewNum = calcPercentChange(
-        latestOneMonthReviews[29],
-        latestOneMonthReviews[0],
-    );
-    const reportNum = calcPercentChange(
-        latestOneMonthReports[29],
-        latestOneMonthReports[0],
-    );
+    const Percentage = calcPercentChange(data[29], data[0]);
     const trendValues = {
-        up: "+" + String(userPercentage) + "%",
-        neutral: "+" + String(reviewNum) + "%",
-        down: "+" + String(reportNum) + "%",
+        up: "+" + String(Percentage) + "%",
+        down: "+" + String(Percentage) + "%",
+        neutral: "+" + String(Percentage) + "%",
     };
 
     return (
