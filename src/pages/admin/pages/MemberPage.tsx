@@ -20,7 +20,7 @@ import {
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Copyright from "../internals/components/Copyright";
-import ReportBoardLarge from "../components/ReportBoardLarge";
+import MemberBoard from "../components/MemberBoard";
 
 const xThemeComponents = {
     ...chartsCustomizations,

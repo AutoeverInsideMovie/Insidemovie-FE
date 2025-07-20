@@ -1,6 +1,6 @@
 export type filterItem = { date: string; count: number };
 
-export interface FilteredCumulativeData {
+export interface filteredCumulativeData {
     totalMembers: number[];
     totalReviews: number[];
     concealedReviews: number[];
