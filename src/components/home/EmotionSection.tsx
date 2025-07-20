@@ -59,7 +59,7 @@ const EmotionSection: React.FC<CharacterCarouselSectionProps> = ({
                 const sad100 = Math.round(data.sadness * 100);
                 const angry100 = Math.round(data.anger * 100);
                 const fear100 = Math.round(data.fear * 100);
-                const disgust100 = Math.round(data.neutral * 100);
+                const disgust100 = Math.round(data.disgust * 100);
                 setJoyValue(joy100);
                 setSadValue(sad100);
                 setAngryValue(angry100);
