@@ -3,7 +3,13 @@ import * as React from "react";
 interface ButtonProps {
     text: string;
     textColor?: "white" | "black";
-    buttonColor?: "kakao" | "default" | "transparent" | "disabled" | "white";
+    buttonColor?:
+        | "kakao"
+        | "default"
+        | "transparent"
+        | "disabled"
+        | "white"
+        | "red";
     disabled?: boolean;
     prefixIcon?: string;
     className?: string;
@@ -30,6 +36,7 @@ const Button: React.FC<ButtonProps> = ({
         transparent: "bg-box_bg_white hover:bg-white/40",
         disabled: "bg-grey_300",
         white: "bg-white hover:bg-white/80",
+        red: "bg-error_red hover:bg-error_red/70",
     };
 
     const textClass =

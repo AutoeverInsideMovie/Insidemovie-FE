@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useState, useEffect, useRef } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 // 에셋
 import Button from "../../components/Button";
 import TransparentBox from "../../components/TransparentBox";
@@ -10,32 +9,34 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CalendarIcon from "@assets/calendar.svg?react";
 import ReactDatePicker from "react-datepicker";
-import { format } from "date-fns";
 
 // 평점 라이브러리
-import SamplePoster from "@assets/sample_poster.png";
 import StarRating from "../../components/StarRating";
-
-interface Movie {
-    id: number;
-    image: string;
-    title: string;
-    genre: string;
-    releaseYear: string;
-}
+import { reviewApi } from "../../api/reviewApi";
+import { ConfirmDialog } from "../../components/ConfirmDialog";
+import type { MovieOne } from "../../interfaces/movieOne";
+import { movieApi } from "../../api/movieApi";
 
 const ReviewWrite: React.FC = () => {
-    const [movie, setMovie] = useState<Movie | null>(null);
-
+    const { movieId } = useParams<{ movieId: string }>();
     const [content, setContent] = useState<string>("");
     const [rating, setRating] = useState<number>(0);
     const [spoilerType, setSpoilerType] = useState<boolean>(false);
     const [watchedAt, setWatchedAt] = useState<Date | null>();
 
+    const [movieInfo, setMovieInfo] = useState<MovieOne | null>(null);
+
     const [isEditMode, setIsEditMode] = useState(false);
     const [reviewId, setReviewId] = useState<number | null>(null);
 
     const navigate = useNavigate();
+    const movieIdNumber = Number(movieId);
+
+    const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
+
+    const [isErrorOpen, setIsErrorOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     // 달력 아이콘으로 달력 열기
     const datePickerRef = useRef<ReactDatePicker | null>(null);
@@ -46,76 +47,86 @@ const ReviewWrite: React.FC = () => {
     };
     // 최초 마운트
     useEffect(() => {
+        if (!movieId) return;
         (async () => {
             try {
-                const res = await axios.get<Movie>("/mock/movie1.json");
-                setMovie(res.data);
-                console.log("불러온 영화 정보 : ", res.data);
-
-                const reviewIdFromParams = new URLSearchParams(
-                    window.location.search,
-                ).get("reviewId");
-                if (reviewIdFromParams) {
-                    setIsEditMode(true);
-                    setReviewId(Number(reviewIdFromParams));
-                    try {
-                        const reviewRes = await axios.get(
-                            `/mock/reviewEdit.json`,
-                        );
-                        setContent(reviewRes.data.content);
-                        setRating(reviewRes.data.rating);
-                        setWatchedAt(new Date(reviewRes.data.watchedAt));
-                        setSpoilerType(reviewRes.data.spoilerType);
-                    } catch (e) {
-                        console.error("리뷰 정보 조회 에러:", e);
-                    }
-                }
-            } catch (e) {
-                console.error("영화 정보 조회 에러!! : ", e);
+                // 영화 상세 조회
+                const detailRes = await movieApi().getMovieDetail({
+                    movieId: movieIdNumber,
+                });
+                setMovieInfo(detailRes.data.data);
+                const myRes = await reviewApi().getMyReview({
+                    movieId: movieIdNumber,
+                });
+                const myData = myRes.data.data;
+                setIsEditMode(true);
+                setReviewId(myData.reviewId);
+                setContent(myData.content);
+                setRating(myData.rating);
+                setWatchedAt(
+                    myData.watchedAt ? new Date(myData.watchedAt) : null,
+                );
+                setSpoilerType(myData.spoiler);
+            } catch {
+                // no existing review
             }
         })();
-    }, []);
+    }, [movieId]);
 
     // 제출
     const handleSubmit = async () => {
         if (!content.trim()) {
-            alert("리뷰 내용을 입력해주세요.");
+            setErrorMessage("리뷰 내용을 입력해주세요.");
+            setIsErrorOpen(true);
             return;
         }
         if (!watchedAt) {
-            alert("관람 일자를 선택해주세요.");
+            setErrorMessage("관람 일자를 선택해주세요.");
+            setIsErrorOpen(true);
             return;
         }
         if (rating < 0.5 || rating > 5) {
-            alert("별점을 선택해주세요.");
+            setErrorMessage("별점을 선택해주세요.");
+            setIsErrorOpen(true);
             return;
         }
 
         try {
-            const payload = {
-                movieId: movie?.id,
-                content,
-                rating,
-                watchedAt:
-                    watchedAt instanceof Date
-                        ? format(watchedAt, "yyyy-MM-dd")
-                        : null,
-                spoilerType,
-            };
             if (isEditMode && reviewId) {
-                await axios.put(`/api/review/${reviewId}`, payload);
-                alert("리뷰가 수정되었습니다.");
+                await reviewApi().modifyReview({
+                    reviewId,
+                    content,
+                    rating,
+                    spoiler: spoilerType,
+                    watchedAt: watchedAt.toISOString(),
+                });
+                setSuccessMessage("수정");
+                setIsSuccessOpen(true);
             } else {
-                await axios.post("/api/review", payload);
-                alert("리뷰가 등록되었습니다.");
+                await reviewApi().createReview({
+                    movieId: movieIdNumber,
+                    content,
+                    rating,
+                    spoiler: spoilerType,
+                    watchedAt: watchedAt.toISOString(),
+                });
+                setSuccessMessage("등록");
+                setIsSuccessOpen(true);
             }
-            // await axios.post("http://localhost:8080", payload);
-            navigate(-1); // 홈으로 이동
         } catch (err) {
             console.error("리뷰 등록 실패:", err);
-            alert("리뷰 등록 중 오류가 발생했습니다.");
+            setErrorMessage("리뷰 등록 중 오류가 발생했습니다.");
+            setIsErrorOpen(true);
         }
     };
+
+    if (!movieInfo) {
+        return (
+            <div className="w-full h-full flex justify-center items-center text-white">
+                로딩 중...
+            </div>
+        );
+    }
 
     return (
         <div className="flex justify-center">
@@ -135,16 +146,16 @@ const ReviewWrite: React.FC = () => {
                     </div>
                     <div className="flex gap-10 text-white">
                         <img
-                            src={SamplePoster}
-                            alt="인사이드 아웃"
+                            src={movieInfo.posterPath}
+                            alt={movieInfo.title}
                             className="w-20 object-contain"
                         />
                         <div className="flex flex-col justify-center">
                             <h1 className="text-4xl font-normal">
-                                인사이드 아웃
+                                {movieInfo.title}
                             </h1>
                             <div className="mt-2 font-light text-sm text-grey_200">
-                                애니메이션 · 2015
+                                {movieInfo.titleEn}
                             </div>
                         </div>
                     </div>
@@ -218,6 +229,29 @@ const ReviewWrite: React.FC = () => {
                     />
                 </div>
             </div>
+            <ConfirmDialog
+                isOpen={isErrorOpen}
+                title="오류"
+                message={errorMessage}
+                showCancel={false}
+                isRedButton={true}
+                onConfirm={() => setIsErrorOpen(false)}
+                onCancel={function (): void {
+                    throw new Error("Function not implemented.");
+                }}
+            />
+            <ConfirmDialog
+                isOpen={isSuccessOpen}
+                title={`리뷰 ${successMessage} 완료`}
+                message={`리뷰가 ${successMessage}되었습니다.`}
+                showCancel={false}
+                isRedButton={false}
+                onConfirm={() => {
+                    setIsSuccessOpen(false);
+                    navigate(-1);
+                }}
+                onCancel={() => setIsSuccessOpen(false)}
+            />
         </div>
     );
 };
