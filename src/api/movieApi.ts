@@ -54,6 +54,11 @@ export const movieApi = () => {
         return await axios.get(`/api/v1/movies/detail/${movieId}`);
     };
 
+    // 영화 좋아요 클릭
+    const likeMovie = async ({ movieId }) => {
+        return await axios.post(`/api/v1/movies/${movieId}/like-movie`);
+    };
+
     return {
         searchTitle,
         getPopularMoviesByGenre,
@@ -61,5 +66,6 @@ export const movieApi = () => {
         getPopularMovies,
         getMovieEmotions,
         getMovieDetail,
+        likeMovie,
     };
 };

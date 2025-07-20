@@ -7,9 +7,13 @@ export interface MovieOne {
     voteAverage: number;
     originalLanguage: string;
     isLike: boolean | null;
-    genre?: string[];
-    emotions?: {
-        icon: "joy" | "anger" | "sadness" | "fear" | "neutral";
-        value: number;
-    }[];
+    genre: string[];
+    actors: string[];
+    director: string[];
+    ottProviders: string[];
+    rating: string;
+    releaseDate: string;
+    runtime: number;
+    status: string;
+    titleEn: string;
 }

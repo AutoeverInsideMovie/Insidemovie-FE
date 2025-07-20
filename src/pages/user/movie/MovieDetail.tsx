@@ -13,6 +13,8 @@ import Button from "../../../components/Button";
 import ReviewItem from "../../../components/ReviewItem";
 import { useNavigate, useParams } from "react-router-dom";
 import MyReviewItem from "../../../components/MyReviewItem";
+import Like from "@assets/like.svg?react";
+import Unlike from "@assets/unlike.svg?react";
 
 interface ReviewItemProps {
     review_id: number;
@@ -113,6 +115,24 @@ const MovieDetail: React.FC = () => {
         })();
     }, [movieIdNumber]);
 
+    // 좋아요/취소 토글 핸들러
+    const handleLikeClick = async () => {
+        if (!movieInfo) return;
+        try {
+            if (movieInfo.isLike) {
+                await movieApi().likeMovie({ movieId: movieIdNumber });
+            } else {
+                await movieApi().likeMovie({ movieId: movieIdNumber });
+            }
+            // 로컬 state 토글
+            setMovieInfo((prev) =>
+                prev ? { ...prev, isLike: !prev.isLike } : prev,
+            );
+        } catch (e) {
+            console.error("좋아요 토글 실패:", e);
+        }
+    };
+
     // 데이터 로딩 전에는 아무것도 렌더링하지 않음
     if (!movieInfo) {
         return (
@@ -123,160 +143,215 @@ const MovieDetail: React.FC = () => {
     }
 
     return (
-        <div className="flex justify-center">
-            <div className="max-w-screen-lg w-full pt-20">
-                {/* 상단: 포스터 + 정보 */}
-                <div className="flex gap-10 text-white">
-                    <img
-                        src={movieInfo.posterPath}
-                        alt={movieInfo.title}
-                        className="w-52 rounded-md"
-                    />
-                    <div>
-                        <h1 className="text-4xl font-normal">
-                            {movieInfo.title}
-                        </h1>
-                        <div className="mt-2 font-light text-sm text-grey_200">
-                            애니메이션 · 2015
-                        </div>
-                        <StarRating
-                            value={movieInfo.voteAverage}
-                            readOnly={true}
-                            showValue={true}
+        <div className="relative">
+            <div className="absolute -top-[100px] left-0 w-full h-[840px] z-10">
+                <img
+                    src={movieInfo.backdropPath}
+                    alt="backdrop"
+                    className="w-full h-full object-cover opacity-50 blur-xs"
+                    style={{
+                        WebkitMaskImage:
+                            "linear-gradient(to top, transparent 0%, black 100%)",
+                        maskImage:
+                            "linear-gradient(to top, transparent 0%, black 100%)",
+                    }}
+                />
+            </div>
+            <div className="flex justify-center relative z-10 pt-96">
+                <div className="max-w-screen-lg w-full">
+                    {/* 상단: 포스터 + 정보 */}
+                    <div className="flex gap-10 text-white">
+                        <img
+                            src={movieInfo.posterPath}
+                            alt={movieInfo.title}
+                            className="w-52 h-fit rounded-md"
                         />
-                        <div className="mt-3 space-y-1 text-sm text-gray-300">
-                            <p>개봉일: 2015-07-09</p>
-                            <p>국가: 미국</p>
-                            <p>장르: 애니메이션, 가족, 코미디</p>
+                        <div>
+                            <div className="flex items-center gap-2">
+                                <h1 className="text-4xl font-normal">
+                                    {movieInfo.title}
+                                </h1>
+                                <button
+                                    className="ml-1 p-2 hover:bg-box_bg_white rounded-full transition-all duration-300"
+                                    onClick={handleLikeClick}
+                                >
+                                    {movieInfo.isLike ? <Like /> : <Unlike />}
+                                </button>
+                            </div>
+                            <div className="mt-2 font-light text-sm text-grey_200 mb-2">
+                                {movieInfo.titleEn}
+                            </div>
+                            <StarRating
+                                value={movieInfo.voteAverage}
+                                readOnly={true}
+                                showValue={true}
+                            />
+                            <div className="mt-3 space-y-1 text-sm text-gray-300">
+                                <p>개봉일 : {movieInfo.releaseDate}</p>
+                                <p>상영 시간 : {movieInfo.runtime}분</p>
+                                <p>
+                                    장르 :{" "}
+                                    {movieInfo.genre.length > 0
+                                        ? movieInfo.genre.join(", ")
+                                        : "장르 정보 없음"}
+                                </p>
+                                <p>
+                                    언어 :{" "}
+                                    {movieInfo.originalLanguage.toUpperCase()}
+                                </p>
+                                <p>
+                                    감독 :{" "}
+                                    {movieInfo.director.length > 0
+                                        ? movieInfo.director.join(", ")
+                                        : "감독 정보 없음"}
+                                </p>
+                                <p
+                                    className="mt-1 text-sm text-gray-300 overflow-hidden"
+                                    style={{
+                                        display: "-webkit-box",
+                                        WebkitLineClamp: 5,
+                                        WebkitBoxOrient: "vertical",
+                                    }}
+                                >
+                                    배우 :{" "}
+                                    {movieInfo.actors.length > 0
+                                        ? movieInfo.actors.join(", ")
+                                        : "배우 정보 없음"}
+                                </p>
+                            </div>
                         </div>
+                        {/*<img src={Background} className={"w-[80px]"} />*/}
                     </div>
-                    {/*<img src={Background} className={"w-[80px]"} />*/}
-                </div>
 
-                {/* 감정 평가 & 시놉시스 */}
-                <div className="flex gap-10 mt-10">
-                    <div className="flex-1 bg-box_bg_white p-6 rounded-3xl">
-                        <div className="flex items-center mb-4 text-white">
-                            <h2 className="text-3xl  font-bold">감정 평가</h2>
-                            <p className="font-light text-xs ml-2">
-                                | 사용자의 리뷰를 바탕으로 제작되었습니다.
+                    {/* 감정 평가 & 시놉시스 */}
+                    <div className="flex gap-10 mt-10">
+                        <div className="flex-1 bg-box_bg_white p-6 rounded-3xl">
+                            <div className="flex items-center mb-4 text-white">
+                                <h2 className="text-3xl  font-bold">
+                                    감정 평가
+                                </h2>
+                                <p className="font-light text-xs ml-2">
+                                    | 사용자의 리뷰를 바탕으로 제작되었습니다.
+                                </p>
+                            </div>
+
+                            {/* 감정 바: API 결과 사용 */}
+                            {emotionStats &&
+                                [
+                                    { icon: "joy", value: emotionStats.joy },
+                                    {
+                                        icon: "angry",
+                                        value: emotionStats.anger,
+                                    },
+                                    {
+                                        icon: "sad",
+                                        value: emotionStats.sadness,
+                                    },
+                                    { icon: "fear", value: emotionStats.fear },
+                                    {
+                                        icon: "disgust",
+                                        value: emotionStats.disgust,
+                                    },
+                                    // optional: use dominantEmotion if you have it
+                                ].map((e, i) => (
+                                    <div
+                                        key={i}
+                                        className="flex items-center gap-1 mb-2"
+                                    >
+                                        <img
+                                            src={emotionMap[e.icon]}
+                                            alt={e.icon}
+                                            className="w-10 h-10"
+                                        />
+                                        <div className="w-full h-2 rounded-full bg-box_bg_white overflow-hidden">
+                                            <div
+                                                className={`${emotionColorMap[e.icon]} h-full rounded-full`}
+                                                style={{
+                                                    width: `${Math.round(e.value * 100)}%`,
+                                                }}
+                                            />
+                                        </div>
+                                        <span className="ml-2 w-12 text-sm text-white">
+                                            {Math.round(e.value * 100)}%
+                                        </span>
+                                    </div>
+                                ))}
+                        </div>
+                        <div className="flex-1 bg-box_bg_white p-6 rounded-3xl text-white">
+                            <h2 className="text-3xl  font-bold">시놉시스</h2>
+                            <p className="text-sm text-gray-300 leading-relaxed mt-5">
+                                {movieInfo.overview}
                             </p>
                         </div>
-
-                        {/* 감정 바: API 결과 사용 */}
-                        {emotionStats &&
-                            [
-                                { icon: "joy", value: emotionStats.joy },
-                                { icon: "anger", value: emotionStats.anger },
-                                { icon: "sad", value: emotionStats.sadness },
-                                { icon: "fear", value: emotionStats.fear },
-                                {
-                                    icon: "disgust",
-                                    value: emotionStats.disgust,
-                                },
-                                // optional: use dominantEmotion if you have it
-                            ].map((e, i) => (
-                                <div
-                                    key={i}
-                                    className="flex items-center gap-1 mb-2"
-                                >
-                                    <img
-                                        src={emotionMap[e.icon]}
-                                        alt={e.icon}
-                                        className="w-10 h-10"
-                                    />
-                                    <div className="w-full h-2 rounded-full bg-box_bg_white overflow-hidden">
-                                        <div
-                                            className={`${emotionColorMap[e.icon]} h-full rounded-full`}
-                                            style={{
-                                                width: `${Math.round(e.value * 100)}%`,
-                                            }}
-                                        />
-                                    </div>
-                                    <span className="ml-2 text-sm text-white">
-                                        {Math.round(e.value * 100)}%
-                                    </span>
-                                </div>
-                            ))}
                     </div>
-                    <div className="flex-1 bg-box_bg_white p-6 rounded-3xl text-white">
-                        <h2 className="text-3xl  font-bold">시놉시스</h2>
-                        <p className="text-sm text-gray-300 leading-relaxed mt-5">
-                            주인공 ‘라일리’는 평범한 11살 소녀! 어느 날 아빠의
-                            직장 문제로 인해 낯선 도시 샌프란시스코로 이사를
-                            오게 되고, ‘라일리’의 머릿속 감정 컨트롤 본부에서는
-                            다섯 감정 ‘기쁨이’, ‘슬픔이’, ‘버럭이’, ‘까칠이’,
-                            ‘소심이’가 흥분하기 시작하는데...
-                        </p>
-                    </div>
-                </div>
 
-                {/* 내가 쓴 리뷰 */}
-                {isLogin && (
-                    <div className="mt-10">
-                        <h2 className="text-3xl font-semibold text-white">
-                            내가 쓴 리뷰
-                        </h2>
-                        <div className="p-10 rounded-3xl border border-white/20 mt-6">
-                            <Button
-                                text="리뷰 작성 하기"
-                                className="mx-auto block px-6 py-2"
-                                onClick={() => {
-                                    navigate("/review-write");
-                                }}
-                            />
+                    {/* 내가 쓴 리뷰 */}
+                    {isLogin && (
+                        <div className="mt-10">
+                            <h2 className="text-3xl font-semibold text-white">
+                                내가 쓴 리뷰
+                            </h2>
+                            <div className="p-10 rounded-3xl border border-white/20 mt-6">
+                                <Button
+                                    text="리뷰 작성 하기"
+                                    className="mx-auto block px-6 py-2"
+                                    onClick={() => {
+                                        navigate("/review-write");
+                                    }}
+                                />
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
 
-                {/* 로그인 시 작성한 리뷰 보여주기 */}
-                {!isLogin && reviewList.length > 0 && (
-                    <MyReviewItem
-                        reviewId={reviewList[0].reviewId}
-                        content={reviewList[0].content}
-                        rating={reviewList[0].rating}
-                        spoiler={false}
-                        createdAt={reviewList[0].createdAt}
-                        likeCount={reviewList[0].likeCount}
-                        myReview={reviewList[0].myReview}
-                        modify={reviewList[0].modify}
-                        myLike={reviewList[0].myLike}
-                        nickname={reviewList[0].nickname}
-                        memberId={reviewList[0].memberId}
-                        movieId={reviewList[0].movieId}
-                        profile={reviewList[0].profile}
-                        emotions={reviewList[0].emotions}
-                        isReported={reviewList[0].isReported}
-                        isConcealed={reviewList[0].isConcealed}
-                        isMypage={false}
-                    />
-                )}
-
-                {/* 리뷰 목록 */}
-                <div className="mt-12">
-                    <h2 className="text-3xl font-semibold text-white mb-6">
-                        리뷰
-                    </h2>
-                    {reviewList.map((review) => (
-                        <ReviewItem
-                            reviewId={review.reviewId}
-                            content={review.content}
-                            rating={review.rating}
+                    {/* 로그인 시 작성한 리뷰 보여주기 */}
+                    {!isLogin && reviewList.length > 0 && (
+                        <MyReviewItem
+                            reviewId={reviewList[0].reviewId}
+                            content={reviewList[0].content}
+                            rating={reviewList[0].rating}
                             spoiler={false}
-                            createdAt={review.createdAt}
-                            likeCount={review.likeCount}
-                            myReview={review.myReview}
-                            modify={review.modify}
-                            myLike={review.myLike}
-                            nickname={review.nickname}
-                            memberId={review.memberId}
-                            movieId={review.movieId}
-                            profile={review.profile}
-                            emotions={review.emotions}
-                            isReported={review.isReported}
-                            isConcealed={review.isConcealed}
+                            createdAt={reviewList[0].createdAt}
+                            likeCount={reviewList[0].likeCount}
+                            myReview={reviewList[0].myReview}
+                            modify={reviewList[0].modify}
+                            myLike={reviewList[0].myLike}
+                            nickname={reviewList[0].nickname}
+                            memberId={reviewList[0].memberId}
+                            movieId={reviewList[0].movieId}
+                            profile={reviewList[0].profile}
+                            emotions={reviewList[0].emotions}
+                            isReported={reviewList[0].isReported}
+                            isConcealed={reviewList[0].isConcealed}
+                            isMypage={false}
                         />
-                    ))}
+                    )}
+
+                    {/* 리뷰 목록 */}
+                    <div className="mt-12">
+                        <h2 className="text-3xl font-semibold text-white mb-6">
+                            리뷰
+                        </h2>
+                        {reviewList.map((review) => (
+                            <ReviewItem
+                                reviewId={review.reviewId}
+                                content={review.content}
+                                rating={review.rating}
+                                spoiler={false}
+                                createdAt={review.createdAt}
+                                likeCount={review.likeCount}
+                                myReview={review.myReview}
+                                modify={review.modify}
+                                myLike={review.myLike}
+                                nickname={review.nickname}
+                                memberId={review.memberId}
+                                movieId={review.movieId}
+                                profile={review.profile}
+                                emotions={review.emotions}
+                                isReported={review.isReported}
+                                isConcealed={review.isConcealed}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
