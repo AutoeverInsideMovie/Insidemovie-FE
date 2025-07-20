@@ -8,18 +8,18 @@ import Stack from "@mui/material/Stack";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
-import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+// import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const mainListItems = [
     { text: "Home", icon: <HomeRoundedIcon />, path: "/admin" },
     { text: "Members", icon: <PeopleRoundedIcon />, path: "/admin/member" },
     { text: "Reports", icon: <AssignmentRoundedIcon />, path: "/admin/report" },
-    {
-        text: "Settings",
-        icon: <SettingsRoundedIcon />,
-        path: "/admin/settings",
-    },
+    // {
+    //     text: "Settings",
+    //     icon: <SettingsRoundedIcon />,
+    //     path: "/admin/settings",
+    // },
 ];
 
 export default function MenuContent() {

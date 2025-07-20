@@ -11,7 +11,6 @@ import MovieDetail from "./pages/user/movie/MovieDetail";
 import Dashboard from "./pages/admin/pages/Dashboard";
 import ReportPage from "./pages/admin/pages/ReportPage";
 import MemberPage from "./pages/admin/pages/MemberPage";
-import SettingsPage from "./pages/admin/pages/SettingsPage";
 import ReviewWrite from "./pages/user/ReviewWrite";
 import KakaoRedirect from "./pages/user/social/KakaoRedirect";
 import SignupKakao from "./pages/user/social/SignupKakao";
@@ -29,8 +28,7 @@ const AppContent: React.FC = () => {
         location.pathname === "/signup-kakao" ||
         location.pathname === "/admin" ||
         location.pathname === "/admin/report" ||
-        location.pathname === "/admin/member" ||
-        location.pathname === "/admin/settings";
+        location.pathname === "/admin/member";
 
     return (
         <>
@@ -66,7 +64,6 @@ const AppContent: React.FC = () => {
                 <Route path="/admin" element={<Dashboard />} />
                 <Route path="/admin/report" element={<ReportPage />} />
                 <Route path="/admin/member" element={<MemberPage />} />
-                <Route path="/admin/settings" element={<SettingsPage />} />
             </Routes>
         </>
     );

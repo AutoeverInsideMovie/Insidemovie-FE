@@ -5,7 +5,6 @@ import type { GridCellParams, GridColDef } from "@mui/x-data-grid";
 import type { ReportStatus, ReportType } from "../../../../types/reportStatus";
 import axios from "axios";
 import type { JSX } from "react";
-import dateFormat from "../../../../services/dateFormating";
 
 export const statusDisplayMap: Record<
     ReportStatus,
@@ -454,14 +453,6 @@ export function getMemberColumns(
             align: "center",
             flex: 0.5,
             minWidth: 80,
-            renderCell: (params) => {
-                const auth = params.value as string;
-                let color = "#000";
-                if (auth === "관리자") {
-                    color = "yellow";
-                } else color = "#fff";
-                return <span style={{ color }}>{params.value}</span>;
-            },
         },
         {
             field: "createdAt",
