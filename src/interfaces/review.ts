@@ -12,7 +12,7 @@ export interface Review {
     memberId: string;
     movieId: string;
     profile: string;
-    emotions: {
+    emotion: {
         icon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
         value: number;
     }[];
