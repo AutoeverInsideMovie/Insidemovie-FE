@@ -1,4 +1,4 @@
-import type { Report } from "../types/reportTypes"; // Report 타입 정의
+import type { Report } from "../types/report"; // Report 타입 정의
 import dateFormat from "./dateFormating";
 import { statusDisplayMap } from "../pages/admin/internals/data/gridData";
 
@@ -14,7 +14,6 @@ export function mapReportsToRows(reports: Report[]): GridRowsProp {
         const config = statusDisplayMap[statusKey];
         if (!config) {
             console.warn(`Unknown status key: ${statusKey}`);
-            // 기본값을 직접 넣거나 빈 문자열로 처리
             return {
                 id: report.reportId,
                 status: report.status,

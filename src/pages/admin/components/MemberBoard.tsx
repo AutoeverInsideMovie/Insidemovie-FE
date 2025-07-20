@@ -1,27 +1,26 @@
 import * as React from "react";
 import { DataGrid, type GridRowsProp } from "@mui/x-data-grid";
-import { getSimpleColumns } from "../internals/data/gridData";
+import { getMemberColumns } from "../internals/data/gridData";
 import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
-import { mapReportsToRows } from "../../../services/mapReportsToRows";
 import axios from "axios";
-import type { Report } from "../../../types/report"; // Report 타입 정의
-import type { ReportStatus } from "../../../types/reportStatus"; // Report 상태 타입 정의
+import type { Member } from "../../../types/member"; // Report 타입 정의
 import { useNavigate } from "react-router-dom";
-interface ReportBoardProps {
-    filtered?: boolean; // 필터 적용 여부(미처리만 보여주기)
-}
+import { mapMembersToRows } from "../../../services/mapMembersToRows";
+// interface ReportBoardProps {
+//     filtered?: boolean; // 필터 적용 여부(미처리만 보여주기)
+// }
 
-export default function ReportBoard({ filtered = false }: ReportBoardProps) {
+export default function MemberBoard() {
+    const [memberList, setMemberList] = useState<Member[] | null>(null);
     const navigate = useNavigate();
-    const [reportList, setReportList] = useState<Report[] | null>(null);
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
         console.log("토큰 : ", token);
         const fetchData = async () => {
             try {
                 const res = await axios.get(
-                    "http://localhost:8080/api/v1/admin/reports?page=0&size=10",
+                    "http://localhost:8080/api/v1/admin/members?page=0&size=20",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -34,26 +33,29 @@ export default function ReportBoard({ filtered = false }: ReportBoardProps) {
                     console.error("allData 없음");
                     return;
                 }
-                setReportList(allData);
+                setMemberList(allData);
                 console.log("필터링 : ", allData);
             } catch (err) {
-                console.error("신고 데이터 불러오기 실패:", err);
+                console.error("멤버 페이지 데이터 불러오기 실패:", err);
                 navigate("/login");
             }
         };
         fetchData();
     }, []);
-    const rows: GridRowsProp = mapReportsToRows(reportList);
+    const rows: GridRowsProp = mapMembersToRows(memberList);
+    if (!memberList) {
+        return [];
+    }
 
-    const handleStatusChange = (reportId: number, newStatus: ReportStatus) => {
-        const updated = reportList.map((r) =>
-            r.reportId === reportId ? { ...r, status: newStatus } : r,
+    const handleBannedChange = (memberId: number, newStatus: boolean) => {
+        const updated = memberList.map((r) =>
+            r.id === memberId ? { ...r, banned: newStatus } : r,
         );
-        setReportList(updated ?? []);
+        setMemberList(updated ?? []);
     };
-    const columns = getSimpleColumns(handleStatusChange);
+    const columns = getMemberColumns(handleBannedChange);
 
-    if (!reportList) {
+    if (!memberList) {
         return <div className="text-white text-center">Loading...</div>;
     }
     return (
@@ -78,20 +80,7 @@ export default function ReportBoard({ filtered = false }: ReportBoardProps) {
                             },
                         ],
                     },
-                    pagination: { paginationModel: { pageSize: 10 } },
-                    ...(filtered && {
-                        filter: {
-                            filterModel: {
-                                items: [
-                                    {
-                                        field: "status",
-                                        operator: "equals",
-                                        value: "UNPROCESSED",
-                                    },
-                                ],
-                            },
-                        },
-                    }),
+                    pagination: { paginationModel: { pageSize: 20 } },
                 }}
                 pageSizeOptions={[10, 20, 50]}
                 disableColumnResize

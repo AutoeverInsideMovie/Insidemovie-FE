@@ -54,6 +54,7 @@ export default function ReportPage(props: { disableCustomTheme?: boolean }) {
                             mx: 3,
                             pb: 5,
                             mt: { xs: 12, md: 0 },
+                            minHeight: "100vh",
                         }}
                     >
                         <Header />
