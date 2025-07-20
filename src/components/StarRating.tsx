@@ -22,7 +22,7 @@ const StarRating: React.FC<StarRatingProps> = ({
         <div className="flex items-center gap-2">
             <Rating
                 name="rating"
-                value={showOneStar ? 1 : value}
+                value={showOneStar ? 1 : value / 2}
                 precision={0.5}
                 readOnly={readOnly}
                 max={showOneStar ? 1 : 5}
