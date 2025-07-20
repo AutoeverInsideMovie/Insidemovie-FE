@@ -73,7 +73,7 @@ export const memberApi = () => {
         sadness,
         fear,
         anger,
-        neutral,
+        disgust,
     }) => {
         return await axios.post("/api/v1/member/signup/emotion", {
             memberId,
@@ -81,7 +81,7 @@ export const memberApi = () => {
             sadness,
             fear,
             anger,
-            neutral,
+            disgust,
         });
     };
 

@@ -24,7 +24,7 @@ const emotionMap = {
     sadness: sadIcon,
     anger: angryIcon,
     fear: fearIcon,
-    neutral: disgustIcon,
+    disgust: disgustIcon,
     bingbong: bingbongIcon,
 };
 

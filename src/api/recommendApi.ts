@@ -6,14 +6,14 @@ export const recommendApi = () => {
         joy,
         anger,
         fear,
-        neutral,
+        disgust,
         sadness,
     }) => {
         return await axios.post("/api/v1/recommend/emotion", {
             joy,
             anger,
             fear,
-            neutral,
+            disgust,
             sadness,
         });
     };
