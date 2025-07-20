@@ -59,7 +59,8 @@ const KakaoRedirect: React.FC = () => {
                         localStorage.setItem("accessToken", accessToken);
                         localStorage.setItem("refreshToken", refreshToken);
 
-                        navigate("/");
+                        navigate("/", { replace: true });
+                        window.location.replace("/");
                     } else {
                         setDialog({
                             isOpen: true,
