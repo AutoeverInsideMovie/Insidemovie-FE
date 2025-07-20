@@ -54,6 +54,7 @@ export default function MemberPage(props: { disableCustomTheme?: boolean }) {
                             mx: 3,
                             pb: 5,
                             mt: { xs: 12, md: 0 },
+                            minHeight: "100vh", // ✅ 추가: 화면 전체 높이를 보장
                         }}
                     >
                         <Header />
@@ -69,7 +70,7 @@ export default function MemberPage(props: { disableCustomTheme?: boolean }) {
                                 variant="h6"
                                 sx={{ mb: 2, mt: 4 }}
                             >
-                                유저 관리
+                                구성원 관리
                             </Typography>
 
                             <Grid container spacing={2} columns={12}>

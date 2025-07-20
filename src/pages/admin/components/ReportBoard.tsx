@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
 import { mapReportsToRows } from "../../../services/mapReportsToRows";
 import axios from "axios";
-import type { Report } from "../../../types/reportTypes"; // Report 타입 정의
+import type { Report } from "../../../types/report"; // Report 타입 정의
 import type { ReportStatus } from "../../../types/reportStatus"; // Report 상태 타입 정의
 import { useNavigate } from "react-router-dom";
 interface ReportBoardProps {
@@ -37,7 +37,7 @@ export default function ReportBoard({ filtered = false }: ReportBoardProps) {
                 setReportList(allData);
                 console.log("필터링 : ", allData);
             } catch (err) {
-                console.error("신고 페이지 데이터 불러오기 실패:", err);
+                console.error("신고 데이터 불러오기 실패:", err);
                 navigate("/login");
             }
         };

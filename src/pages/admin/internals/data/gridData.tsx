@@ -2,8 +2,10 @@ import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import type { GridCellParams, GridColDef } from "@mui/x-data-grid";
-import type { ReportStatus } from "../../../../types/reportStatus";
+import type { ReportStatus, ReportType } from "../../../../types/reportStatus";
 import axios from "axios";
+import type { JSX } from "react";
+import dateFormat from "../../../../services/dateFormating";
 
 export const statusDisplayMap: Record<
     ReportStatus,
@@ -79,12 +81,15 @@ function renderResult(status: ReportStatus) {
     );
 }
 
-type ReportType =
-    | "INAPPROPRIATE_LANGUAGE"
-    | "SEXUAL_CONTENT"
-    | "SPOILER"
-    | "RUDE_BEHAVIOR"
-    | "ADVERTISEMENT";
+function renderBanned(banned: boolean) {
+    return (
+        <Chip
+            label={banned ? "정지" : "정상"}
+            color={banned ? "error" : "success"}
+            size="small"
+        />
+    );
+}
 
 const reportTypeLabelMap: Record<ReportType, string> = {
     INAPPROPRIATE_LANGUAGE: "욕설/비방",
@@ -187,7 +192,45 @@ export const renderButtonSimple = (
         );
     }
 };
-
+export const renderMemberButton = (
+    memberId: number,
+    currentStatus: boolean,
+    handleBannedChange: (id: number, newStatus: boolean) => void,
+): JSX.Element => {
+    const handleMemberClick = async (newStatus: boolean) => {
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+            console.error("토큰이 없습니다.");
+            return;
+        }
+        let statusParam = "";
+        if (newStatus === true) {
+            statusParam = "ban";
+        } else if (newStatus === false) {
+            statusParam = "unban";
+        }
+        try {
+            await axios.patch(
+                `http://localhost:8080/api/v1/admin/members/${memberId}/${statusParam}`,
+                { banned: newStatus },
+                { headers: { Authorization: `Bearer ${token}` } },
+            );
+            handleBannedChange(memberId, newStatus);
+        } catch (err) {
+            console.error("상태 변경 실패 : ", err);
+        }
+    };
+    return (
+        <Chip
+            label={currentStatus ? "해제하기" : "정지하기"}
+            color={currentStatus ? "success" : "error"}
+            variant="outlined"
+            size="small"
+            clickable
+            onClick={() => handleMemberClick(!currentStatus)}
+        />
+    );
+};
 export function getSimpleColumns(
     handleStatus: (reportId: number, newStatus: ReportStatus) => void,
 ): GridColDef[] {
@@ -265,7 +308,7 @@ export function getSimpleColumns(
 }
 
 export function getColumns(
-    handleStatus: (reportId: number, newStatus: ReportStatus) => void,
+    handleStatus: (id: number, newStatus: ReportStatus) => void,
 ): GridColDef[] {
     return [
         {
@@ -332,6 +375,97 @@ export function getColumns(
         {
             field: "submissionTime",
             headerName: "접수 시간",
+            headerAlign: "center",
+            align: "center",
+            flex: 1,
+            minWidth: 150,
+        },
+    ];
+}
+
+export function getMemberColumns(
+    handleStatus: (memberId: number, newStatus: boolean) => void,
+): GridColDef[] {
+    return [
+        {
+            field: "button",
+            headerName: "구성원 관리",
+            headerAlign: "center",
+            align: "center",
+            flex: 0.5,
+            minWidth: 100,
+            disableColumnMenu: true,
+            sortable: false,
+            renderCell: (params) =>
+                renderMemberButton(
+                    params.row.id,
+                    params.row.banned,
+                    handleStatus,
+                ),
+        },
+        {
+            field: "nickname",
+            headerName: "닉네임",
+            headerAlign: "center",
+            align: "center",
+            flex: 0.5,
+            minWidth: 80,
+        },
+        {
+            field: "banned",
+            headerName: "정지 여부",
+            headerAlign: "center",
+            align: "center",
+            flex: 0.5,
+            minWidth: 80,
+            renderCell: (params) => renderBanned(params.row.banned),
+        },
+
+        {
+            field: "email",
+            headerName: "이메일",
+            headerAlign: "center",
+            align: "center",
+            flex: 1,
+            minWidth: 150,
+        },
+        {
+            field: "reportCount",
+            headerName: "신고 당한 횟수",
+            headerAlign: "center",
+            align: "center",
+            flex: 0.5,
+            minWidth: 40,
+        },
+
+        {
+            field: "reviewCount",
+            headerName: "작성 리뷰 수",
+            headerAlign: "center",
+            align: "center",
+            flex: 0.5,
+            minWidth: 40,
+        },
+
+        {
+            field: "authority",
+            headerName: "권한",
+            headerAlign: "center",
+            align: "center",
+            flex: 0.5,
+            minWidth: 80,
+            renderCell: (params) => {
+                const auth = params.value as string;
+                let color = "#000";
+                if (auth === "관리자") {
+                    color = "yellow";
+                } else color = "#fff";
+                return <span style={{ color }}>{params.value}</span>;
+            },
+        },
+        {
+            field: "createdAt",
+            headerName: "가입일",
             headerAlign: "center",
             align: "center",
             flex: 1,

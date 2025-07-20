@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
 import { mapReportsToRows } from "../../../services/mapReportsToRows";
 import axios from "axios";
-import type { Report } from "../../../types/reportTypes"; // Report 타입 정의
+import type { Report } from "../../../types/report"; // Report 타입 정의
 import { useNavigate } from "react-router-dom";
 import type { ReportStatus } from "../../../types/reportStatus";
 // interface ReportBoardProps {
