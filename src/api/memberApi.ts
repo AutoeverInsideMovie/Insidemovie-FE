@@ -85,6 +85,11 @@ export const memberApi = () => {
         });
     };
 
+    // 나의 감정 평균 조회
+    const getMyAverageEmotions = async () => {
+        return await axios.get("/api/v1/member/emotion-summary");
+    };
+
     // 내가 좋아요 한 영화 목록 조회
     const getMyLikedMovies = async ({ page, pageSize }) => {
         return await axios.get("/api/v1/member/my-movie", {
@@ -125,6 +130,7 @@ export const memberApi = () => {
         logout,
         profile,
         registerEmotions,
+        getMyAverageEmotions,
         getMyLikedMovies,
         getMyVisitedMovies,
         getMyReviews,

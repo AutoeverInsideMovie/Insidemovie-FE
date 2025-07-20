@@ -1,27 +1,56 @@
 import * as React from "react";
 import ArrowRight from "@assets/arrow_right.svg?react";
-import Poster from "../Poster";
+import MovieItem from "../MovieItem";
 import Tag from "../Tag";
 import { useEffect, useState } from "react";
-import type { Movie } from "../../interfaces/movie";
-import axios from "axios";
-import SamplePoster from "@assets/sample_poster.png";
 import { useNavigate } from "react-router-dom";
+import { movieApi } from "../../api/movieApi";
 
 interface RecommendMovieSectionProps {
     className?: string;
+}
+
+interface Movie {
+    id: number;
+    posterPath: string;
+    title: string;
+    voteAverage: number;
+    mainEmotion: string;
+    emotionValue: number;
+    releaseDate: string;
 }
 
 const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
     className = "",
 }) => {
     const navigate = useNavigate();
-    const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
+    const tagList = [
+        "액션",
+        "모험",
+        "애니메이션",
+        "코미디",
+        "범죄",
+        "다큐멘터리",
+        "드라마",
+        "가족",
+        "판타지",
+        "역사",
+        "공포",
+        "음악",
+        "미스터리",
+        "로맨스",
+        "SF",
+        "TV영화",
+        "스릴러",
+        "전쟁",
+        "서부",
+    ];
+    const [selectedTags, setSelectedTags] = React.useState<string[]>([
+        tagList[0],
+    ]);
     const scrollRef = React.useRef<HTMLDivElement>(null);
     const [canScrollLeft, setCanScrollLeft] = React.useState(false);
     const [canScrollRight, setCanScrollRight] = React.useState(true);
-
-    const tagList = ["hello", "ㄷㄷ", "태그", "스포츠", "안녕"];
     const [movieList, setMovieList] = useState<Movie[]>([]);
 
     React.useEffect(() => {
@@ -43,21 +72,33 @@ const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
     }, [movieList]);
 
     useEffect(() => {
+        const tag = selectedTags[0];
+        if (!tag) {
+            setMovieList([]);
+            return;
+        }
         (async () => {
             try {
-                const res = await axios.get("/mock/movie.json");
-                setMovieList(res.data);
+                const res = await movieApi().getPopularMoviesByGenre({
+                    genre: tag,
+                    page: 0,
+                    pageSize: 10,
+                });
+                setMovieList(res.data.data.content);
             } catch (e) {
-                console.error("맞춤 영화 조회 에러!! : ", e);
+                console.error("장르별 영화 조회 에러!! : ", e);
+                setMovieList([]);
             }
         })();
-    }, []);
+    }, [selectedTags]);
 
     const handleTagClick = (label: string) => {
         setSelectedTags((prev) =>
-            prev.includes(label)
-                ? prev.filter((t) => t !== label)
-                : [...prev, label],
+            // 다중 선택
+            // prev.includes(label)
+            //     ? prev.filter((t) => t !== label)
+            //     : [...prev, label],
+            prev[0] === label ? [] : [label],
         );
     };
 
@@ -70,7 +111,7 @@ const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
                 추천 영화
                 <ArrowRight />
             </h1>
-            <div className="flex items-center mb-4">
+            <div className="flex items-center mb-4 px-2 w-full overflow-x-auto scrollbar-hide whitespace-nowrap">
                 {tagList.map((tag) => (
                     <Tag
                         key={tag}
@@ -87,14 +128,14 @@ const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
                 >
                     <div className="flex gap-3 w-max px-2">
                         {movieList.map((poster, idx) => (
-                            <Poster
+                            <MovieItem
                                 key={idx}
-                                posterImg={SamplePoster}
-                                posterName={poster.posterName}
-                                emotionIcon={poster.emotionIcon}
+                                movieId={poster.id}
+                                posterImg={poster.posterPath}
+                                posterName={poster.title}
+                                emotionIcon={poster.mainEmotion.toLowerCase()}
                                 emotionValue={poster.emotionValue}
-                                starValue={poster.starValue}
-                                onClick={() => navigate("/movie")}
+                                starValue={poster.voteAverage}
                             />
                         ))}
                     </div>

@@ -28,7 +28,12 @@ const EmotionSlider: React.FC<EmotionSliderProps> = ({
             0,
             Math.min(100, ((rect.height - offsetY) / rect.height) * 100),
         );
-        onChange(Math.round(newValue));
+        // Round to nearest multiple of 5
+        const stepValue = Math.round(newValue / 5) * 5;
+        // Only emit when changed
+        if (stepValue !== value) {
+            onChange(stepValue);
+        }
     };
 
     useEffect(() => {

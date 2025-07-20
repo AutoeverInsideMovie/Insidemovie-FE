@@ -246,7 +246,7 @@ const Signup: React.FC = () => {
                         page: 0,
                         pageSize: 8,
                     });
-                    const mapped = res.data.data.results.map((m: any) => ({
+                    const mapped = res.data.data.results.map((m) => ({
                         id: m.id,
                         posterPath: m.poster_path,
                         title: m.title,
@@ -584,6 +584,7 @@ const Signup: React.FC = () => {
                     // 성공 시 로그인으로, 실패 시 다이얼로그만 닫기
                     if (dialogTitle === "회원가입 성공") {
                         navigate("/login", { replace: true });
+                        window.location.replace("/");
                     }
                 }}
                 onCancel={() => setIsDialogOpen(false)}

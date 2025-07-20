@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import SamplePoster from "@assets/sample_poster.png";
 import StarRating from "../../../components/StarRating";
 import joyIcon from "@assets/character/joy_icon.png";
 import sadIcon from "@assets/character/sad_icon.png";
@@ -7,17 +6,12 @@ import angryIcon from "@assets/character/angry_icon.png";
 import fearIcon from "@assets/character/fear_icon.png";
 import disgustIcon from "@assets/character/disgust_icon.png";
 import bingbongIcon from "@assets/character/bingbong_icon.png";
-import Like from "@assets/like.svg?react";
-import Unlike from "@assets/unlike.svg?react";
-import Edit from "@assets/edit.svg?react";
-import Delete from "@assets/delete.svg?react";
-import axios from "axios";
+import { movieApi } from "../../../api/movieApi";
 import type { MovieOne } from "../../../interfaces/movieOne";
 import type { Review } from "../../../interfaces/review";
 import Button from "../../../components/Button";
 import ReviewItem from "../../../components/ReviewItem";
 import { useNavigate, useParams } from "react-router-dom";
-import Profile from "@assets/profile/joy_profile.png";
 import MyReviewItem from "../../../components/MyReviewItem";
 
 interface ReviewItemProps {
@@ -59,6 +53,15 @@ const MovieDetail: React.FC = () => {
     const navigate = useNavigate();
     const [movieInfo, setMovieInfo] = useState<MovieOne | null>(null);
     const [reviewList, setReviewList] = useState<Review[]>([]);
+    // 감정평가 API 결과 저장
+    const [emotionStats, setEmotionStats] = useState<{
+        joy: number;
+        anger: number;
+        sadness: number;
+        fear: number;
+        neutral: number;
+        dominantEmotion: string;
+    } | null>(null);
     const isLogin = false;
 
     const getTopEmotionIcon = (emotions: ReviewItemProps["emotions"]) => {
@@ -87,16 +90,37 @@ const MovieDetail: React.FC = () => {
     useEffect(() => {
         (async () => {
             try {
-                const res = await axios.get("/mock/movieDetail.json");
-                setMovieInfo(res.data);
-
-                const reviewList = await axios.get("/mock/review.json");
-                setReviewList(reviewList.data);
+                // 영화 상세 조회
+                const detailRes = await movieApi().getMovieDetail({
+                    movieId: movieIdNumber,
+                });
+                setMovieInfo(detailRes.data.data);
+                // 영화 감정 조회
+                const emotionRes = await movieApi().getMovieEmotions({
+                    movieId: movieIdNumber,
+                });
+                setEmotionStats(emotionRes.data.data);
+                // 리뷰 목록 조회 remains unchanged (mock or implement API)
+                /*const reviewRes = (await movieApi().getMovieReviews)
+                    ? await movieApi().getMovieReviews({
+                          movieId: movieIdNumber,
+                      })
+                    : await Promise.resolve({ data: { data: [] } });*/
+                //setReviewList(reviewRes.data.data);
             } catch (e) {
-                console.error("박스오피스 조회 에러!! : ", e);
+                console.error("영화 상세 정보 조회 에러: ", e);
             }
         })();
-    }, []);
+    }, [movieIdNumber]);
+
+    // 데이터 로딩 전에는 아무것도 렌더링하지 않음
+    if (!movieInfo) {
+        return (
+            <div className="w-full h-full flex justify-center items-center text-white">
+                로딩 중...
+            </div>
+        );
+    }
 
     return (
         <div className="flex justify-center">
@@ -104,17 +128,19 @@ const MovieDetail: React.FC = () => {
                 {/* 상단: 포스터 + 정보 */}
                 <div className="flex gap-10 text-white">
                     <img
-                        src={SamplePoster}
-                        alt="인사이드 아웃"
+                        src={movieInfo.posterPath}
+                        alt={movieInfo.title}
                         className="w-52 rounded-md"
                     />
                     <div>
-                        <h1 className="text-4xl font-normal">인사이드 아웃</h1>
+                        <h1 className="text-4xl font-normal">
+                            {movieInfo.title}
+                        </h1>
                         <div className="mt-2 font-light text-sm text-grey_200">
                             애니메이션 · 2015
                         </div>
                         <StarRating
-                            value={4.5}
+                            value={movieInfo.voteAverage}
                             readOnly={true}
                             showValue={true}
                         />
@@ -137,28 +163,41 @@ const MovieDetail: React.FC = () => {
                             </p>
                         </div>
 
-                        {/* 감정 바 예시 */}
-                        {movieInfo?.emotions.map((emotion, i) => (
-                            <div
-                                key={i}
-                                className="flex items-center gap-1 mb-2"
-                            >
-                                <img
-                                    src={emotionMap[emotion.icon]}
-                                    alt={emotion.icon}
-                                    className="w-10 h-10"
-                                />
-                                <div className="w-full h-2 rounded-full bg-box_bg_white overflow-hidden">
-                                    <div
-                                        className={`h-full rounded-full ${emotionColorMap[emotion.icon]}`}
-                                        style={{ width: `${emotion.value}%` }}
+                        {/* 감정 바: API 결과 사용 */}
+                        {emotionStats &&
+                            [
+                                { icon: "joy", value: emotionStats.joy },
+                                { icon: "anger", value: emotionStats.anger },
+                                { icon: "sad", value: emotionStats.sadness },
+                                { icon: "fear", value: emotionStats.fear },
+                                {
+                                    icon: "disgust",
+                                    value: emotionStats.neutral,
+                                },
+                                // optional: use dominantEmotion if you have it
+                            ].map((e, i) => (
+                                <div
+                                    key={i}
+                                    className="flex items-center gap-1 mb-2"
+                                >
+                                    <img
+                                        src={emotionMap[e.icon]}
+                                        alt={e.icon}
+                                        className="w-10 h-10"
                                     />
+                                    <div className="w-full h-2 rounded-full bg-box_bg_white overflow-hidden">
+                                        <div
+                                            className={`${emotionColorMap[e.icon]} h-full rounded-full`}
+                                            style={{
+                                                width: `${Math.round(e.value * 100)}%`,
+                                            }}
+                                        />
+                                    </div>
+                                    <span className="ml-2 text-sm text-white">
+                                        {Math.round(e.value * 100)}%
+                                    </span>
                                 </div>
-                                <span className="ml-2 text-sm text-white">
-                                    {emotion.value}%
-                                </span>
-                            </div>
-                        ))}
+                            ))}
                     </div>
                     <div className="flex-1 bg-box_bg_white p-6 rounded-3xl text-white">
                         <h2 className="text-3xl  font-bold">시놉시스</h2>

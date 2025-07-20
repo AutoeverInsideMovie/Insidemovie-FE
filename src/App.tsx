@@ -19,6 +19,7 @@ import MyPage from "./pages/user/mypage/MyPage";
 import LikedMovie from "./pages/user/mypage/LikedMovie";
 import WatchedMovie from "./pages/user/mypage/WatchedMovie";
 import MyReview from "./pages/user/mypage/MyReview";
+import Search from "./pages/user/Search";
 
 const AppContent: React.FC = () => {
     const location = useLocation();
@@ -47,10 +48,14 @@ const AppContent: React.FC = () => {
                     element={<WatchedMovie />}
                 />
                 <Route path="/mypage/my-review" element={<MyReview />} />
+                <Route path="/search" element={<Search />} />
                 <Route path="/recommend" element={<RecommendMovie />} />
                 <Route path="/boxoffice" element={<BoxOfficeMovie />} />
                 <Route path="/weekmatch" element={<WeekMatch />} />
-                <Route path="/movie/:movieId" element={<MovieDetail />} />
+                <Route
+                    path="/movies/detail/:movieId"
+                    element={<MovieDetail />}
+                />
                 <Route path="/review-write" element={<ReviewWrite />} />
                 <Route
                     path="/login/oauth2/code/kakao"

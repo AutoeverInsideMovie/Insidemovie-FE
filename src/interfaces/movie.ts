@@ -3,5 +3,6 @@ export interface Movie {
     posterPath: string;
     title: string;
     mainEmotion: string;
+    emotionValue: number;
     voteAverage: number;
 }
