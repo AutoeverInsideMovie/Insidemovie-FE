@@ -210,6 +210,7 @@ const Header: React.FC = () => {
                         setMenuOpen(false);
                         setLogoutDialogOpen(false);
                         navigate("/", { replace: true });
+                        window.location.replace("/");
                         window.location.reload();
                     } catch (err) {
                         console.error("Logout API failed", err);
