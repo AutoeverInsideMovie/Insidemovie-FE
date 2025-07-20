@@ -2,14 +2,20 @@ import * as React from "react";
 import ArrowRight from "@assets/arrow_right.svg?react";
 import MovieItem from "../MovieItem";
 import { useEffect, useState } from "react";
-import type { Movie } from "../../interfaces/movie";
-import axios from "axios";
-import SamplePoster from "@assets/sample_poster.png";
 import { useNavigate } from "react-router-dom";
 import { memberApi } from "../../api/memberApi";
 
 interface WatchMovieSectionProps {
     className?: string;
+}
+
+interface Movie {
+    id: number;
+    posterPath: string;
+    title: string;
+    mainEmotion: string;
+    emotionValue: number;
+    voteAverage: number;
 }
 
 const WatchMovieSection: React.FC<WatchMovieSectionProps> = ({
@@ -71,15 +77,13 @@ const WatchMovieSection: React.FC<WatchMovieSectionProps> = ({
                     <div className="flex gap-3 w-max px-2">
                         {movieList.map((poster) => (
                             <MovieItem
-                                key={poster.movieId}
+                                key={poster.id}
+                                movieId={poster.id}
                                 posterImg={poster.posterPath}
                                 posterName={poster.title}
-                                emotionIcon={"joy"}
-                                emotionValue={0}
+                                emotionIcon={poster.mainEmotion.toLowerCase()}
+                                emotionValue={poster.emotionValue}
                                 starValue={poster.voteAverage}
-                                onClick={() =>
-                                    navigate(`/movie/${poster.movieId}`)
-                                }
                             />
                         ))}
                     </div>

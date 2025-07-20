@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { movieApi } from "../../api/movieApi";
-import type { Movie } from "../../interfaces/movie";
 import MovieItem from "../../components/MovieItem";
 import { Pagination } from "@mui/material";
 import SearchIcon from "@assets/search.svg?react";
 import CloseIcon from "@assets/close.svg?react";
+
+interface Movie {
+    id: number;
+    posterPath: string;
+    title: string;
+    mainEmotion: string;
+    emotionValue: number;
+    voteAverage: number;
+}
 
 const Search: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -14,7 +22,6 @@ const Search: React.FC = () => {
     const pageSize = 40;
     const [results, setResults] = useState<Movie[]>([]);
     const [totalPages, setTotalPages] = useState(0);
-    const navigate = useNavigate();
 
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -104,15 +111,13 @@ const Search: React.FC = () => {
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-4 mb-20">
                             {results.map((movie) => (
                                 <MovieItem
-                                    key={movie.movieId}
+                                    key={movie.id}
+                                    movieId={movie.id}
                                     posterImg={movie.posterPath}
                                     posterName={movie.title}
-                                    emotionIcon="joy"
-                                    emotionValue={0}
+                                    emotionIcon={movie.mainEmotion.toLowerCase()}
+                                    emotionValue={movie.emotionValue}
                                     starValue={movie.voteAverage}
-                                    onClick={() =>
-                                        navigate(`/movie/${movie.movieId}`)
-                                    }
                                 />
                             ))}
                         </div>

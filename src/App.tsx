@@ -52,7 +52,10 @@ const AppContent: React.FC = () => {
                 <Route path="/recommend" element={<RecommendMovie />} />
                 <Route path="/boxoffice" element={<BoxOfficeMovie />} />
                 <Route path="/weekmatch" element={<WeekMatch />} />
-                <Route path="/movie/:movieId" element={<MovieDetail />} />
+                <Route
+                    path="/movies/detail/:movieId"
+                    element={<MovieDetail />}
+                />
                 <Route path="/review-write" element={<ReviewWrite />} />
                 <Route
                     path="/login/oauth2/code/kakao"
