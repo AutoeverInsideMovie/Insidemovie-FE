@@ -68,13 +68,20 @@ const MyReviewItem: React.FC<MyReviewItemProps> = ({
     const navigate = useNavigate();
 
     const getTopEmotionIcon = (emotions: MyReviewItemProps["emotions"]) => {
-        if (!emotions || emotions.length === 0) return null;
+        const list = Array.isArray(emotions) ? emotions : [];
+        if (list.length === 0) return null;
+
+        const topEmotion = list.reduce((prev, curr) =>
+            curr.value > prev.value ? curr : prev,
+        );
+        return topEmotion.icon;
+        /*if (!emotions || emotions.length === 0) return null;
 
         const topEmotion = emotions.reduce((prev, curr) =>
             curr.value > prev.value ? curr : prev,
         );
 
-        return topEmotion.icon;
+        return topEmotion.icon;*/
     };
 
     const topEmotionIcon = getTopEmotionIcon(emotions);
@@ -86,13 +93,13 @@ const MyReviewItem: React.FC<MyReviewItemProps> = ({
             <div className="flex items-center justify-between">
                 <div className="flex gap-2 items-center">
                     <img
-                        src={!profile && BingbongProfile}
+                        src={profile ? profile : BingbongProfile}
                         alt="유저"
                         className="w-8 h-8 rounded-full"
                     />
                     <div>
                         <div className="font-normal text-sm">
-                            {!nickname && "알 수 없는 사용자"}
+                            {nickname ? nickname : "알 수 없는 사용자"}
                         </div>
                         <div className="text-xs font-light text-gray-400">
                             {createdAt}

@@ -12,24 +12,12 @@ import type { Review } from "../../../interfaces/review";
 import Button from "../../../components/Button";
 import ReviewItem from "../../../components/ReviewItem";
 import { useNavigate, useParams } from "react-router-dom";
+import { Select, MenuItem, Pagination } from "@mui/material";
 import MyReviewItem from "../../../components/MyReviewItem";
 import Like from "@assets/like.svg?react";
 import Unlike from "@assets/unlike.svg?react";
-
-interface ReviewItemProps {
-    review_id: number;
-    user_profile: string;
-    user_name: string;
-    date: string;
-    content: string;
-    like_count: number;
-    star_value: number;
-    spoiler: true;
-    emotions: {
-        icon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
-        value: number;
-    }[];
-}
+import { reviewApi } from "../../../api/reviewApi";
+import type { SelectChangeEvent } from "@mui/material/Select";
 
 const emotionMap = {
     joy: joyIcon,
@@ -54,7 +42,9 @@ const MovieDetail: React.FC = () => {
     const movieIdNumber = Number(movieId);
     const navigate = useNavigate();
     const [movieInfo, setMovieInfo] = useState<MovieOne | null>(null);
+    const [myReview, setMyReview] = useState<Review | null>(null);
     const [reviewList, setReviewList] = useState<Review[]>([]);
+    const [myReviewLoaded, setMyReviewLoaded] = useState<boolean>(false);
     // 감정평가 API 결과 저장
     const [emotionStats, setEmotionStats] = useState<{
         joy: number;
@@ -64,30 +54,16 @@ const MovieDetail: React.FC = () => {
         disgust: number;
         dominantEmotion: string;
     } | null>(null);
-    const isLogin = false;
 
-    const getTopEmotionIcon = (emotions: ReviewItemProps["emotions"]) => {
-        if (!emotions || emotions.length === 0) return null;
+    // Review list pagination & sort
+    const [reviewPage, setReviewPage] = useState(0);
+    const [reviewTotalPages, setReviewTotalPages] = useState(0);
+    const [reviewSort, setReviewSort] = useState<
+        "POPULAR" | "LATEST" | "OLDEST"
+    >("POPULAR");
 
-        const topEmotion = emotions.reduce((prev, curr) =>
-            curr.value > prev.value ? curr : prev,
-        );
-
-        return topEmotion.icon;
-    };
-
-    const sampleEmotions: {
-        icon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
-        value: number;
-    }[] = [
-        { icon: "joy", value: 35 },
-        { icon: "sad", value: 15 },
-        { icon: "angry", value: 10 },
-        { icon: "fear", value: 25 },
-        { icon: "disgust", value: 10 },
-        { icon: "bingbong", value: 5 },
-    ];
-    const topEmotionIcon = getTopEmotionIcon(sampleEmotions);
+    // Determine login status based on stored access token
+    const isLogin = Boolean(localStorage.getItem("accessToken"));
 
     useEffect(() => {
         (async () => {
@@ -102,18 +78,43 @@ const MovieDetail: React.FC = () => {
                     movieId: movieIdNumber,
                 });
                 setEmotionStats(emotionRes.data.data);
-                // 리뷰 목록 조회 remains unchanged (mock or implement API)
-                /*const reviewRes = (await movieApi().getMovieReviews)
-                    ? await movieApi().getMovieReviews({
-                          movieId: movieIdNumber,
-                      })
-                    : await Promise.resolve({ data: { data: [] } });*/
-                //setReviewList(reviewRes.data.data);
+                // 내 리뷰 단건 조회
+                try {
+                    const myRes = await reviewApi().getMyReview({
+                        movieId: movieIdNumber,
+                    });
+                    setMyReview(myRes.data.data);
+                } catch {
+                    setMyReview(null);
+                } finally {
+                    setMyReviewLoaded(true);
+                }
+                // 전체 리뷰 목록 조회
+                const listRes = await reviewApi().getReviewList({
+                    movieId: movieIdNumber,
+                    sort: reviewSort,
+                    page: reviewPage,
+                    size: 10,
+                });
+                setReviewList(listRes.data.data.content);
+                setReviewTotalPages(listRes.data.data.totalPages);
             } catch (e) {
                 console.error("영화 상세 정보 조회 에러: ", e);
             }
         })();
-    }, [movieIdNumber]);
+    }, [movieIdNumber, reviewPage, reviewSort]);
+    const handleReviewPageChange = (
+        _: React.ChangeEvent<unknown>,
+        value: number,
+    ) => {
+        setReviewPage(value - 1);
+    };
+    const handleReviewSortChange = (
+        e: SelectChangeEvent<"POPULAR" | "LATEST" | "OLDEST">,
+    ) => {
+        setReviewSort(e.target.value as "POPULAR" | "LATEST" | "OLDEST");
+        setReviewPage(0);
+    };
 
     // 좋아요/취소 토글 핸들러
     const handleLikeClick = async () => {
@@ -286,71 +287,113 @@ const MovieDetail: React.FC = () => {
                     </div>
 
                     {/* 내가 쓴 리뷰 */}
-                    {isLogin && (
-                        <div className="mt-10">
-                            <h2 className="text-3xl font-semibold text-white">
-                                내가 쓴 리뷰
-                            </h2>
-                            <div className="p-10 rounded-3xl border border-white/20 mt-6">
+                    {/* 내가 쓴 리뷰 및 리뷰 목록 */}
+                    {myReviewLoaded &&
+                        (myReview ? (
+                            <MyReviewItem
+                                reviewId={myReview.reviewId}
+                                content={myReview.content}
+                                rating={myReview.rating}
+                                spoiler={false}
+                                createdAt={myReview.createdAt}
+                                likeCount={myReview.likeCount}
+                                myReview={true}
+                                modify={myReview.modify}
+                                myLike={myReview.myLike}
+                                nickname={myReview.nickname}
+                                memberId={myReview.memberId}
+                                movieId={myReview.movieId}
+                                profile={myReview.profile}
+                                emotions={myReview.emotion}
+                                isReported={myReview.isReported}
+                                isConcealed={myReview.isConcealed}
+                                isMypage={false}
+                                {...myReview}
+                            />
+                        ) : (
+                            <div className="flex justify-center mt-10 p-10 rounded-3xl border border-white/20">
                                 <Button
                                     text="리뷰 작성 하기"
-                                    className="mx-auto block px-6 py-2"
                                     onClick={() => {
-                                        navigate("/review-write");
+                                        if (!isLogin) {
+                                            navigate("/login");
+                                            return;
+                                        }
+                                        navigate(`/review-write/${movieId}`);
                                     }}
                                 />
                             </div>
-                        </div>
-                    )}
-
-                    {/* 로그인 시 작성한 리뷰 보여주기 */}
-                    {!isLogin && reviewList.length > 0 && (
-                        <MyReviewItem
-                            reviewId={reviewList[0].reviewId}
-                            content={reviewList[0].content}
-                            rating={reviewList[0].rating}
-                            spoiler={false}
-                            createdAt={reviewList[0].createdAt}
-                            likeCount={reviewList[0].likeCount}
-                            myReview={reviewList[0].myReview}
-                            modify={reviewList[0].modify}
-                            myLike={reviewList[0].myLike}
-                            nickname={reviewList[0].nickname}
-                            memberId={reviewList[0].memberId}
-                            movieId={reviewList[0].movieId}
-                            profile={reviewList[0].profile}
-                            emotions={reviewList[0].emotions}
-                            isReported={reviewList[0].isReported}
-                            isConcealed={reviewList[0].isConcealed}
-                            isMypage={false}
-                        />
-                    )}
+                        ))}
 
                     {/* 리뷰 목록 */}
                     <div className="mt-12">
-                        <h2 className="text-3xl font-semibold text-white mb-6">
-                            리뷰
-                        </h2>
-                        {reviewList.map((review) => (
-                            <ReviewItem
-                                reviewId={review.reviewId}
-                                content={review.content}
-                                rating={review.rating}
-                                spoiler={false}
-                                createdAt={review.createdAt}
-                                likeCount={review.likeCount}
-                                myReview={review.myReview}
-                                modify={review.modify}
-                                myLike={review.myLike}
-                                nickname={review.nickname}
-                                memberId={review.memberId}
-                                movieId={review.movieId}
-                                profile={review.profile}
-                                emotions={review.emotions}
-                                isReported={review.isReported}
-                                isConcealed={review.isConcealed}
-                            />
-                        ))}
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-3xl font-semibold text-white">
+                                리뷰
+                            </h2>
+                            <Select
+                                value={reviewSort}
+                                onChange={handleReviewSortChange}
+                                size="small"
+                                sx={{
+                                    color: "#fff",
+                                    ".MuiOutlinedInput-notchedOutline": {
+                                        borderColor: "transparent",
+                                    },
+                                    ".MuiSvgIcon-root": { color: "#fff" },
+                                }}
+                            >
+                                <MenuItem value="POPULAR">인기순</MenuItem>
+                                <MenuItem value="LATEST">최신순</MenuItem>
+                                <MenuItem value="OLDEST">오래된순</MenuItem>
+                            </Select>
+                        </div>
+                        {reviewList.length === 0 ? (
+                            <div className="text-center text-white py-10 mb-36">
+                                리뷰가 없습니다
+                            </div>
+                        ) : (
+                            reviewList.map((review) => (
+                                <ReviewItem
+                                    reviewId={review.reviewId}
+                                    content={review.content}
+                                    rating={review.rating}
+                                    spoiler={review.spoiler}
+                                    createdAt={review.createdAt}
+                                    likeCount={review.likeCount}
+                                    myReview={review.myReview}
+                                    modify={review.modify}
+                                    myLike={review.myLike}
+                                    nickname={review.nickname}
+                                    memberId={review.memberId}
+                                    movieId={review.movieId}
+                                    profile={review.profile}
+                                    emotions={review.emotion}
+                                    isReported={review.isReported}
+                                    isConcealed={review.isConcealed}
+                                    {...review}
+                                />
+                            ))
+                        )}
+                        {reviewTotalPages > 0 && (
+                            <div className="flex justify-center mt-20 mb-36">
+                                <Pagination
+                                    count={reviewTotalPages}
+                                    page={reviewPage + 1}
+                                    onChange={handleReviewPageChange}
+                                    siblingCount={1}
+                                    boundaryCount={1}
+                                    showFirstButton
+                                    showLastButton
+                                    color="primary"
+                                    sx={{
+                                        "& .MuiPaginationItem-root": {
+                                            color: "#fff",
+                                        },
+                                    }}
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
