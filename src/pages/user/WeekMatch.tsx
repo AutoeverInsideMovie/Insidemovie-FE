@@ -42,7 +42,7 @@ const WeekMatch: React.FC = () => {
                                             emotionIcon={poster.emotionIcon}
                                             emotionValue={poster.emotionValue}
                                             starValue={poster.starValue}
-                                            onClick={() => navigate("/movie")}
+                                            movieId={0}
                                         />
                                         {idx < 2 && (
                                             <span className="text-white text-xl mx-2">
