@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Poster from "../../components/Poster";
+import MovieItem from "../../components/MovieItem";
 import SamplePoster from "@assets/sample_poster.png";
 import Button from "../../components/Button";
 import type { Winner } from "../../interfaces/winner";
@@ -36,7 +36,7 @@ const WeekMatch: React.FC = () => {
                             <div className="flex justify-center items-center gap-10 mt-10">
                                 {movieList.slice(0, 3).map((poster, idx) => (
                                     <React.Fragment key={idx}>
-                                        <Poster
+                                        <MovieItem
                                             posterImg={SamplePoster}
                                             posterName={poster.posterName}
                                             emotionIcon={poster.emotionIcon}

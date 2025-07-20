@@ -1,5 +1,5 @@
 import * as React from "react";
-import Poster from "../Poster";
+import MovieItem from "../MovieItem";
 import type { Movie } from "../../interfaces/movie";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -32,13 +32,13 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
             <h1 className="text-xl font-semibold mb-4 text-white">맞춤 영화</h1>
             <div className="flex gap-3 overflow-x-hidden scrollbar-hide px-2">
                 {movieList.splice(0, 5).map((movie, idx) => (
-                    <Poster
+                    <MovieItem
                         key={idx}
                         posterImg={SamplePoster}
-                        posterName={movie.posterName}
-                        emotionIcon={movie.emotionIcon}
-                        emotionValue={movie.emotionValue}
-                        starValue={movie.starValue}
+                        posterName={movie.title}
+                        emotionIcon={"joy"}
+                        emotionValue={0}
+                        starValue={movie.voteAverage}
                         onClick={() => navigate("/movie")}
                     />
                 ))}

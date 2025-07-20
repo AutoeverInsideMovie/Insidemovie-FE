@@ -27,9 +27,16 @@ export const movieApi = () => {
         return await axios.get(`/api/v1/movies/emotions/${movieId}`);
     };
 
+    // 영화 상세 조회
+    const getMovieDetail = async ({ movieId }) => {
+        return await axios.get(`/api/v1/movies/detail/${movieId}`);
+    };
+
     return {
         searchTitle,
         getPopularMovies,
         getMovieEmotions,
+        getMovieDetail,
+        // TODO: implement getMovieReviews if not yet present
     };
 };
