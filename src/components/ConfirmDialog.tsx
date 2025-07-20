@@ -21,12 +21,16 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     isRedButton = false,
 }) => {
     useEffect(() => {
+        if (!isOpen) return;
+
         const handleEsc = (e: KeyboardEvent) => {
-            if (e.key === "Escape") onCancel();
+            if (e.key === "Escape") onCancel?.();
         };
         window.addEventListener("keydown", handleEsc);
-        return () => window.removeEventListener("keydown", handleEsc);
-    }, [onCancel]);
+        return () => {
+            window.removeEventListener("keydown", handleEsc);
+        };
+    }, [isOpen, onCancel]);
 
     if (!isOpen) return null;
 

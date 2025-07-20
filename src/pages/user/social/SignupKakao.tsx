@@ -1,15 +1,15 @@
 import * as React from "react";
-import InputField from "../components/InputField";
-import Button from "../components/Button";
-import TransparentBox from "../components/TransparentBox";
+import InputField from "../../../components/InputField";
+import Button from "../../../components/Button";
+import TransparentBox from "../../../components/TransparentBox";
 import BackgroundBubble from "@assets/background_bubble.svg?react";
 import SearchIcon from "@assets/search.svg?react";
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Logo from "@assets/insidemovie_white.png";
-import { memberApi } from "../api/memberApi";
-import { ConfirmDialog } from "../components/ConfirmDialog";
-import { movieApi } from "../api/movieApi";
+import { movieApi } from "../../../api/movieApi";
+import { memberApi } from "../../../api/memberApi";
+import { ConfirmDialog } from "../../../components/ConfirmDialog";
 
 import joyIcon from "@assets/character/joy_icon.png";
 import sadIcon from "@assets/character/sad_icon.png";
@@ -55,16 +55,16 @@ const profileImgMap: Record<keyof typeof emotionMap, string> = {
     disgust: disgustProfile,
 };
 
+interface LocationState {
+    accessToken: string;
+}
+
 const Signup: React.FC = () => {
     const navigate = useNavigate();
-    const [step, setStep] = useState(1);
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [passwordConfirm, setPasswordConfirm] = useState("");
+    const location = useLocation();
+    const { accessToken } = location.state as LocationState;
+    const [step, setStep] = useState(2);
     const [nickname, setNickname] = useState("");
-    const [emailError, setEmailError] = useState("");
-    const [passwordError, setPasswordError] = useState("");
-    const [passwordConfirmError, setPasswordConfirmError] = useState("");
     const [nicknameError, setNicknameError] = useState("");
 
     // Dialog
@@ -97,6 +97,7 @@ const Signup: React.FC = () => {
     const [hasMore, setHasMore] = useState(true);
     const [loadingMovies, setLoadingMovies] = useState(false);
     const resultsRef = useRef<HTMLDivElement | null>(null);
+    const previewRef = useRef<HTMLDivElement | null>(null);
 
     // 선탹한 영화의 감정 평균 값
     const [emotionAverages, setEmotionAverages] = useState<{
@@ -137,6 +138,16 @@ const Signup: React.FC = () => {
             .map(([k]) => k);
         setDominantEmotion(topEmotions[0]);
     }, [emotionAverages, selectedMovies]);
+
+    // 선택된 영화 미리보기 스크롤 자동 이동
+    useEffect(() => {
+        if (previewRef.current) {
+            previewRef.current.scrollTo({
+                left: previewRef.current.scrollWidth,
+                behavior: "smooth",
+            });
+        }
+    }, [selectedMovies]);
 
     // 감정 선택 시 마다 평균 감정 계산
     useEffect(() => {
@@ -189,51 +200,6 @@ const Signup: React.FC = () => {
         fetchEmotions();
     }, [selectedMovies]);
 
-    // 이메일 확인
-    const validateEmail = (email: string) => {
-        const trimmed = email.trim();
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return regex.test(trimmed);
-    };
-
-    // 비밀번호 확인
-    const validatePassword = (password: string) => {
-        const trimmed = password.trim();
-        const regex =
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':",.<>?]).{8,}$/;
-        return regex.test(trimmed);
-    };
-
-    // 이메일 필드
-    const handleEmailChange = (value: string) => {
-        setEmail(value);
-        setEmailError(
-            validateEmail(value) ? "" : "올바른 이메일 형식이 아닙니다.",
-        );
-    };
-
-    // 비밀번호 필드
-    const handlePasswordChange = (value: string) => {
-        setPassword(value);
-        setPasswordError(
-            validatePassword(value)
-                ? ""
-                : "영문 대소문자, 숫자, 특수문자를 포함한 8자 이상이어야 합니다.",
-        );
-        // Also validate password confirmation again
-        setPasswordConfirmError(
-            value === passwordConfirm ? "" : "비밀번호가 일치하지 않습니다.",
-        );
-    };
-
-    // 비밀번호 확인 필드
-    const handlePasswordConfirmChange = (value: string) => {
-        setPasswordConfirm(value);
-        setPasswordConfirmError(
-            value === password ? "" : "비밀번호가 일치하지 않습니다.",
-        );
-    };
-
     // 닉네임 필드
     const handleNicknameChange = (value: string) => {
         setNickname(value);
@@ -256,15 +222,6 @@ const Signup: React.FC = () => {
                 setNicknameError(error.response?.data?.message);
             });
     };
-
-    // Step 1 Check
-    const isStep1Disabled =
-        !email ||
-        !password ||
-        !passwordConfirm ||
-        !!emailError ||
-        !!passwordError ||
-        !!passwordConfirmError;
 
     // Step 2 Check
     const isStep2Disabled = selectedMovies.length === 0;
@@ -336,10 +293,8 @@ const Signup: React.FC = () => {
     const handleSignup = async () => {
         try {
             // 1) 회원가입
-            const response = await memberApi().signup({
-                email,
-                password,
-                checkedPassword: passwordConfirm,
+            const response = await memberApi().signupKakao({
+                accessToken,
                 nickname,
             });
             const { memberId } = response.data.data;
@@ -354,7 +309,6 @@ const Signup: React.FC = () => {
                 neutral: emotionAverages.disgust,
             });
 
-            // 3) 모두 성공 시 로그인 화면으로 이동
             setDialogTitle("회원가입 성공");
             setMessage("회원가입이 정상적으로 완료되었습니다.");
             setDialogIsRedButton(false);
@@ -384,58 +338,6 @@ const Signup: React.FC = () => {
                         className="w-[500px] h-fit flex flex-col justify-center items-center"
                         padding="px-8 py-10"
                     >
-                        {/* === Signup Step 1: 이메일, 비밀번호 입력 === */}
-                        {/* Step 1 UI */}
-                        {step === 1 && (
-                            <div className="w-full">
-                                <p className="text-white font-light text-xl mb-20 w-full">
-                                    <span className="text-movie_point font-bold">
-                                        인사이드무비
-                                    </span>
-                                    에 오신 것을 환영합니다.
-                                </p>
-                                <InputField
-                                    type="email"
-                                    placeholder="이메일"
-                                    icon="email"
-                                    value={email}
-                                    onChange={handleEmailChange}
-                                    isError={true}
-                                    error={emailError}
-                                />
-                                <InputField
-                                    type="password"
-                                    placeholder="비밀번호"
-                                    icon="password"
-                                    showToggle
-                                    value={password}
-                                    onChange={handlePasswordChange}
-                                    isError={true}
-                                    error={passwordError}
-                                />
-                                <InputField
-                                    type="password"
-                                    placeholder="비밀번호 확인"
-                                    icon="password"
-                                    showToggle
-                                    value={passwordConfirm}
-                                    onChange={handlePasswordConfirmChange}
-                                    isError={true}
-                                    error={passwordConfirmError}
-                                />
-                                <Button
-                                    text="다음"
-                                    textColor="white"
-                                    buttonColor={
-                                        isStep1Disabled ? "disabled" : "default"
-                                    }
-                                    className="w-full mt-10"
-                                    disabled={isStep1Disabled}
-                                    onClick={() => setStep(2)}
-                                />
-                            </div>
-                        )}
-
                         {/* Step 2 UI */}
                         {/* TODO : 영화 박스오피스 Top 8 조회 후 리스트업 / 검색 시 검색한 영화 목록 리스트업 / 영화 눌러 최소 1개 선택 / 최소 1개 선택 후 버튼 활성화 */}
                         {step === 2 && (
@@ -514,16 +416,17 @@ const Signup: React.FC = () => {
                                 </div>
                                 {/* 선택된 영화 미리보기 */}
                                 <div
-                                    className="flex space-x-2 mb-4 overflow-x-auto hide-scrollbar"
+                                    className="flex space-x-2 mb-4 overflow-x-auto hide-scrollbar transition-all duration-300 ease-in-out"
                                     style={{
                                         msOverflowStyle: "none",
                                         scrollbarWidth: "none",
                                     }}
+                                    ref={previewRef}
                                 >
                                     {selectedMovies.map((movie) => (
                                         <div
                                             key={movie.id}
-                                            className="relative flex-shrink-0"
+                                            className="relative flex-shrink-0 transition-all duration-300 ease-in-out transform"
                                         >
                                             <img
                                                 src={movie.posterPath}
@@ -631,6 +534,7 @@ const Signup: React.FC = () => {
                                     </p>
                                 </div>
 
+                                {/* Profile Preview */}
                                 <div className="bg-box_bg_white w-full rounded-3xl py-5 px-6 flex flex-col items-center gap-3 mb-8">
                                     <img
                                         src={profileImgMap[dominantEmotion]}
@@ -642,6 +546,8 @@ const Signup: React.FC = () => {
                                     </p>
                                 </div>
 
+                                {/* Nickname Input */}
+                                {/* TODO : 닉네임 중복 확인 */}
                                 <InputField
                                     type="text"
                                     placeholder="닉네임"

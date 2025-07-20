@@ -1,18 +1,20 @@
 import React, { useState } from "react";
-import Profile from "@assets/profile/joy_profile.png";
 import StarRating from "./StarRating";
 import Like from "@assets/like.svg?react";
 import Unlike from "@assets/unlike.svg?react";
-import Report from "@assets/report.svg?react";
 import joyIcon from "@assets/character/joy_icon.png";
 import sadIcon from "@assets/character/sad_icon.png";
 import angryIcon from "@assets/character/angry_icon.png";
 import fearIcon from "@assets/character/fear_icon.png";
 import disgustIcon from "@assets/character/disgust_icon.png";
 import bingbongIcon from "@assets/character/bingbong_icon.png";
+import { useNavigate } from "react-router-dom";
+import Edit from "@assets/edit.svg?react";
+import Delete from "@assets/delete.svg?react";
+import ArrowRight from "@assets/arrow_right.svg?react";
 import BingbongProfile from "@assets/profile/bingbong_profile.png";
 
-interface ReviewItemProps {
+interface MyReviewItemProps {
     reviewId: number;
     content: string;
     rating: number;
@@ -32,6 +34,7 @@ interface ReviewItemProps {
     }[];
     isReported: boolean;
     isConcealed: boolean;
+    isMypage?: boolean;
 }
 
 const emotionMap = {
@@ -43,7 +46,7 @@ const emotionMap = {
     bingbong: bingbongIcon,
 };
 
-const ReviewItem: React.FC<ReviewItemProps> = ({
+const MyReviewItem: React.FC<MyReviewItemProps> = ({
     reviewId,
     content,
     rating,
@@ -60,10 +63,11 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
     emotions,
     isReported,
     isConcealed,
+    isMypage = false,
 }) => {
-    const [showContent, setShowContent] = useState(!spoiler); // 스포일러면 처음엔 false
+    const navigate = useNavigate();
 
-    const getTopEmotionIcon = (emotions: ReviewItemProps["emotions"]) => {
+    const getTopEmotionIcon = (emotions: MyReviewItemProps["emotions"]) => {
         if (!emotions || emotions.length === 0) return null;
 
         const topEmotion = emotions.reduce((prev, curr) =>
@@ -76,7 +80,9 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
     const topEmotionIcon = getTopEmotionIcon(emotions);
 
     return (
-        <div className="bg-box_bg_white p-4 rounded-3xl text-white mb-3">
+        <div
+            className={`bg-box_bg_white p-4 rounded-3xl text-white mb-3 ${!isMypage && "mt-10"}`}
+        >
             <div className="flex items-center justify-between">
                 <div className="flex gap-2 items-center">
                     <img
@@ -113,19 +119,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
             </div>
 
             <div className="mt-3 text-[15px] leading-relaxed">
-                {!showContent ? (
-                    <div className="text-center font-extralight text-gray-200">
-                        <div>이 리뷰에는 스포일러가 포함되어 있습니다.</div>
-                        <button
-                            onClick={() => setShowContent(true)}
-                            className="mt-2 font-semibold underline text-white "
-                        >
-                            리뷰 보기
-                        </button>
-                    </div>
-                ) : (
-                    <p className="px-2">{content}</p>
-                )}
+                <p className="px-2">{content}</p>
             </div>
 
             <div className="w-full h-[1px] bg-white/10 mt-4" />
@@ -135,13 +129,37 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
                     <Unlike className="w-5 h-5" />
                     {likeCount}
                 </div>
-                <div className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer">
-                    <Report className="w-5 h-5" />
-                    신고하기
-                </div>
+                {!isMypage && (
+                    <div className="flex">
+                        <div
+                            className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer"
+                            onClick={() => {
+                                navigate("/review-write");
+                            }}
+                        >
+                            <Edit className="w-5 h-5" />
+                            수정하기
+                        </div>
+                        <div className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer">
+                            <Delete className="w-5 h-5" />
+                            삭제하기
+                        </div>
+                    </div>
+                )}
+                {isMypage && (
+                    <div
+                        className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer"
+                        onClick={() => {
+                            navigate(`/movie/${movieId}`);
+                        }}
+                    >
+                        영화 보기
+                        <ArrowRight className="w-5 h-5" />
+                    </div>
+                )}
             </div>
         </div>
     );
 };
 
-export default ReviewItem;
+export default MyReviewItem;

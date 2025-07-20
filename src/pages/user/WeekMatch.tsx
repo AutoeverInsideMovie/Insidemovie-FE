@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Poster from "../components/Poster";
+import Poster from "../../components/Poster";
 import SamplePoster from "@assets/sample_poster.png";
-import Button from "../components/Button";
-import type { Winner } from "../interfaces/winner";
+import Button from "../../components/Button";
+import type { Winner } from "../../interfaces/winner";
 import axios from "axios";
-import WinnerItem from "../components/WinnerItem";
+import WinnerItem from "../../components/WinnerItem";
 import { useNavigate } from "react-router-dom";
 
 const WeekMatch: React.FC = () => {
