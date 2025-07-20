@@ -8,8 +8,10 @@ const axiosInstance = axios.create({
 const token = localStorage.getItem("refreshToken");
 
 const reissue = async (refreshToken: string | null) => {
-    return axios.post(`http://localhost:8080/api/v1/member/reissue`, {
-        refreshToken: refreshToken,
+    return axios.post("http://localhost:8080/api/v1/member/reissue", null, {
+        headers: {
+            "Authorization-Refresh": `Bearer ${refreshToken}`,
+        },
     });
 };
 
@@ -21,7 +23,9 @@ const getToken = async (): Promise<void> => {
             localStorage.removeItem("refreshToken");
         } else {
             const accessToken: string = res.data.data.accessToken;
+            const refreshToken: string = res.data.data.refreshToken;
             localStorage.setItem("accessToken", accessToken);
+            localStorage.setItem("refreshToken", refreshToken);
         }
     } catch (error) {
         console.error("Error during token reissue:", error);
