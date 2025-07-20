@@ -44,7 +44,7 @@
         "reportedMemberId": 304,
         "reportedNickname": "비꼬기장인",
         "reason": "RUDE_BEHAVIOR",
-        "status": "APPROVED",
+        "status": "ACCEPTED",
         "createdAt": "2025-07-01T13:00:00"
     },
     {
@@ -56,7 +56,7 @@
         "reportedMemberId": 305,
         "reportedNickname": "광고봇",
         "reason": "ADVERTISEMENT",
-        "status": "APPROVED",
+        "status": "ACCEPTED",
         "createdAt": "2025-07-01T14:00:00"
     },
     {
@@ -92,7 +92,7 @@
         "reportedMemberId": 308,
         "reportedNickname": "외모비하러",
         "reason": "RUDE_BEHAVIOR",
-        "status": "APPROVED",
+        "status": "ACCEPTED",
         "createdAt": "2025-07-02T11:00:00"
     },
     {
@@ -116,7 +116,7 @@
         "reportedMemberId": 310,
         "reportedNickname": "초반까기러",
         "reason": "SPOILER",
-        "status": "APPROVED",
+        "status": "ACCEPTED",
         "createdAt": "2025-07-02T13:00:00"
     },
     {

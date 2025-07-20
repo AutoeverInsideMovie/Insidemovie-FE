@@ -67,7 +67,7 @@ export default function ReportPage(props: { disableCustomTheme?: boolean }) {
                             <Typography
                                 component="h2"
                                 variant="h6"
-                                sx={{ mb: 2 }}
+                                sx={{ mb: 2, mt: 4 }}
                             >
                                 신고 관리
                             </Typography>

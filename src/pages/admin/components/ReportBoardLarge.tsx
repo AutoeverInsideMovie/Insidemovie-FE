@@ -1,38 +1,65 @@
 import * as React from "react";
-import {
-    DataGrid,
-    type GridRowsProp,
-    type GridValidRowModel,
-} from "@mui/x-data-grid";
+import { DataGrid, type GridRowsProp } from "@mui/x-data-grid";
 import { getColumns } from "../internals/data/gridData";
 import Box from "@mui/material/Box";
-
-import { updateReportStatus } from "../../../services/reportHandler";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { mapReportsToRows } from "../../../services/mapReportsToRows";
-import mock from "../../../../public/mock/report.json";
+import axios from "axios";
+import type { Report } from "../../../types/reportTypes"; // Report 타입 정의
+import { useNavigate } from "react-router-dom";
+import type { ReportStatus } from "../../../types/reportStatus";
+// interface ReportBoardProps {
+//     filtered?: boolean; // 필터 적용 여부(미처리만 보여주기)
+// }
 
-interface ReportBoardProps {
-    filtered?: boolean; // 필터 적용 여부
-}
+export default function ReportBoard() {
+    const [reportList, setReportList] = useState<Report[] | null>(null);
+    const navigate = useNavigate();
+    useEffect(() => {
+        const token = localStorage.getItem("accessToken");
+        console.log("토큰 : ", token);
+        const fetchData = async () => {
+            try {
+                const res = await axios.get(
+                    "http://localhost:8080/api/v1/admin/reports?page=0&size=20",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    },
+                    // "/mock/report.json",
+                );
+                const allData = res.data.data.content;
+                if (!allData) {
+                    console.error("allData 없음");
+                    return;
+                }
+                setReportList(allData);
+                console.log("필터링 : ", allData);
+            } catch (err) {
+                console.error("신고 페이지 데이터 불러오기 실패:", err);
+                navigate("/login");
+            }
+        };
+        fetchData();
+    }, []);
+    const rows: GridRowsProp = mapReportsToRows(reportList);
 
-export default function ReportBoard({ filtered = false }: ReportBoardProps) {
-    const rows: GridRowsProp = mapReportsToRows(mock);
-    const [reportList, setReportList] = useState<GridValidRowModel[]>([
-        ...rows,
-    ]);
-
-    const handleApprove = (reportId: number) => {
-        const updated = updateReportStatus(reportList, reportId, "APPROVED");
-        setReportList(updated);
+    const handleStatusChange = (reportId: number, newStatus: ReportStatus) => {
+        const updated = reportList.map((r) =>
+            r.reportId === reportId ? { ...r, status: newStatus } : r,
+        );
+        setReportList(updated ?? []);
     };
+    const columns = getColumns(handleStatusChange);
 
-    const columns = getColumns(handleApprove);
-
+    if (!reportList) {
+        return <div className="text-white text-center">Loading...</div>;
+    }
     return (
         <Box sx={{ width: "100%" }}>
             <DataGrid
-                rows={reportList}
+                rows={rows}
                 columns={columns}
                 getRowClassName={(params) =>
                     params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"
@@ -47,24 +74,11 @@ export default function ReportBoard({ filtered = false }: ReportBoardProps) {
                         sortModel: [
                             {
                                 field: "submissionTime",
-                                sort: "desc", // 오름차순은 "asc"
+                                sort: "desc",
                             },
                         ],
                     },
                     pagination: { paginationModel: { pageSize: 20 } },
-                    ...(filtered && {
-                        filter: {
-                            filterModel: {
-                                items: [
-                                    {
-                                        field: "status",
-                                        operator: "equals", // 연산자
-                                        value: "UNPROCESSED", // 필터 값
-                                    },
-                                ],
-                            },
-                        },
-                    }),
                 }}
                 pageSizeOptions={[10, 20, 50]}
                 disableColumnResize

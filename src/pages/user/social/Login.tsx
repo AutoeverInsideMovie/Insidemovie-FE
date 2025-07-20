@@ -1,27 +1,26 @@
 import * as React from "react";
 import { useState } from "react";
-import InputField from "../components/InputField";
-import Button from "../components/Button";
-import TransparentBox from "../components/TransparentBox";
+import InputField from "../../../components/InputField";
+import Button from "../../../components/Button";
+import TransparentBox from "../../../components/TransparentBox";
 import { useNavigate } from "react-router-dom";
 import Logo from "@assets/insidemovie_white.png";
 import KakaoIcon from "@assets/kakao.png";
-import { memberApi } from "../api/memberApi";
-import { ConfirmDialog } from "../components/ConfirmDialog";
+import { memberApi } from "../../../api/memberApi";
+import { ConfirmDialog } from "../../../components/ConfirmDialog";
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [message, setMessage] = useState("");
 
     const handleConfirm = () => {
-        console.log("확인 클릭됨: 실제 로직 수행");
         setIsDialogOpen(false);
     };
 
     const handleCancel = () => {
-        console.log("취소 클릭됨: 모달 닫기");
         setIsDialogOpen(false);
     };
 
@@ -31,13 +30,13 @@ const Login: React.FC = () => {
             const { accessToken, refreshToken } = response.data.data;
 
             if (accessToken && refreshToken) {
-                sessionStorage.setItem("accessToken", accessToken);
-                sessionStorage.setItem("refreshToken", refreshToken);
+                localStorage.setItem("accessToken", accessToken);
+                localStorage.setItem("refreshToken", refreshToken);
 
                 navigate("/");
             } else throw new Error("토큰이 존재하지 않습니다.");
         } catch (error) {
-            alert(error.response?.data?.message);
+            setMessage(error.response?.data?.message || error);
             setIsDialogOpen(true);
         }
     };
@@ -123,11 +122,12 @@ const Login: React.FC = () => {
             </TransparentBox>
             <ConfirmDialog
                 isOpen={isDialogOpen}
-                title="정말 삭제하시겠습니까?"
-                message="삭제 후에는 복구할 수 없습니다."
+                title="로그인 실패"
+                message={message}
                 onConfirm={handleConfirm}
+                showCancel={false}
                 onCancel={handleCancel}
-                isRedButton
+                isRedButton={true}
             />
         </div>
     );

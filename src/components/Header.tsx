@@ -5,12 +5,23 @@ import Logout from "@assets/logout.svg?react";
 import Logo from "@assets/insidemovie_white.png";
 import Button from "./Button";
 import { memberApi } from "../api/memberApi";
-import JoyImg from "@assets/profile/joy_profile.png";
-import SadImg from "@assets/profile/sad_profile.png";
-import AngryImg from "@assets/profile/angry_profile.png";
-import FearImg from "@assets/profile/fear_profile.png";
-import DisgustImg from "@assets/profile/disgust_profile.png";
-import BingBong from "@assets/profile/bingbong_profile.png";
+import { ConfirmDialog } from "./ConfirmDialog";
+import bingbongProfile from "@assets/profile/bingbong_profile.png";
+import joyProfile from "@assets/profile/joy_profile.png";
+import angryProfile from "@assets/profile/angry_profile.png";
+import sadnessProfile from "@assets/profile/sad_profile.png";
+import fearProfile from "@assets/profile/fear_profile.png";
+import disgustProfile from "@assets/profile/disgust_profile.png";
+
+interface UserInfo {
+    memberId: number;
+    email: string;
+    nickname: string;
+    reportCount: number;
+    likeCount: number;
+    repEmotionType: string;
+    authority: string;
+}
 
 const Header: React.FC = () => {
     const navigate = useNavigate();
@@ -19,10 +30,18 @@ const Header: React.FC = () => {
     const isRecommend = location.pathname === "/recommend";
     const isWeekMatch = location.pathname === "/weekmatch";
     const [scrolled, setScrolled] = useState(false);
-    const [nickname, setNickname] = useState<string>("");
-    const [userImg, setUserImg] = useState<string>("");
+
+    const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+    const emotionProfileMap: Record<string, string> = {
+        joy: joyProfile,
+        anger: angryProfile,
+        sadness: sadnessProfile,
+        fear: fearProfile,
+        neutral: disgustProfile,
+    };
 
     const [menuOpen, setMenuOpen] = useState(false);
+    const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -34,20 +53,29 @@ const Header: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        (async () => {
-            const response = await memberApi().profile();
-            setNickname(response.data.data.nickname);
-            const emotion = response.data.data.refEmotions as string;
-            const emotionMap: Record<string, string> = {
-                joy: JoyImg,
-                sad: SadImg,
-                angry: AngryImg,
-                fear: FearImg,
-                disgust: DisgustImg,
-            };
-            setUserImg(emotionMap[emotion] || "");
-        })();
-    }, [location.pathname]);
+        const fetchProfile = () => {
+            memberApi()
+                .profile()
+                .then((res) => {
+                    setUserInfo(res.data.data);
+                })
+                .catch((err) => {
+                    console.error("Failed to load user info", err);
+                });
+        };
+
+        fetchProfile();
+
+        const handleProfileUpdated = () => {
+            fetchProfile();
+        };
+
+        window.addEventListener("profileUpdated", handleProfileUpdated);
+
+        return () => {
+            window.removeEventListener("profileUpdated", handleProfileUpdated);
+        };
+    }, []);
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -111,15 +139,21 @@ const Header: React.FC = () => {
                             </a>
                         </nav>
                     </div>
-                    {nickname !== "" ? (
+                    {userInfo?.nickname ? (
                         <div className="relative">
                             <div
                                 className="flex items-center cursor-pointer text-white font-light text-sm gap-3"
                                 onClick={() => setMenuOpen((open) => !open)}
                             >
-                                {nickname}
+                                {userInfo.nickname}
                                 <img
-                                    src={userImg ? userImg : BingBong}
+                                    src={
+                                        userInfo
+                                            ? emotionProfileMap[
+                                                  userInfo.repEmotionType?.toLowerCase()
+                                              ]
+                                            : bingbongProfile
+                                    }
                                     alt="Profile"
                                     className="h-10 w-10 rounded-full "
                                 />
@@ -144,18 +178,7 @@ const Header: React.FC = () => {
                                 </button>
                                 <button
                                     className="flex items-center w-full px-6 py-3 hover:bg-grey_100 hover:rounded-xl text-error_red"
-                                    onClick={() => {
-                                        // 로그아웃 로직
-                                        sessionStorage.removeItem(
-                                            "accessToken",
-                                        );
-                                        sessionStorage.removeItem(
-                                            "refreshToken",
-                                        );
-                                        navigate("/");
-                                        window.location.reload();
-                                        setMenuOpen(false);
-                                    }}
+                                    onClick={() => setLogoutDialogOpen(true)}
                                 >
                                     <Logout className="mr-2" /> 로그아웃
                                 </button>
@@ -173,6 +196,27 @@ const Header: React.FC = () => {
                 </div>
             </header>
             <div className={`${scrolled ? "h-20" : "h-24"}`} />
+            <ConfirmDialog
+                isOpen={logoutDialogOpen}
+                title="로그아웃"
+                message="로그아웃 하시겠습니까?"
+                isRedButton={true}
+                showCancel={true}
+                onConfirm={async () => {
+                    try {
+                        await memberApi().logout();
+                        localStorage.removeItem("accessToken");
+                        localStorage.removeItem("refreshToken");
+                        setMenuOpen(false);
+                        setLogoutDialogOpen(false);
+                        navigate("/", { replace: true });
+                        window.location.reload();
+                    } catch (err) {
+                        console.error("Logout API failed", err);
+                    }
+                }}
+                onCancel={() => setLogoutDialogOpen(false)}
+            />
         </>
     );
 };

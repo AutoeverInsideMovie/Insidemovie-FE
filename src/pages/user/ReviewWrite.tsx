@@ -3,18 +3,18 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 // 에셋
-import Button from "../components/Button";
-import TransparentBox from "../components/TransparentBox";
+import Button from "../../components/Button";
+import TransparentBox from "../../components/TransparentBox";
 // 날짜 라이브러리
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import CalendarIcon from "../assets/calendar.svg?react";
+import CalendarIcon from "@assets/calendar.svg?react";
 import ReactDatePicker from "react-datepicker";
 import { format } from "date-fns";
 
 // 평점 라이브러리
 import SamplePoster from "@assets/sample_poster.png";
-import StarRating from "../components/StarRating";
+import StarRating from "../../components/StarRating";
 
 interface Movie {
     id: number;

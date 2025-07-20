@@ -1,1 +1,1 @@
-export type ReportStatus = "APPROVED" | "REJECTED" | "UNPROCESSED";
+export type ReportStatus = "ACCEPTED" | "REJECTED" | "UNPROCESSED";

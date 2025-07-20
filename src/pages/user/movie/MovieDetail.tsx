@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SamplePoster from "@assets/sample_poster.png";
-import StarRating from "../components/StarRating";
+import StarRating from "../../../components/StarRating";
 import joyIcon from "@assets/character/joy_icon.png";
 import sadIcon from "@assets/character/sad_icon.png";
 import angryIcon from "@assets/character/angry_icon.png";
@@ -12,12 +12,13 @@ import Unlike from "@assets/unlike.svg?react";
 import Edit from "@assets/edit.svg?react";
 import Delete from "@assets/delete.svg?react";
 import axios from "axios";
-import type { MovieOne } from "../interfaces/movieOne";
-import type { Review } from "../interfaces/review";
-import Button from "../components/Button";
-import ReviewItem from "../components/ReviewItem";
-import { useNavigate } from "react-router-dom";
+import type { MovieOne } from "../../../interfaces/movieOne";
+import type { Review } from "../../../interfaces/review";
+import Button from "../../../components/Button";
+import ReviewItem from "../../../components/ReviewItem";
+import { useNavigate, useParams } from "react-router-dom";
 import Profile from "@assets/profile/joy_profile.png";
+import MyReviewItem from "../../../components/MyReviewItem";
 
 interface ReviewItemProps {
     review_id: number;
@@ -53,6 +54,8 @@ const emotionColorMap = {
 };
 
 const MovieDetail: React.FC = () => {
+    const { movieId } = useParams<{ movieId: string }>();
+    const movieIdNumber = Number(movieId);
     const navigate = useNavigate();
     const [movieInfo, setMovieInfo] = useState<MovieOne | null>(null);
     const [reviewList, setReviewList] = useState<Review[]>([]);
@@ -86,11 +89,9 @@ const MovieDetail: React.FC = () => {
             try {
                 const res = await axios.get("/mock/movieDetail.json");
                 setMovieInfo(res.data);
-                console.log(res.data);
 
                 const reviewList = await axios.get("/mock/review.json");
                 setReviewList(reviewList.data);
-                console.log(reviewList.data);
             } catch (e) {
                 console.error("박스오피스 조회 에러!! : ", e);
             }
@@ -190,69 +191,26 @@ const MovieDetail: React.FC = () => {
                 )}
 
                 {/* 로그인 시 작성한 리뷰 보여주기 */}
-                {!isLogin && (
-                    <div className="bg-box_bg_white p-4 rounded-3xl text-white mt-10">
-                        <div className="flex items-center justify-between">
-                            <div className="flex gap-2 items-center">
-                                <img
-                                    src={Profile}
-                                    alt="유저"
-                                    className="w-8 h-8 rounded-full"
-                                />
-                                <div>
-                                    <div className="font-normal text-sm">
-                                        홍길동
-                                    </div>
-                                    <div className="text-xs font-light text-gray-400">
-                                        1일 전
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-1 bg-box_bg_white/10 px-2 py-1 rounded-full text-sm">
-                                {topEmotionIcon && (
-                                    <img
-                                        src={emotionMap[topEmotionIcon]}
-                                        alt={topEmotionIcon}
-                                        className="w-6 h-6"
-                                    />
-                                )}
-                                |
-                                <StarRating
-                                    value={4.5}
-                                    readOnly={true}
-                                    showOneStar={true}
-                                    showValue={true}
-                                    size={"small"}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="mt-3 text-[15px] leading-relaxed">
-                            <p className="px-2">"내용"</p>
-                        </div>
-
-                        <div className="w-full h-[1px] bg-white/10 mt-4" />
-
-                        <div className="mt-4 flex justify-start items-center text-sm text-gray-300">
-                            <div className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer">
-                                <Unlike className="w-5 h-5" />
-                                12{/*{like_count}*/}
-                            </div>
-                            <div
-                                className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer"
-                                onClick={() => {
-                                    navigate("/review-write");
-                                }}
-                            >
-                                <Edit className="w-5 h-5" />
-                                수정하기
-                            </div>
-                            <div className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer">
-                                <Delete className="w-5 h-5" />
-                                삭제하기
-                            </div>
-                        </div>
-                    </div>
+                {!isLogin && reviewList.length > 0 && (
+                    <MyReviewItem
+                        reviewId={reviewList[0].reviewId}
+                        content={reviewList[0].content}
+                        rating={reviewList[0].rating}
+                        spoiler={false}
+                        createdAt={reviewList[0].createdAt}
+                        likeCount={reviewList[0].likeCount}
+                        myReview={reviewList[0].myReview}
+                        modify={reviewList[0].modify}
+                        myLike={reviewList[0].myLike}
+                        nickname={reviewList[0].nickname}
+                        memberId={reviewList[0].memberId}
+                        movieId={reviewList[0].movieId}
+                        profile={reviewList[0].profile}
+                        emotions={reviewList[0].emotions}
+                        isReported={reviewList[0].isReported}
+                        isConcealed={reviewList[0].isConcealed}
+                        isMypage={false}
+                    />
                 )}
 
                 {/* 리뷰 목록 */}
@@ -262,15 +220,22 @@ const MovieDetail: React.FC = () => {
                     </h2>
                     {reviewList.map((review) => (
                         <ReviewItem
-                            user_name={review.user_name}
-                            date={review.date}
+                            reviewId={review.reviewId}
                             content={review.content}
-                            like_count={review.like_count}
-                            star_value={review.star_value}
-                            spoiler={review.spoiler}
-                            review_id={review.review_id}
-                            user_profile={review.user_profile}
+                            rating={review.rating}
+                            spoiler={false}
+                            createdAt={review.createdAt}
+                            likeCount={review.likeCount}
+                            myReview={review.myReview}
+                            modify={review.modify}
+                            myLike={review.myLike}
+                            nickname={review.nickname}
+                            memberId={review.memberId}
+                            movieId={review.movieId}
+                            profile={review.profile}
                             emotions={review.emotions}
+                            isReported={review.isReported}
+                            isConcealed={review.isConcealed}
                         />
                     ))}
                 </div>

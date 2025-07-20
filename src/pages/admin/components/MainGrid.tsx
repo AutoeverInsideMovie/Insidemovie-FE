@@ -13,25 +13,18 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
-interface DashboardDataDTO {
-    totalMembers: number[];
-    totalReviews: number[];
-    concealedReviews: number[];
-    MonthlytotalMembers: number[];
-    MonthlytotalReviews: number[];
-    MonthlyconcealedReviews: number[];
-}
+import type { filteredCumulativeData } from "../../../types/dashboardData";
 
 export default function MainGrid() {
     const navigate = useNavigate();
     const handleClick = () => {
         navigate("/admin/report"); // 이동할 경로 입력
     };
+
     const [dashboardState, setDashboardState] =
-        useState<DashboardDataDTO>(null);
+        useState<filteredCumulativeData | null>(null);
     useEffect(() => {
-        const token = sessionStorage.getItem("accessToken");
+        const token = localStorage.getItem("accessToken");
         console.log("토큰 : ", token);
         const fetchData = async () => {
             try {
@@ -44,9 +37,43 @@ export default function MainGrid() {
                     },
                     // "/mock/dashBoardData.json",
                 );
-                setDashboardState(res.data.data);
+                const allData = res.data.data;
+                if (!allData) {
+                    console.error("allData 없음");
+                    return;
+                }
+
+                const extractCounts = (
+                    arr: { date: string; count: number }[] | undefined,
+                ) => (arr ? arr.map((item) => item.count) : []);
+
+                const filtered = {
+                    totalMembers: extractCounts(
+                        allData.dailyMemberCumulativeCounts,
+                    ),
+                    totalReviews: extractCounts(
+                        allData.dailyReviewCumulativeCounts,
+                    ),
+                    concealedReviews: extractCounts(
+                        allData.dailyReportCumulativeCounts,
+                    ),
+
+                    MonthlytotalMembers: extractCounts(
+                        allData.monthlyMemberCumulativeCounts,
+                    ),
+                    MonthlytotalReviews: extractCounts(
+                        allData.monthlyReviewCumulativeCounts,
+                    ),
+                    MonthlyconcealedReviews: extractCounts(
+                        allData.monthlyReportCumulativeCounts,
+                    ),
+                };
+
+                setDashboardState(filtered);
+                console.log("필터링 : ", filtered);
             } catch (err) {
                 console.error("대시보드 데이터 불러오기 실패:", err);
+                navigate("/login");
             }
         };
         fetchData();
@@ -137,7 +164,7 @@ export default function MainGrid() {
                         variant="caption"
                         sx={{ color: "text.secondary" }}
                     >
-                        수정 및 다중 삭제 →
+                        상세보기 수정 →
                     </Typography>
                 </Button>
             </Grid>

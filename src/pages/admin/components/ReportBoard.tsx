@@ -1,24 +1,22 @@
 import * as React from "react";
-import {
-    DataGrid,
-    type GridRowsProp,
-    type GridValidRowModel,
-} from "@mui/x-data-grid";
-import { getColumns } from "../internals/data/gridData";
+import { DataGrid, type GridRowsProp } from "@mui/x-data-grid";
+import { getSimpleColumns } from "../internals/data/gridData";
 import Box from "@mui/material/Box";
-import { updateReportStatus } from "../../../services/reportHandler";
 import { useEffect, useState } from "react";
 import { mapReportsToRows } from "../../../services/mapReportsToRows";
 import axios from "axios";
 import type { Report } from "../../../types/reportTypes"; // Report 타입 정의
+import type { ReportStatus } from "../../../types/reportStatus"; // Report 상태 타입 정의
+import { useNavigate } from "react-router-dom";
 interface ReportBoardProps {
     filtered?: boolean; // 필터 적용 여부(미처리만 보여주기)
 }
 
 export default function ReportBoard({ filtered = false }: ReportBoardProps) {
+    const navigate = useNavigate();
     const [reportList, setReportList] = useState<Report[] | null>(null);
     useEffect(() => {
-        const token = sessionStorage.getItem("accessToken");
+        const token = localStorage.getItem("accessToken");
         console.log("토큰 : ", token);
         const fetchData = async () => {
             try {
@@ -31,23 +29,30 @@ export default function ReportBoard({ filtered = false }: ReportBoardProps) {
                     },
                     // "/mock/report.json",
                 );
-                setReportList(res.data.content);
+                const allData = res.data.data.content;
+                if (!allData) {
+                    console.error("allData 없음");
+                    return;
+                }
+                setReportList(allData);
+                console.log("필터링 : ", allData);
             } catch (err) {
                 console.error("신고 페이지 데이터 불러오기 실패:", err);
+                navigate("/login");
             }
         };
         fetchData();
     }, []);
     const rows: GridRowsProp = mapReportsToRows(reportList);
 
-    const handleDelete = (reportId: number) => {
-        const updated = reportList?.map((r) =>
-            r.reportId === reportId ? { ...r, status: "APPROVED" } : r,
+    const handleStatusChange = (reportId: number, newStatus: ReportStatus) => {
+        const updated = reportList.map((r) =>
+            r.reportId === reportId ? { ...r, status: newStatus } : r,
         );
-        setReportList(updated);
+        setReportList(updated ?? []);
     };
+    const columns = getSimpleColumns(handleStatusChange);
 
-    const columns = getColumns(handleDelete);
     if (!reportList) {
         return <div className="text-white text-center">Loading...</div>;
     }
@@ -73,7 +78,7 @@ export default function ReportBoard({ filtered = false }: ReportBoardProps) {
                             },
                         ],
                     },
-                    pagination: { paginationModel: { pageSize: 20 } },
+                    pagination: { paginationModel: { pageSize: 10 } },
                     ...(filtered && {
                         filter: {
                             filterModel: {
