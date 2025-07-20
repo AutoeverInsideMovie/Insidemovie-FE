@@ -53,7 +53,7 @@ export default function PageViewsBarChart({
         <Card variant="outlined" sx={{ width: "100%" }}>
             <CardContent>
                 <Typography component="h2" variant="subtitle2" gutterBottom>
-                    일별 추이
+                    일간 추이
                 </Typography>
                 <Stack sx={{ justifyContent: "space-between" }}>
                     <Stack

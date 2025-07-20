@@ -194,7 +194,7 @@ export function getSimpleColumns(
     return [
         {
             field: "button",
-            headerName: "간편 관리",
+            headerName: "신고 처리",
             headerAlign: "center",
             align: "center",
             flex: 0.5,
@@ -270,7 +270,7 @@ export function getColumns(
     return [
         {
             field: "button",
-            headerName: "간편 관리",
+            headerName: "신고 처리",
             headerAlign: "center",
             align: "center",
             flex: 0.5,

@@ -64,7 +64,7 @@ export default function SessionsChart({
         <Card variant="outlined" sx={{ width: "100%" }}>
             <CardContent>
                 <Typography component="h2" variant="subtitle2" gutterBottom>
-                    월별 추이
+                    연간 추이
                 </Typography>
 
                 <Stack sx={{ justifyContent: "space-between" }}>
