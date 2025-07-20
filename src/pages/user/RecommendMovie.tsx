@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import type { Movie } from "../../interfaces/movie";
 import SamplePoster from "@assets/sample_poster.png";
-import Poster from "../../components/Poster";
+import MovieItem from "../../components/MovieItem";
 import Tag from "../../components/Tag";
 import { useNavigate } from "react-router-dom";
 
@@ -53,13 +53,13 @@ const RecommendMovie: React.FC = () => {
                         </div>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-4">
                             {movieList.map((poster, idx) => (
-                                <Poster
+                                <MovieItem
                                     key={idx}
                                     posterImg={SamplePoster}
-                                    posterName={poster.posterName}
-                                    emotionIcon={poster.emotionIcon}
-                                    emotionValue={poster.emotionValue}
-                                    starValue={poster.starValue}
+                                    posterName={poster.posterPath}
+                                    emotionIcon={"joy"}
+                                    emotionValue={0}
+                                    starValue={poster.voteAverage}
                                     onClick={() => navigate("/movie")}
                                 />
                             ))}

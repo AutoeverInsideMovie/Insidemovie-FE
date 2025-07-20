@@ -246,7 +246,7 @@ const Signup: React.FC = () => {
                         page: 0,
                         pageSize: 8,
                     });
-                    const mapped = res.data.data.results.map((m: any) => ({
+                    const mapped = res.data.data.results.map((m) => ({
                         id: m.id,
                         posterPath: m.poster_path,
                         title: m.title,

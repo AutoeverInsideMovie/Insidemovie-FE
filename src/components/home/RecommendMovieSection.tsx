@@ -1,6 +1,6 @@
 import * as React from "react";
 import ArrowRight from "@assets/arrow_right.svg?react";
-import Poster from "../Poster";
+import MovieItem from "../MovieItem";
 import Tag from "../Tag";
 import { useEffect, useState } from "react";
 import type { Movie } from "../../interfaces/movie";
@@ -87,13 +87,13 @@ const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
                 >
                     <div className="flex gap-3 w-max px-2">
                         {movieList.map((poster, idx) => (
-                            <Poster
+                            <MovieItem
                                 key={idx}
                                 posterImg={SamplePoster}
-                                posterName={poster.posterName}
-                                emotionIcon={poster.emotionIcon}
-                                emotionValue={poster.emotionValue}
-                                starValue={poster.starValue}
+                                posterName={poster.title}
+                                emotionIcon={"joy"}
+                                emotionValue={0}
+                                starValue={poster.voteAverage}
                                 onClick={() => navigate("/movie")}
                             />
                         ))}

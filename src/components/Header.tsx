@@ -37,7 +37,7 @@ const Header: React.FC = () => {
         anger: angryProfile,
         sadness: sadnessProfile,
         fear: fearProfile,
-        neutral: disgustProfile,
+        disgust: disgustProfile,
     };
 
     const [menuOpen, setMenuOpen] = useState(false);

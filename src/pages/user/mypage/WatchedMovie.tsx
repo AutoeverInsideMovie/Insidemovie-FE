@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import type { Movie } from "../../../interfaces/movie";
-import Poster from "../../../components/Poster";
+import MovieItem from "../../../components/MovieItem";
 import ArrowRight from "@assets/arrow_right.svg?react";
 import { memberApi } from "../../../api/memberApi";
 import { Pagination } from "@mui/material";
@@ -55,7 +55,7 @@ const WatchedMovie: React.FC = () => {
                         <>
                             <div className="min-h-48 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-4 mb-20">
                                 {movieList.map((poster) => (
-                                    <Poster
+                                    <MovieItem
                                         key={poster.movieId}
                                         posterImg={poster.posterPath}
                                         posterName={poster.title}

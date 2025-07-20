@@ -1,6 +1,6 @@
 import * as React from "react";
 import ArrowRight from "@assets/arrow_right.svg?react";
-import Poster from "../Poster";
+import MovieItem from "../MovieItem";
 import { useEffect, useState } from "react";
 import type { Movie } from "../../interfaces/movie";
 import axios from "axios";
@@ -70,7 +70,7 @@ const WatchMovieSection: React.FC<WatchMovieSectionProps> = ({
                 >
                     <div className="flex gap-3 w-max px-2">
                         {movieList.map((poster) => (
-                            <Poster
+                            <MovieItem
                                 key={poster.movieId}
                                 posterImg={poster.posterPath}
                                 posterName={poster.title}

@@ -8,7 +8,7 @@ import disgustIcon from "@assets/character/disgust_icon.png";
 import bingbongIcon from "@assets/character/bingbong_icon.png";
 import StarFull from "@assets/star_full.svg?react";
 
-interface PosterProps {
+interface MovieItemProps {
     posterImg: string;
     posterName: string;
     emotionIcon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
@@ -27,7 +27,7 @@ const emotionMap = {
     bingbong: bingbongIcon,
 };
 
-const Poster: React.FC<PosterProps> = ({
+const MovieItem: React.FC<MovieItemProps> = ({
     posterImg,
     posterName,
     emotionIcon = "bingbong",
@@ -68,4 +68,4 @@ const Poster: React.FC<PosterProps> = ({
     );
 };
 
-export default Poster;
+export default MovieItem;

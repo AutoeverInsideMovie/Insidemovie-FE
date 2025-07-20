@@ -1,5 +1,5 @@
 import * as React from "react";
-import Poster from "../Poster";
+import MovieItem from "../MovieItem";
 import ArrowRight from "@assets/arrow_right.svg?react";
 import { useEffect, useState } from "react";
 import type { Winner } from "../../interfaces/winner";
@@ -42,7 +42,7 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
                     <div className="flex justify-between items-center">
                         {movieList.slice(0, 3).map((poster, idx) => (
                             <React.Fragment key={idx}>
-                                <Poster
+                                <MovieItem
                                     posterImg={SamplePoster}
                                     posterName={poster.posterName}
                                     emotionIcon={poster.emotionIcon}

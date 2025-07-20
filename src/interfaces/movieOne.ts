@@ -1,9 +1,15 @@
 export interface MovieOne {
-    posterImg: string;
-    posterName: string;
-    starValue: number;
-    emotions: {
-        icon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
+    id: number;
+    title: string;
+    overview: string;
+    posterPath: string;
+    backdropPath: string;
+    voteAverage: number;
+    originalLanguage: string;
+    isLike: boolean | null;
+    genre?: string[];
+    emotions?: {
+        icon: "joy" | "anger" | "sadness" | "fear" | "neutral";
         value: number;
     }[];
 }
