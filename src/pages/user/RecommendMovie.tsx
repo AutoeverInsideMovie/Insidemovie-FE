@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import type { Movie } from "../interfaces/movie";
+import type { Movie } from "../../interfaces/movie";
 import SamplePoster from "@assets/sample_poster.png";
-import Poster from "../components/Poster";
-import Tag from "../components/Tag";
+import Poster from "../../components/Poster";
+import Tag from "../../components/Tag";
 import { useNavigate } from "react-router-dom";
 
 const RecommendMovie: React.FC = () => {
@@ -41,7 +41,7 @@ const RecommendMovie: React.FC = () => {
                             추천 영화
                         </h1>
 
-                        <div className="flex items-center pt-3 mb-4">
+                        <div className="flex items-center pt-3">
                             {tagList.map((tag) => (
                                 <Tag
                                     key={tag}
@@ -51,7 +51,7 @@ const RecommendMovie: React.FC = () => {
                                 />
                             ))}
                         </div>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-4">
                             {movieList.map((poster, idx) => (
                                 <Poster
                                     key={idx}

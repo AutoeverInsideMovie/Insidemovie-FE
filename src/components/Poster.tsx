@@ -15,6 +15,7 @@ interface PosterProps {
     emotionValue: number;
     starValue: number;
     onClick?: () => void;
+    className?: string;
 }
 
 const emotionMap = {
@@ -33,14 +34,17 @@ const Poster: React.FC<PosterProps> = ({
     emotionValue = 0,
     starValue = 0,
     onClick,
+    className = "",
 }) => {
     return (
         <div className="px-1 py-3" onClick={onClick}>
-            <TransparentBox className="w-[180px] bg-box_bg_white rounded-xl shadow-md cursor-pointer flex flex-col transform transition-transform duration-200 hover:scale-105">
+            <TransparentBox
+                className={`w-[180px] bg-box_bg_white rounded-xl shadow-md cursor-pointer flex flex-col transform transition-transform duration-200 hover:scale-105 ${className}`}
+            >
                 <img
                     src={posterImg}
                     alt="posterImage"
-                    className="w-full h-auto rounded-t-xl"
+                    className="w-full h-64 object-cover rounded-t-xl"
                 />
                 <div className="text-left text-white text-lg font-extralight px-2 py-1 truncate">
                     {posterName}

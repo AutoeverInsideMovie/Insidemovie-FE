@@ -1,13 +1,13 @@
 import * as React from "react";
 import { useState } from "react";
-import InputField from "../components/InputField";
-import Button from "../components/Button";
-import TransparentBox from "../components/TransparentBox";
+import InputField from "../../../components/InputField";
+import Button from "../../../components/Button";
+import TransparentBox from "../../../components/TransparentBox";
 import { useNavigate } from "react-router-dom";
 import Logo from "@assets/insidemovie_white.png";
 import KakaoIcon from "@assets/kakao.png";
-import { memberApi } from "../api/memberApi";
-import { ConfirmDialog } from "../components/ConfirmDialog";
+import { memberApi } from "../../../api/memberApi";
+import { ConfirmDialog } from "../../../components/ConfirmDialog";
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
@@ -30,8 +30,8 @@ const Login: React.FC = () => {
             const { accessToken, refreshToken } = response.data.data;
 
             if (accessToken && refreshToken) {
-                sessionStorage.setItem("accessToken", accessToken);
-                sessionStorage.setItem("refreshToken", refreshToken);
+                localStorage.setItem("accessToken", accessToken);
+                localStorage.setItem("refreshToken", refreshToken);
 
                 navigate("/");
             } else throw new Error("토큰이 존재하지 않습니다.");

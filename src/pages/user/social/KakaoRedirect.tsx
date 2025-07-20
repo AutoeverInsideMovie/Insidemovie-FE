@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "../api/axiosInstance";
-import { ConfirmDialog } from "../components/ConfirmDialog";
+import axios from "../../../api/axiosInstance";
+import { ConfirmDialog } from "../../../components/ConfirmDialog";
 import { useNavigate } from "react-router-dom";
 
 interface DialogState {
@@ -56,8 +56,8 @@ const KakaoRedirect: React.FC = () => {
 
                     const { accessToken, refreshToken } = res.data.data;
                     if (accessToken && refreshToken) {
-                        sessionStorage.setItem("accessToken", accessToken);
-                        sessionStorage.setItem("refreshToken", refreshToken);
+                        localStorage.setItem("accessToken", accessToken);
+                        localStorage.setItem("refreshToken", refreshToken);
 
                         navigate("/");
                     } else {
