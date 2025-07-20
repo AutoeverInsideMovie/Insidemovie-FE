@@ -1,10 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import type { Movie } from "../../../interfaces/movie";
 import MovieItem from "../../../components/MovieItem";
 import ArrowRight from "@assets/arrow_right.svg?react";
 import { memberApi } from "../../../api/memberApi";
 import { Pagination } from "@mui/material";
+
+interface Movie {
+    movieId: number;
+    posterPath: string;
+    title: string;
+    mainEmotion: string;
+    emotionValue: number;
+    voteAverage: number;
+}
 
 const LikedMovie: React.FC = () => {
     const navigate = useNavigate();
@@ -57,14 +65,12 @@ const LikedMovie: React.FC = () => {
                                 {movieList.map((poster) => (
                                     <MovieItem
                                         key={poster.movieId}
+                                        movieId={poster.movieId}
                                         posterImg={poster.posterPath}
                                         posterName={poster.title}
-                                        emotionIcon={"joy"}
-                                        emotionValue={0}
+                                        emotionIcon={poster.mainEmotion.toLowerCase()}
+                                        emotionValue={poster.emotionValue}
                                         starValue={poster.voteAverage}
-                                        onClick={() =>
-                                            navigate(`/movie/${poster.movieId}`)
-                                        }
                                     />
                                 ))}
                             </div>

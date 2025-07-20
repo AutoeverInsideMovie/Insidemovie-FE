@@ -1,5 +1,6 @@
 import * as React from "react";
 import TransparentBox from "./TransparentBox";
+import { useNavigate } from "react-router-dom";
 import joyIcon from "@assets/character/joy_icon.png";
 import sadIcon from "@assets/character/sad_icon.png";
 import angryIcon from "@assets/character/angry_icon.png";
@@ -9,35 +10,42 @@ import bingbongIcon from "@assets/character/bingbong_icon.png";
 import StarFull from "@assets/star_full.svg?react";
 
 interface MovieItemProps {
+    movieId: number;
     posterImg: string;
     posterName: string;
-    emotionIcon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
+    emotionIcon: string;
     emotionValue: number;
     starValue: number;
-    onClick?: () => void;
     className?: string;
 }
 
 const emotionMap = {
     joy: joyIcon,
-    sad: sadIcon,
-    angry: angryIcon,
+    sadness: sadIcon,
+    anger: angryIcon,
     fear: fearIcon,
-    disgust: disgustIcon,
+    neutral: disgustIcon,
     bingbong: bingbongIcon,
 };
 
 const MovieItem: React.FC<MovieItemProps> = ({
+    movieId,
     posterImg,
     posterName,
     emotionIcon = "bingbong",
     emotionValue = 0,
     starValue = 0,
-    onClick,
     className = "",
 }) => {
+    const navigate = useNavigate();
+
     return (
-        <div className="px-1 py-3" onClick={onClick}>
+        <div
+            className="px-1 py-3"
+            onClick={() => {
+                navigate(`/movies/detail/${movieId}`);
+            }}
+        >
             <TransparentBox
                 className={`w-[180px] bg-box_bg_white rounded-xl shadow-md cursor-pointer flex flex-col transform transition-transform duration-200 hover:scale-105 ${className}`}
             >
@@ -60,7 +68,7 @@ const MovieItem: React.FC<MovieItemProps> = ({
                     </div>
                     <div className="flex items-center text-xs font-light text-white">
                         <StarFull className="w-6 h-6" />
-                        <p>{starValue}%</p>
+                        <p>{starValue}</p>
                     </div>
                 </div>
             </TransparentBox>

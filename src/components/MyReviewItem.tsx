@@ -150,7 +150,7 @@ const MyReviewItem: React.FC<MyReviewItemProps> = ({
                     <div
                         className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer"
                         onClick={() => {
-                            navigate(`/movie/${movieId}`);
+                            navigate(`/movies/detail/${movieId}`);
                         }}
                     >
                         영화 보기

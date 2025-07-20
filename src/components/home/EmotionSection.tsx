@@ -1,6 +1,6 @@
 import * as React from "react";
 import EmotionSlider from "../EmotionSlider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import joyImg from "@assets/character/joy.png";
 import sadImg from "@assets/character/sad.png";
 import angryImg from "@assets/character/angry.png";
@@ -8,9 +8,17 @@ import fearImg from "@assets/character/fear.png";
 import disgustImg from "@assets/character/disgust.png";
 import bingdbongImg from "@assets/character/bingbong.png";
 import Button from "../Button";
+import { memberApi } from "../../api/memberApi";
 
 interface CharacterCarouselSectionProps {
     className?: string;
+    onEmotionsChange?: (
+        joy: number,
+        sad: number,
+        angry: number,
+        fear: number,
+        disgust: number,
+    ) => void;
 }
 
 const characters = [
@@ -24,14 +32,71 @@ const characters = [
 
 const EmotionSection: React.FC<CharacterCarouselSectionProps> = ({
     className = "",
+    onEmotionsChange,
 }) => {
     const [joyValue, setJoyValue] = useState(50);
     const [sadValue, setSadValue] = useState(50);
     const [angryValue, setAngryValue] = useState(50);
     const [fearValue, setFearValue] = useState(50);
     const [disgustValue, setDisgustValue] = useState(50);
+
+    // Store the baseline values for reset
+    const [initialEmotions, setInitialEmotions] = useState({
+        joy: 50,
+        sad: 50,
+        angry: 50,
+        fear: 50,
+        disgust: 50,
+    });
+
+    useEffect(() => {
+        const loadEmotions = async () => {
+            try {
+                const res = await memberApi().getMyAverageEmotions();
+                const data = res.data.data;
+                // API returns decimals between 0 and 1
+                const joy100 = Math.round(data.joy * 100);
+                const sad100 = Math.round(data.sadness * 100);
+                const angry100 = Math.round(data.anger * 100);
+                const fear100 = Math.round(data.fear * 100);
+                const disgust100 = Math.round(data.neutral * 100);
+                setJoyValue(joy100);
+                setSadValue(sad100);
+                setAngryValue(angry100);
+                setFearValue(fear100);
+                setDisgustValue(disgust100);
+                setInitialEmotions({
+                    joy: joy100,
+                    sad: sad100,
+                    angry: angry100,
+                    fear: fear100,
+                    disgust: disgust100,
+                });
+            } catch {
+                // not logged in or error: keep defaults
+            }
+        };
+        loadEmotions();
+    }, []);
+
+    // Call onEmotionsChange whenever any emotion value changes
+    useEffect(() => {
+        if (onEmotionsChange) {
+            onEmotionsChange(
+                joyValue,
+                sadValue,
+                angryValue,
+                fearValue,
+                disgustValue,
+            );
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [joyValue, sadValue, angryValue, fearValue, disgustValue]);
+
     return (
-        <div className={`${className}`}>
+        <div
+            className={`flex flex-col justify-center items-center ${className}`}
+        >
             <div className="flex items-center justify-center space-x-4 overflow-x-auto scrollbar-hide px-2 py-4">
                 <EmotionSlider
                     name="JOY"
@@ -73,8 +138,14 @@ const EmotionSection: React.FC<CharacterCarouselSectionProps> = ({
                 text="감정 초기화"
                 textColor="white"
                 buttonColor="transparent"
-                className="w-full"
-                onClick={() => {}}
+                className="w-full max-w-screen-sm"
+                onClick={() => {
+                    setJoyValue(initialEmotions.joy);
+                    setSadValue(initialEmotions.sad);
+                    setAngryValue(initialEmotions.angry);
+                    setFearValue(initialEmotions.fear);
+                    setDisgustValue(initialEmotions.disgust);
+                }}
             />
         </div>
     );

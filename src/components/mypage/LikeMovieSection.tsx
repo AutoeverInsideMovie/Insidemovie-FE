@@ -2,12 +2,20 @@ import * as React from "react";
 import ArrowRight from "@assets/arrow_right.svg?react";
 import MovieItem from "../MovieItem";
 import { useEffect, useState } from "react";
-import type { Movie } from "../../interfaces/movie";
 import { memberApi } from "../../api/memberApi";
 import { useNavigate } from "react-router-dom";
 
 interface LikeMovieSectionProps {
     className?: string;
+}
+
+interface Movie {
+    movieId: number;
+    posterPath: string;
+    title: string;
+    mainEmotion: string;
+    emotionValue: number;
+    voteAverage: number;
 }
 
 const LikeMovieSection: React.FC<LikeMovieSectionProps> = ({
@@ -70,14 +78,12 @@ const LikeMovieSection: React.FC<LikeMovieSectionProps> = ({
                         {movieList.map((poster) => (
                             <MovieItem
                                 key={poster.movieId}
+                                movieId={poster.movieId}
                                 posterImg={poster.posterPath}
                                 posterName={poster.title}
-                                emotionIcon={"joy"}
-                                emotionValue={0}
+                                emotionIcon={poster.mainEmotion.toLowerCase()}
+                                emotionValue={poster.emotionValue}
                                 starValue={poster.voteAverage}
-                                onClick={() =>
-                                    navigate(`/movie/${poster.movieId}`)
-                                }
                             />
                         ))}
                     </div>
