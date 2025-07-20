@@ -22,6 +22,7 @@ const Search: React.FC = () => {
     const pageSize = 40;
     const [results, setResults] = useState<Movie[]>([]);
     const [totalPages, setTotalPages] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
 
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -46,9 +47,14 @@ const Search: React.FC = () => {
                     page,
                     pageSize,
                 });
-                const { content, totalPages: tp } = res.data.data;
+                const {
+                    content,
+                    totalPages: tp,
+                    totalElements: te,
+                } = res.data.data;
                 setResults(content);
                 setTotalPages(tp);
+                setTotalElements(te);
             } catch (e) {
                 console.error("영화 검색 실패:", e);
             }
@@ -97,8 +103,9 @@ const Search: React.FC = () => {
                     </div>
                 </div>
 
-                <h1 className="flex gap-3 text-white text-2xl font-semibold text-left w-full mb-4">
-                    '{title}' <p className="font-extralight">검색 결과</p>
+                <h1 className="flex gap-3 items-center text-white text-2xl font-semibold text-left w-full mb-4">
+                    '{title}' <p className="font-extralight">검색 결과</p>{" "}
+                    <p className="font-extralight text-sm">{totalElements}건</p>
                 </h1>
                 {results.length === 0 ? (
                     <div className="flex items-center justify-center h-64">
