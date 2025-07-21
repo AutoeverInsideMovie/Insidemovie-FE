@@ -4,7 +4,7 @@ import Button from "./Button";
 interface ConfirmDialogProps {
     isOpen: boolean;
     title?: string;
-    message?: string;
+    message?: React.ReactNode;
     showCancel?: boolean;
     onConfirm: () => void;
     onCancel: () => void;
@@ -43,7 +43,9 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                 className="bg-grey_100 rounded-3xl max-w-md w-full p-6 shadow-lg"
                 onClick={(e) => e.stopPropagation()}
             >
-                <h3 className="text-xl font-bold mb-2 text-center">{title}</h3>
+                <h3 className="text-black text-xl font-bold mb-2 text-center">
+                    {title}
+                </h3>
                 {message && (
                     <p className="text-gray-600 text-sm font-medium mb-4 text-center">
                         {message}
@@ -64,18 +66,11 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                     <Button
                         text={"확인"}
                         textColor={"black"}
-                        buttonColor={"default"}
+                        buttonColor={isRedButton ? "red" : "default"}
                         disabled={false}
                         prefixIcon={null}
                         onClick={onConfirm}
-                        className={`
-                            text-white transition w-full
-                            ${
-                                isRedButton
-                                    ? "bg-error_red hover:bg-error_red/70"
-                                    : ""
-                            }
-                        `}
+                        className={"text-white transition w-full"}
                     />
                 </div>
             </div>

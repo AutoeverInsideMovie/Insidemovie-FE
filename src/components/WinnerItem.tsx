@@ -4,7 +4,7 @@ import StarRating from "./StarRating";
 interface WinnerItemProps {
     posterImg: string;
     posterName: string;
-    emotionIcon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
+    emotionIcon: string;
     emotionValue: number;
     starValue: number;
     winnerWeek: string;
@@ -35,7 +35,11 @@ const WinnerItem: React.FC<WinnerItemProps> = ({
 
                 <div className="flex items-center my-2">
                     <StarRating value={starValue} readOnly />
-                    <span className="ml-2 text-sm">{starValue.toFixed(1)}</span>
+                    <span className="ml-2 text-sm">
+                        {Number.isInteger(Number(starValue))
+                            ? String(Number(starValue))
+                            : Number(starValue).toFixed(1)}
+                    </span>
                 </div>
             </div>
         </div>

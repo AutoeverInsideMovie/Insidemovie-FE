@@ -2,28 +2,63 @@ import * as React from "react";
 import MovieItem from "../MovieItem";
 import ArrowRight from "@assets/arrow_right.svg?react";
 import { useEffect, useState } from "react";
-import type { Winner } from "../../interfaces/winner";
-import axios from "axios";
-import SamplePoster from "@assets/sample_poster.png";
 import WinnerItem from "../WinnerItem";
 import Button from "../Button";
 import { useNavigate } from "react-router-dom";
+import { matchApi } from "../../api/matchApi";
 
 interface MatchSectionProps {
     className?: string;
 }
 
+interface Movie {
+    id: number;
+    posterPath: string;
+    title: string;
+    voteAverage: number;
+    mainEmotion: string;
+    emotionValue: number;
+    releaseDate: string;
+}
+
+interface Winner {
+    matchNumber: number;
+    matchDate: string;
+    movie: {
+        id: number;
+        posterPath: string;
+        title: string;
+        voteAverage: number;
+        mainEmotion: string;
+        emotionValue: number;
+        releaseDate: string;
+        matchDate: string;
+    };
+}
+
 const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
     const navigate = useNavigate();
-    const [movieList, setMovieList] = useState<Winner[]>([]);
+    const [movieList, setMovieList] = useState<Movie[]>([]);
+    const [pastWinners, setPastWinners] = useState<Winner[]>([]);
 
     useEffect(() => {
         (async () => {
             try {
-                const res = await axios.get("/mock/winner.json");
-                setMovieList(res.data);
+                const res = await matchApi().getWeeklyMatchMovie();
+                setMovieList(res.data.data);
             } catch (e) {
-                console.error("맞춤 영화 조회 에러!! : ", e);
+                console.error("금주의 영화 대결 조회 에러: ", e);
+            }
+        })();
+    }, []);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const res = await matchApi().getPastMatchMovie();
+                setPastWinners(res.data.data);
+            } catch (e) {
+                console.error("역대 우승 영화 조회 에러:", e);
             }
         })();
     }, []);
@@ -40,15 +75,15 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
             <div className="flex w-full justify-between gap-10">
                 <div>
                     <div className="flex justify-between items-center">
-                        {movieList.slice(0, 3).map((poster, idx) => (
+                        {movieList.map((poster, idx) => (
                             <React.Fragment key={idx}>
                                 <MovieItem
-                                    posterImg={SamplePoster}
-                                    posterName={poster.posterName}
-                                    emotionIcon={poster.emotionIcon}
+                                    movieId={poster.id}
+                                    posterImg={poster.posterPath}
+                                    posterName={poster.title}
+                                    emotionIcon={poster.mainEmotion}
                                     emotionValue={poster.emotionValue}
-                                    starValue={poster.starValue}
-                                    onClick={() => navigate("/movie")}
+                                    starValue={poster.voteAverage}
                                 />
                                 {idx < 2 && (
                                     <span className="text-white text-xl mx-2">
@@ -71,18 +106,28 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
                         역대 우승 영화
                     </h1>
                     <div className="flex flex-col items-center justify-center px-2 py-1">
-                        {movieList.splice(0, 2).map((movie, i) => (
-                            <WinnerItem
-                                key={i}
-                                posterImg={SamplePoster}
-                                posterName={movie.posterName}
-                                emotionIcon={movie.emotionIcon}
-                                emotionValue={movie.emotionValue}
-                                starValue={movie.starValue}
-                                winnerWeek={movie.winnerWeek}
-                                onClick={() => navigate("/movie")}
-                            />
-                        ))}
+                        {pastWinners.length === 0 ? (
+                            <p className="text-white text-center w-full">
+                                역대 우승 영화가 없습니다.
+                            </p>
+                        ) : (
+                            pastWinners.map((movie, i) => (
+                                <WinnerItem
+                                    key={i}
+                                    posterImg={movie.movie.posterPath}
+                                    posterName={movie.movie.title}
+                                    emotionIcon={movie.movie.mainEmotion}
+                                    emotionValue={movie.movie.emotionValue}
+                                    starValue={movie.movie.voteAverage}
+                                    winnerWeek={movie.matchDate}
+                                    onClick={() =>
+                                        navigate(
+                                            `/movies/detail/${movie.movie.id}`,
+                                        )
+                                    }
+                                />
+                            ))
+                        )}
                     </div>
                 </div>
             </div>

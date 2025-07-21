@@ -11,7 +11,7 @@ interface Movie {
     title: string;
     voteAverage: number;
     mainEmotion: string;
-    emotionValue: number;
+    mainEmotionValue: number;
     releaseDate: string;
 }
 
@@ -142,7 +142,7 @@ const RecommendMovie: React.FC = () => {
                                     posterImg={poster.posterPath}
                                     posterName={poster.title}
                                     emotionIcon={poster.mainEmotion.toLowerCase()}
-                                    emotionValue={poster.emotionValue}
+                                    emotionValue={poster.mainEmotionValue}
                                     starValue={poster.voteAverage}
                                 />
                             ))}

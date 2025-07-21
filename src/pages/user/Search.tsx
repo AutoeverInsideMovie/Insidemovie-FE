@@ -11,7 +11,7 @@ interface Movie {
     posterPath: string;
     title: string;
     mainEmotion: string;
-    emotionValue: number;
+    mainEmotionValue: number;
     voteAverage: number;
 }
 
@@ -123,7 +123,7 @@ const Search: React.FC = () => {
                                     posterImg={movie.posterPath}
                                     posterName={movie.title}
                                     emotionIcon={movie.mainEmotion.toLowerCase()}
-                                    emotionValue={movie.emotionValue}
+                                    emotionValue={movie.mainEmotionValue}
                                     starValue={movie.voteAverage}
                                 />
                             ))}

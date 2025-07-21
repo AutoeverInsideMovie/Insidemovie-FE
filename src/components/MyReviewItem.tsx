@@ -13,6 +13,9 @@ import Edit from "@assets/edit.svg?react";
 import Delete from "@assets/delete.svg?react";
 import ArrowRight from "@assets/arrow_right.svg?react";
 import BingbongProfile from "@assets/profile/bingbong_profile.png";
+import { ConfirmDialog } from "./ConfirmDialog";
+import { reviewApi } from "../api/reviewApi";
+import { timeForToday } from "../services/timeForToday";
 
 interface MyReviewItemProps {
     reviewId: number;
@@ -66,15 +69,23 @@ const MyReviewItem: React.FC<MyReviewItemProps> = ({
     isMypage = false,
 }) => {
     const navigate = useNavigate();
+    const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
     const getTopEmotionIcon = (emotions: MyReviewItemProps["emotions"]) => {
-        if (!emotions || emotions.length === 0) return null;
+        const list = Array.isArray(emotions) ? emotions : [];
+        if (list.length === 0) return null;
+
+        const topEmotion = list.reduce((prev, curr) =>
+            curr.value > prev.value ? curr : prev,
+        );
+        return topEmotion.icon;
+        /*if (!emotions || emotions.length === 0) return null;
 
         const topEmotion = emotions.reduce((prev, curr) =>
             curr.value > prev.value ? curr : prev,
         );
 
-        return topEmotion.icon;
+        return topEmotion.icon;*/
     };
 
     const topEmotionIcon = getTopEmotionIcon(emotions);
@@ -86,16 +97,16 @@ const MyReviewItem: React.FC<MyReviewItemProps> = ({
             <div className="flex items-center justify-between">
                 <div className="flex gap-2 items-center">
                     <img
-                        src={!profile && BingbongProfile}
+                        src={profile ? profile : BingbongProfile}
                         alt="유저"
                         className="w-8 h-8 rounded-full"
                     />
                     <div>
                         <div className="font-normal text-sm">
-                            {!nickname && "알 수 없는 사용자"}
+                            {nickname ? nickname : "알 수 없는 사용자"}
                         </div>
                         <div className="text-xs font-light text-gray-400">
-                            {createdAt}
+                            {timeForToday(createdAt)}
                         </div>
                     </div>
                 </div>
@@ -134,13 +145,16 @@ const MyReviewItem: React.FC<MyReviewItemProps> = ({
                         <div
                             className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer"
                             onClick={() => {
-                                navigate("/review-write");
+                                navigate(`/review-write/${movieId}`);
                             }}
                         >
                             <Edit className="w-5 h-5" />
                             수정하기
                         </div>
-                        <div className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer">
+                        <div
+                            className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer"
+                            onClick={() => setIsDeleteConfirmOpen(true)}
+                        >
                             <Delete className="w-5 h-5" />
                             삭제하기
                         </div>
@@ -158,6 +172,24 @@ const MyReviewItem: React.FC<MyReviewItemProps> = ({
                     </div>
                 )}
             </div>
+            <ConfirmDialog
+                isOpen={isDeleteConfirmOpen}
+                title="리뷰 삭제"
+                message="리뷰를 삭제하시겠습니까?"
+                showCancel={true}
+                isRedButton={true}
+                onConfirm={async () => {
+                    try {
+                        await reviewApi().deleteReview({ reviewId });
+                        window.location.reload();
+                    } catch (e) {
+                        console.error("리뷰 삭제 실패", e);
+                    } finally {
+                        setIsDeleteConfirmOpen(false);
+                    }
+                }}
+                onCancel={() => setIsDeleteConfirmOpen(false)}
+            />
         </div>
     );
 };

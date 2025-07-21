@@ -62,7 +62,7 @@ export default function MemberBoard() {
     if (!memberList) {
         return <div className="text-white text-center">Loading...</div>;
     }
-    return (
+
         <Box
             sx={{
                 width: "100%",

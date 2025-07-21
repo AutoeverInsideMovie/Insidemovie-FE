@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Profile from "@assets/profile/joy_profile.png";
 import StarRating from "./StarRating";
 import Like from "@assets/like.svg?react";
 import Unlike from "@assets/unlike.svg?react";
@@ -11,6 +10,17 @@ import fearIcon from "@assets/character/fear_icon.png";
 import disgustIcon from "@assets/character/disgust_icon.png";
 import bingbongIcon from "@assets/character/bingbong_icon.png";
 import BingbongProfile from "@assets/profile/bingbong_profile.png";
+import { reviewApi } from "../api/reviewApi";
+import { timeForToday } from "../services/timeForToday";
+import { ConfirmDialog } from "./ConfirmDialog";
+import {
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    Snackbar,
+    Alert,
+} from "@mui/material";
 
 interface ReviewItemProps {
     reviewId: number;
@@ -62,15 +72,79 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
     isConcealed,
 }) => {
     const [showContent, setShowContent] = useState(!spoiler); // 스포일러면 처음엔 false
+    const [liked, setLiked] = useState<boolean>(Boolean(myLike));
+    const [likeCountState, setLikeCountState] = useState<number>(likeCount);
+
+    const [toastOpen, setToastOpen] = useState(false);
+    const [toastSeverity, setToastSeverity] = useState<"success" | "error">(
+        "success",
+    );
+    const [toastMessage, setToastMessage] = useState("");
+
+    // 신고 dialog
+    const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
+    const [reportReason, setReportReason] = useState<string>(
+        "INAPPROPRIATE_LANGUAGE",
+    );
+    // possible reasons
+    const reportReasons = [
+        { value: "INAPPROPRIATE_LANGUAGE", label: "부적절한 언어 사용" },
+        { value: "SEXUAL_CONTENT", label: "성적인 불쾌감 유발" },
+        { value: "SPOILER", label: "줄거리 노출" },
+        { value: "RUDE_BEHAVIOR", label: "무례하거나 공격적인 태도" },
+        { value: "ADVERTISEMENT", label: "광고 또는 홍보성 내용" },
+    ];
+
+    const handleReportConfirm = async () => {
+        try {
+            await reviewApi().reportReview({ reviewId, reason: reportReason });
+
+            setToastSeverity("success");
+            setToastMessage("신고되었습니다");
+        } catch (e) {
+            console.error("리뷰 신고 실패:", e);
+
+            console.error(e);
+            setToastSeverity("error");
+            setToastMessage("신고 중 오류가 발생했습니다");
+        } finally {
+            setIsReportDialogOpen(false);
+
+            setIsReportDialogOpen(false);
+            setToastOpen(true);
+        }
+    };
+
+    const handleLikeToggle = async () => {
+        try {
+            if (liked) {
+                await reviewApi().likeReview({ reviewId });
+                setLikeCountState((c) => c - 1);
+            } else {
+                await reviewApi().likeReview({ reviewId });
+                setLikeCountState((c) => c + 1);
+            }
+            setLiked((v) => !v);
+        } catch (e) {
+            console.error("리뷰 좋아요 토글 실패:", e);
+        }
+    };
 
     const getTopEmotionIcon = (emotions: ReviewItemProps["emotions"]) => {
-        if (!emotions || emotions.length === 0) return null;
+        const list = Array.isArray(emotions) ? emotions : [];
+        if (list.length === 0) return null;
 
-        const topEmotion = emotions.reduce((prev, curr) =>
+        const topEmotion = list.reduce((prev, curr) =>
             curr.value > prev.value ? curr : prev,
         );
-
         return topEmotion.icon;
+        // if (!emotions || emotions.length === 0) return null;
+        //
+        // const topEmotion = emotions.reduce((prev, curr) =>
+        //     curr.value > prev.value ? curr : prev,
+        // );
+        //
+        // return topEmotion.icon;
     };
 
     const topEmotionIcon = getTopEmotionIcon(emotions);
@@ -80,16 +154,16 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
             <div className="flex items-center justify-between">
                 <div className="flex gap-2 items-center">
                     <img
-                        src={!profile && BingbongProfile}
+                        src={profile ? profile : BingbongProfile}
                         alt="유저"
                         className="w-8 h-8 rounded-full"
                     />
                     <div>
                         <div className="font-normal text-sm">
-                            {!nickname && "알 수 없는 사용자"}
+                            {nickname ? nickname : "알 수 없는 사용자"}
                         </div>
                         <div className="text-xs font-light text-gray-400">
-                            {createdAt}
+                            {timeForToday(createdAt)}
                         </div>
                     </div>
                 </div>
@@ -131,15 +205,71 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
             <div className="w-full h-[1px] bg-white/10 mt-4" />
 
             <div className="mt-4 flex justify-start items-center text-sm text-gray-300">
-                <div className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer">
-                    <Unlike className="w-5 h-5" />
-                    {likeCount}
+                <div
+                    className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer"
+                    onClick={handleLikeToggle}
+                >
+                    {liked ? (
+                        <Like className="w-5 h-5" />
+                    ) : (
+                        <Unlike className="w-5 h-5" />
+                    )}
+                    {likeCountState}
                 </div>
-                <div className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer">
+                <div
+                    className="flex items-center gap-1 hover:bg-box_bg_white rounded-full px-2 py-1 transition-all duration-200 cursor-pointer"
+                    onClick={() => setIsReportDialogOpen(true)}
+                >
                     <Report className="w-5 h-5" />
                     신고하기
                 </div>
             </div>
+            <ConfirmDialog
+                isOpen={isReportDialogOpen}
+                title="리뷰 신고"
+                message={
+                    <div className="space-y-2">
+                        <div>신고 사유를 선택하세요:</div>
+                        <FormControl fullWidth variant="outlined" size="small">
+                            <InputLabel id="report-reason-label">
+                                신고 사유
+                            </InputLabel>
+                            <Select
+                                labelId="report-reason-label"
+                                value={reportReason}
+                                label="신고 사유"
+                                onChange={(e) =>
+                                    setReportReason(e.target.value as string)
+                                }
+                            >
+                                {reportReasons.map(({ value, label }) => (
+                                    <MenuItem key={value} value={value}>
+                                        {label}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </div>
+                }
+                showCancel={true}
+                onCancel={() => setIsReportDialogOpen(false)}
+                onConfirm={handleReportConfirm}
+                isRedButton={true}
+            ></ConfirmDialog>
+            <Snackbar
+                open={toastOpen}
+                autoHideDuration={3000}
+                onClose={() => setToastOpen(false)}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            >
+                <Alert
+                    onClose={() => setToastOpen(false)}
+                    severity={toastSeverity}
+                    variant="filled"
+                >
+                    {toastMessage}
+                </Alert>
+            </Snackbar>
         </div>
     );
 };

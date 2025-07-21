@@ -54,7 +54,7 @@ const MyReviewSection: React.FC<ReviewSectionProps> = ({ className = "" }) => {
                         memberId={review.memberId}
                         movieId={review.movieId}
                         profile={review.profile}
-                        emotions={review.emotions}
+                        emotions={review.emotion}
                         isReported={review.isReported}
                         isConcealed={review.isConcealed}
                         isMypage={true}

@@ -54,7 +54,10 @@ const AppContent: React.FC = () => {
                     path="/movies/detail/:movieId"
                     element={<MovieDetail />}
                 />
-                <Route path="/review-write" element={<ReviewWrite />} />
+                <Route
+                    path="/review-write/:movieId"
+                    element={<ReviewWrite />}
+                />
                 <Route
                     path="/login/oauth2/code/kakao"
                     element={<KakaoRedirect />}
