@@ -367,7 +367,7 @@ export function getMemberColumns(
     return [
         {
             field: "button",
-            headerName: "구성원 관리",
+            headerName: "회원 관리",
             headerAlign: "center",
             align: "center",
             flex: 0.5,
