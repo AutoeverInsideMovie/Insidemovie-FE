@@ -15,6 +15,7 @@ interface Movie {
     voteAverage: number;
     dominantEmotion: string;
     dominantEmotionRatio: number;
+    ratingAvg: number;
 }
 
 const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
@@ -67,8 +68,9 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
                         posterImg={movie.posterPath}
                         posterName={movie.title}
                         emotionIcon={movie.dominantEmotion.toLowerCase()}
-                        emotionValue={movie.dominantEmotionRatio * 100 || 0}
+                        emotionValue={movie.dominantEmotionRatio || 0}
                         starValue={movie.voteAverage}
+                        ratingAvg={movie.ratingAvg}
                     />
                 ))}
             </div>

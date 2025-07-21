@@ -16,8 +16,9 @@ interface Movie {
     title: string;
     voteAverage: number;
     mainEmotion: string;
-    emotionValue: number;
+    mainEmotionValue: number;
     releaseDate: string;
+    ratingAvg: number;
 }
 
 const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
@@ -134,8 +135,9 @@ const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
                                 posterImg={poster.posterPath}
                                 posterName={poster.title}
                                 emotionIcon={poster.mainEmotion.toLowerCase()}
-                                emotionValue={poster.emotionValue}
+                                emotionValue={poster.mainEmotionValue}
                                 starValue={poster.voteAverage}
+                                ratingAvg={poster.ratingAvg}
                             />
                         ))}
                     </div>

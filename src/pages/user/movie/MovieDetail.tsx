@@ -18,6 +18,12 @@ import Like from "@assets/like.svg?react";
 import Unlike from "@assets/unlike.svg?react";
 import { reviewApi } from "../../../api/reviewApi";
 import type { SelectChangeEvent } from "@mui/material/Select";
+import TMDB from "@assets/TMDB.svg?react";
+import Netflix from "@assets/netflix.png";
+import Watcha from "@assets/watcha.png";
+import Wavve from "@assets/wavve.png";
+import AppleTVPlus from "@assets/appleTV+.png";
+import DisneyPlus from "@assets/disneyPlus.png";
 
 const emotionMap = {
     joy: joyIcon,
@@ -165,7 +171,7 @@ const MovieDetail: React.FC = () => {
                         <img
                             src={movieInfo.posterPath}
                             alt={movieInfo.title}
-                            className="w-52 h-fit rounded-md"
+                            className="w-80 h-fit rounded-md"
                         />
                         <div>
                             <div className="flex items-center gap-2">
@@ -182,11 +188,98 @@ const MovieDetail: React.FC = () => {
                             <div className="mt-2 font-light text-sm text-grey_200 mb-2">
                                 {movieInfo.titleEn}
                             </div>
-                            <StarRating
-                                value={movieInfo.voteAverage}
-                                readOnly={true}
-                                showValue={true}
-                            />
+                            <div className="flex items-center">
+                                <StarRating
+                                    value={movieInfo.ratingAvg}
+                                    readOnly={true}
+                                    showValue={true}
+                                    showOneStar={true}
+                                />
+                                <TMDB className="x-4 y-4 ml-4 mr-1" />
+                                {movieInfo.voteAverage}
+                            </div>
+                            <div className="flex gap-2 mt-4">
+                                {movieInfo.ottProviders.map((provider, idx) => {
+                                    if (provider === "Netflix")
+                                        return (
+                                            <a
+                                                key={`netflix-${idx}`}
+                                                href="https://www.netflix.com"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <img
+                                                    src={Netflix}
+                                                    alt="Netflix"
+                                                    className="w-6 h-6"
+                                                />
+                                            </a>
+                                        );
+                                    if (provider.includes("Watcha"))
+                                        return (
+                                            <a
+                                                key={`watcha-${idx}`}
+                                                href="https://watcha.com"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <img
+                                                    src={Watcha}
+                                                    alt="Watcha"
+                                                    className="w-6 h-6"
+                                                />
+                                            </a>
+                                        );
+                                    if (
+                                        provider.toLowerCase().includes("wavve")
+                                    )
+                                        return (
+                                            <a
+                                                key={`wavve-${idx}`}
+                                                href="https://www.wavve.com"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <img
+                                                    src={Wavve}
+                                                    alt="Wavve"
+                                                    className="w-6 h-6"
+                                                />
+                                            </a>
+                                        );
+                                    if (provider.includes("Apple TV+"))
+                                        return (
+                                            <a
+                                                key={`apple-${idx}`}
+                                                href="https://tv.apple.com"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <img
+                                                    src={AppleTVPlus}
+                                                    alt="Apple TV+"
+                                                    className="w-6 h-6"
+                                                />
+                                            </a>
+                                        );
+                                    if (provider.includes("Disney Plus"))
+                                        return (
+                                            <a
+                                                key={`disney-${idx}`}
+                                                href="https://www.disneyplus.com"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <img
+                                                    src={DisneyPlus}
+                                                    alt="Disney Plus"
+                                                    className="w-6 h-6"
+                                                />
+                                            </a>
+                                        );
+                                    return null;
+                                })}
+                            </div>
                             <div className="mt-3 space-y-1 text-sm text-gray-300">
                                 <p>개봉일 : {movieInfo.releaseDate}</p>
                                 <p>상영 시간 : {movieInfo.runtime}분</p>
@@ -268,12 +361,12 @@ const MovieDetail: React.FC = () => {
                                             <div
                                                 className={`${emotionColorMap[e.icon]} h-full rounded-full`}
                                                 style={{
-                                                    width: `${Math.round(e.value * 100)}%`,
+                                                    width: `${Math.round(e.value)}%`,
                                                 }}
                                             />
                                         </div>
                                         <span className="ml-2 w-12 text-sm text-white">
-                                            {Math.round(e.value * 100)}%
+                                            {Math.round(e.value)}%
                                         </span>
                                     </div>
                                 ))}

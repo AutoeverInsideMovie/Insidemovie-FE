@@ -19,6 +19,7 @@ interface Movie {
     mainEmotion: string;
     emotionValue: number;
     releaseDate: string;
+    ratingAvg: number;
 }
 
 interface Winner {
@@ -33,6 +34,7 @@ interface Winner {
         emotionValue: number;
         releaseDate: string;
         matchDate: string;
+        ratingAvg: number;
     };
 }
 
@@ -84,6 +86,7 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
                                     emotionIcon={poster.mainEmotion}
                                     emotionValue={poster.emotionValue}
                                     starValue={poster.voteAverage}
+                                    ratingAvg={poster.ratingAvg}
                                 />
                                 {idx < 2 && (
                                     <span className="text-white text-xl mx-2">
@@ -119,6 +122,7 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
                                     emotionIcon={movie.movie.mainEmotion}
                                     emotionValue={movie.movie.emotionValue}
                                     starValue={movie.movie.voteAverage}
+                                    ratingAvg={movie.movie.ratingAvg}
                                     winnerWeek={movie.matchDate}
                                     onClick={() =>
                                         navigate(

@@ -1,21 +1,21 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import axios from "axios";
-import type { BoxOffice } from "../../interfaces/boxOffice";
-import Poster from "@assets/sample_poster.png";
+import type { boxOffice } from "../../interfaces/boxOffice";
 import BoxOfficeItem from "../../components/BoxOfficeItem";
-import { useNavigate } from "react-router-dom";
+import { boxofficeApi } from "../../api/boxofficeApi";
 
 const BoxOfficeMovie: React.FC = () => {
-    const navigate = useNavigate();
-    const [movieList, setMovieList] = useState<BoxOffice[]>([]);
+    const [movieDailyList, setDailyMovieList] = useState<boxOffice[]>([]);
+    const [movieWeeklyList, setWeeklyMovieList] = useState<boxOffice[]>([]);
 
     useEffect(() => {
         (async () => {
             try {
-                const res = await axios.get("/mock/boxoffice.json");
-                setMovieList(res.data);
-                console.log(res.data);
+                const resDaily = await boxofficeApi().getDailyBoxOffice();
+                setDailyMovieList(resDaily.data.data.items);
+
+                const resWeekly = await boxofficeApi().getWeeklyBoxOffice();
+                setWeeklyMovieList(resWeekly.data.data.items);
             } catch (e) {
                 console.error("박스오피스 조회 에러!! : ", e);
             }
@@ -28,16 +28,52 @@ const BoxOfficeMovie: React.FC = () => {
                 <h1 className="text-white text-3xl font-semibold pb-6 text-left">
                     박스오피스 순위 top100
                 </h1>
-                {movieList.map((movie) => (
-                    <BoxOfficeItem
-                        rank={movie.rank}
-                        posterImg={Poster}
-                        posterName={movie.posterName}
-                        starValue={movie.starValue}
-                        emotions={movie.emotions}
-                        onClick={() => navigate("/movie")}
-                    />
-                ))}
+                <div className="flex">
+                    {/* Daily Box Office */}
+                    <div className="flex flex-col flex-1 gap-3 overflow-x-hidden scrollbar-hide px-2">
+                        <h2 className="text-white font-semibold mb-2">
+                            일별 순위 Top 3
+                        </h2>
+                        {movieDailyList.map((movie, idx) => (
+                            <BoxOfficeItem
+                                key={`daily-${idx}`}
+                                movieId={movie.movieId}
+                                rank={movie.base.rank}
+                                rankInten={movie.base.rankInten}
+                                rankOldAndNew={movie.base.rankOldAndNew}
+                                posterPath={movie.posterPath}
+                                title={movie.title}
+                                audiAcc={movie.base.audiAcc}
+                                mainEmotion={movie.mainEmotion.toLowerCase()}
+                                mainEmotionValue={movie.mainEmotionValue}
+                                voteAverage={movie.voteAverage}
+                                ratingAvg={movie.ratingAvg}
+                            />
+                        ))}
+                    </div>
+                    {/* Weekly Box Office */}
+                    <div className="flex flex-col flex-1 gap-3 overflow-x-hidden scrollbar-hide px-2">
+                        <h2 className="text-white font-semibold mb-2">
+                            주간 순위 Top 3
+                        </h2>
+                        {movieWeeklyList.map((movie, idx) => (
+                            <BoxOfficeItem
+                                key={`weekly-${idx}`}
+                                movieId={movie.movieId}
+                                rank={movie.base.rank}
+                                rankInten={movie.base.rankInten}
+                                rankOldAndNew={movie.base.rankOldAndNew}
+                                posterPath={movie.posterPath}
+                                title={movie.title}
+                                audiAcc={movie.base.audiAcc}
+                                mainEmotion={movie.mainEmotion.toLowerCase()}
+                                mainEmotionValue={movie.mainEmotionValue}
+                                voteAverage={movie.voteAverage}
+                                ratingAvg={movie.ratingAvg}
+                            />
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     );

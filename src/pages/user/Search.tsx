@@ -13,6 +13,7 @@ interface Movie {
     mainEmotion: string;
     mainEmotionValue: number;
     voteAverage: number;
+    ratingAvg: number;
 }
 
 const Search: React.FC = () => {
@@ -125,6 +126,7 @@ const Search: React.FC = () => {
                                     emotionIcon={movie.mainEmotion.toLowerCase()}
                                     emotionValue={movie.mainEmotionValue}
                                     starValue={movie.voteAverage}
+                                    ratingAvg={movie.ratingAvg}
                                 />
                             ))}
                         </div>
