@@ -10,7 +10,7 @@ interface Movie {
     posterPath: string;
     title: string;
     mainEmotion: string;
-    emotionValue: number;
+    mainEmotionValue: number;
     voteAverage: number;
 }
 
@@ -69,7 +69,7 @@ const WatchedMovie: React.FC = () => {
                                         posterImg={poster.posterPath}
                                         posterName={poster.title}
                                         emotionIcon={poster.mainEmotion.toLowerCase()}
-                                        emotionValue={poster.emotionValue}
+                                        emotionValue={poster.mainEmotionValue}
                                         starValue={poster.voteAverage}
                                     />
                                 ))}
