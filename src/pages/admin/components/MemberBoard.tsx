@@ -7,13 +7,17 @@ import axios from "axios";
 import type { Member } from "../../../types/member"; // Report 타입 정의
 import { useNavigate } from "react-router-dom";
 import { mapMembersToRows } from "../../../services/mapMembersToRows";
-// interface ReportBoardProps {
-//     filtered?: boolean; // 필터 적용 여부(미처리만 보여주기)
-// }
+import { useColorScheme, useTheme } from "@mui/material/styles";
+import { darken } from "@mui/material/styles";
 
 export default function MemberBoard() {
     const [memberList, setMemberList] = useState<Member[] | null>(null);
     const navigate = useNavigate();
+
+    const theme = useTheme();
+    const { mode, systemMode } = useColorScheme();
+    const appliedMode = mode === "system" ? systemMode : mode;
+
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
         console.log("토큰 : ", token);
@@ -58,8 +62,37 @@ export default function MemberBoard() {
     if (!memberList) {
         return <div className="text-white text-center">Loading...</div>;
     }
-    return (
-        <Box sx={{ width: "100%" }}>
+
+        <Box
+            sx={{
+                width: "100%",
+                // 인덱스 0부터, odd -> 짝수 칸, even -> 홀수 칸
+                "& .MuiDataGrid-row.odd": {
+                    backgroundColor:
+                        appliedMode === "light"
+                            ? darken(theme.palette.background.paper, 0.04)
+                            : darken(theme.palette.background.paper, 0.9),
+                    "&:hover": {
+                        backgroundColor:
+                            appliedMode === "light"
+                                ? darken(theme.palette.background.paper, 0)
+                                : darken(theme.palette.background.paper, 0.8),
+                    },
+                },
+                "& .MuiDataGrid-row.even": {
+                    backgroundColor:
+                        appliedMode === "light"
+                            ? darken(theme.palette.background.paper, 0.02)
+                            : darken(theme.palette.background.paper, 0.98),
+                    "&:hover": {
+                        backgroundColor:
+                            appliedMode === "light"
+                                ? darken(theme.palette.background.paper, 0)
+                                : darken(theme.palette.background.paper, 0.8),
+                    },
+                },
+            }}
+        >
             <DataGrid
                 rows={rows}
                 columns={columns}
