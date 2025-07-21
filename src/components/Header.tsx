@@ -208,6 +208,7 @@ const Header: React.FC = () => {
                         await memberApi().logout();
                         localStorage.removeItem("accessToken");
                         localStorage.removeItem("refreshToken");
+                        localStorage.removeItem("authority");
                         setMenuOpen(false);
                         setLogoutDialogOpen(false);
                         navigate("/", { replace: true });

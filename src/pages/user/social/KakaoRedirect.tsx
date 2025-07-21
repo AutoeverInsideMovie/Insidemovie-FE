@@ -58,6 +58,7 @@ const KakaoRedirect: React.FC = () => {
                     if (accessToken && refreshToken) {
                         localStorage.setItem("accessToken", accessToken);
                         localStorage.setItem("refreshToken", refreshToken);
+                        localStorage.setItem("authority", "ROLE_USER");
 
                         navigate("/", { replace: true });
                         window.location.replace("/");
