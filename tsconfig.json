@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "skipLibCheck": true,
         "target": "ES2021",
         "lib": ["DOM", "ES2021", "DOM.Iterable"],
         "module": "ESNext",
