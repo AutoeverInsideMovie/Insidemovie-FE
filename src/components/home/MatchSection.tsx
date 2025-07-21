@@ -76,26 +76,32 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
             </h1>
             <div className="flex w-full justify-between gap-10">
                 <div>
-                    <div className="flex justify-between items-center">
-                        {movieList.map((poster, idx) => (
-                            <React.Fragment key={idx}>
-                                <MovieItem
-                                    movieId={poster.id}
-                                    posterImg={poster.posterPath}
-                                    posterName={poster.title}
-                                    emotionIcon={poster.mainEmotion}
-                                    emotionValue={poster.emotionValue}
-                                    starValue={poster.voteAverage}
-                                    ratingAvg={poster.ratingAvg}
-                                />
-                                {idx < 2 && (
-                                    <span className="text-white text-xl mx-2">
-                                        VS
-                                    </span>
-                                )}
-                            </React.Fragment>
-                        ))}
-                    </div>
+                    {movieList.length === 0 ? (
+                        <div className="flex justify-center items-center gap-10 mt-10 text-center text-gray-400 py-12">
+                            아직 투표된 내용이 없습니다.
+                        </div>
+                    ) : (
+                        <div className="flex justify-between items-center">
+                            {movieList.map((poster, idx) => (
+                                <React.Fragment key={idx}>
+                                    <MovieItem
+                                        movieId={poster.id}
+                                        posterImg={poster.posterPath}
+                                        posterName={poster.title}
+                                        emotionIcon={poster.mainEmotion}
+                                        emotionValue={poster.emotionValue}
+                                        starValue={poster.voteAverage}
+                                        ratingAvg={poster.ratingAvg}
+                                    />
+                                    {idx < 2 && (
+                                        <span className="text-white text-xl mx-2">
+                                            VS
+                                        </span>
+                                    )}
+                                </React.Fragment>
+                            ))}
+                        </div>
+                    )}
                     <Button
                         className="w-full"
                         text="투표하러 가기"

@@ -396,7 +396,7 @@ const MyPage: React.FC = () => {
             />
 
             <ConfirmDialog
-                className={"max-w-md"}
+                className={"w-full max-w-md"}
                 isOpen={isConfirmOpen}
                 title={
                     isPasswordChangeConfirm ? "비밀번호 변경" : "닉네임 변경"
@@ -480,7 +480,7 @@ const MyPage: React.FC = () => {
                 }}
             />
             <ConfirmDialog
-                className={"max-w-md"}
+                className={"w-full max-w-md"}
                 isOpen={isErrorOpen}
                 title="변경 실패"
                 message={errorMessage}
@@ -492,7 +492,7 @@ const MyPage: React.FC = () => {
                 }}
             />
             <ConfirmDialog
-                className={"max-w-md"}
+                className={"w-full max-w-md"}
                 isOpen={isPwdSuccessOpen}
                 title="비밀번호 변경 완료"
                 message={successMessage}

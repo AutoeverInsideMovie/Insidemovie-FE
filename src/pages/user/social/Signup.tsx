@@ -680,7 +680,7 @@ const Signup: React.FC = () => {
                 </div>
             </div>
             <ConfirmDialog
-                className={"max-w-md"}
+                className={"w-full max-w-md"}
                 isOpen={isDialogOpen}
                 title={dialogTitle}
                 message={message}
