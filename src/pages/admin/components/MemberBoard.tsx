@@ -63,87 +63,89 @@ export default function MemberBoard() {
         return <div className="text-white text-center">Loading...</div>;
     }
 
-    <Box
-        sx={{
-            width: "100%",
-            // 인덱스 0부터, odd -> 짝수 칸, even -> 홀수 칸
-            "& .MuiDataGrid-row.odd": {
-                backgroundColor:
-                    appliedMode === "light"
-                        ? darken(theme.palette.background.paper, 0.04)
-                        : darken(theme.palette.background.paper, 0.9),
-                "&:hover": {
+    return (
+        <Box
+            sx={{
+                width: "100%",
+                // 인덱스 0부터, odd -> 짝수 칸, even -> 홀수 칸
+                "& .MuiDataGrid-row.odd": {
                     backgroundColor:
                         appliedMode === "light"
-                            ? darken(theme.palette.background.paper, 0)
-                            : darken(theme.palette.background.paper, 0.8),
-                },
-            },
-            "& .MuiDataGrid-row.even": {
-                backgroundColor:
-                    appliedMode === "light"
-                        ? darken(theme.palette.background.paper, 0.02)
-                        : darken(theme.palette.background.paper, 0.98),
-                "&:hover": {
-                    backgroundColor:
-                        appliedMode === "light"
-                            ? darken(theme.palette.background.paper, 0)
-                            : darken(theme.palette.background.paper, 0.8),
-                },
-            },
-        }}
-    >
-        <DataGrid
-            rows={rows}
-            columns={columns}
-            getRowClassName={(params) =>
-                params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"
-            }
-            initialState={{
-                columns: {
-                    columnVisibilityModel: {
-                        status: false,
+                            ? darken(theme.palette.background.paper, 0.04)
+                            : darken(theme.palette.background.paper, 0.9),
+                    "&:hover": {
+                        backgroundColor:
+                            appliedMode === "light"
+                                ? darken(theme.palette.background.paper, 0)
+                                : darken(theme.palette.background.paper, 0.8),
                     },
                 },
-                sorting: {
-                    sortModel: [
-                        {
-                            field: "submissionTime",
-                            sort: "desc",
-                        },
-                    ],
+                "& .MuiDataGrid-row.even": {
+                    backgroundColor:
+                        appliedMode === "light"
+                            ? darken(theme.palette.background.paper, 0.02)
+                            : darken(theme.palette.background.paper, 0.98),
+                    "&:hover": {
+                        backgroundColor:
+                            appliedMode === "light"
+                                ? darken(theme.palette.background.paper, 0)
+                                : darken(theme.palette.background.paper, 0.8),
+                    },
                 },
-                pagination: { paginationModel: { pageSize: 20 } },
             }}
-            pageSizeOptions={[10, 20, 50]}
-            disableColumnResize
-            density="compact"
-            slotProps={{
-                filterPanel: {
-                    filterFormProps: {
-                        logicOperatorInputProps: {
-                            variant: "outlined",
-                            size: "small",
+        >
+            <DataGrid
+                rows={rows}
+                columns={columns}
+                getRowClassName={(params) =>
+                    params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"
+                }
+                initialState={{
+                    columns: {
+                        columnVisibilityModel: {
+                            status: false,
                         },
-                        columnInputProps: {
-                            variant: "outlined",
-                            size: "small",
-                            sx: { mt: "auto" },
-                        },
-                        operatorInputProps: {
-                            variant: "outlined",
-                            size: "small",
-                            sx: { mt: "auto" },
-                        },
-                        valueInputProps: {
-                            InputComponentProps: {
+                    },
+                    sorting: {
+                        sortModel: [
+                            {
+                                field: "submissionTime",
+                                sort: "desc",
+                            },
+                        ],
+                    },
+                    pagination: { paginationModel: { pageSize: 20 } },
+                }}
+                pageSizeOptions={[10, 20, 50]}
+                disableColumnResize
+                density="compact"
+                slotProps={{
+                    filterPanel: {
+                        filterFormProps: {
+                            logicOperatorInputProps: {
                                 variant: "outlined",
                                 size: "small",
                             },
+                            columnInputProps: {
+                                variant: "outlined",
+                                size: "small",
+                                sx: { mt: "auto" },
+                            },
+                            operatorInputProps: {
+                                variant: "outlined",
+                                size: "small",
+                                sx: { mt: "auto" },
+                            },
+                            valueInputProps: {
+                                InputComponentProps: {
+                                    variant: "outlined",
+                                    size: "small",
+                                },
+                            },
                         },
                     },
-                },
-            }}
-        ></DataGrid>
-    </Box>;
+                }}
+            ></DataGrid>
+        </Box>
+    );
 }
