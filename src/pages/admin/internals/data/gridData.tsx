@@ -58,7 +58,7 @@ function renderStatus(status: ReportStatus) {
             />
         );
     }
-    console.log("renderStatus called with:", status);
+    console.log("renderStatus 상태 : ", status);
     return (
         <Chip
             label={config.statusLabel}
@@ -81,6 +81,7 @@ function renderResult(status: ReportStatus) {
 }
 
 function renderBanned(banned: boolean) {
+    console.log("renderBanned 상태 : ", banned);
     return (
         <Chip
             label={banned ? "정지" : "정상"}
@@ -100,27 +101,6 @@ const reportTypeLabelMap: Record<ReportType, string> = {
 function renderType(type: ReportType) {
     const str = reportTypeLabelMap[type] ?? "알 수 없음";
     return <Chip label={str} color="default" size="small" />;
-}
-
-export function renderAvatar(
-    params: GridCellParams<{ name: string; color: string }, any, any>,
-) {
-    if (params.value == null) {
-        return "";
-    }
-
-    return (
-        <Avatar
-            sx={{
-                backgroundColor: params.value.color,
-                width: "24px",
-                height: "24px",
-                fontSize: "0.85rem",
-            }}
-        >
-            {params.value.name.toUpperCase().substring(0, 1)}
-        </Avatar>
-    );
 }
 
 export const renderButtonSimple = (

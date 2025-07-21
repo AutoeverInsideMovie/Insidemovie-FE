@@ -5,14 +5,14 @@ import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
 import { mapReportsToRows } from "../../../services/mapReportsToRows";
 import axios from "axios";
-import type { Report } from "../../../types/report"; // Report 타입 정의
-import type { ReportStatus } from "../../../types/reportStatus"; // Report 상태 타입 정의
+import type { Report } from "../../../types/report";
+import type { ReportStatus } from "../../../types/reportStatus";
 import { useNavigate } from "react-router-dom";
 import { useColorScheme, useTheme } from "@mui/material/styles";
 import { darken } from "@mui/material/styles";
 
 interface ReportBoardProps {
-    filtered?: boolean; // 필터 적용 여부(미처리만 보여주기)
+    filtered?: boolean;
 }
 
 export default function ReportBoard({ filtered = false }: ReportBoardProps) {
@@ -25,7 +25,7 @@ export default function ReportBoard({ filtered = false }: ReportBoardProps) {
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
-        console.log("토큰 : ", token);
+        // console.log("토큰 : ", token);
         const fetchData = async () => {
             try {
                 const res = await axios.get(
@@ -35,7 +35,6 @@ export default function ReportBoard({ filtered = false }: ReportBoardProps) {
                             Authorization: `Bearer ${token}`,
                         },
                     },
-                    // "/mock/report.json",
                 );
                 const allData = res.data.data.content;
                 if (!allData) {
@@ -54,8 +53,9 @@ export default function ReportBoard({ filtered = false }: ReportBoardProps) {
     const rows: GridRowsProp = mapReportsToRows(reportList);
 
     const handleStatusChange = (reportId: number, newStatus: ReportStatus) => {
-        const updated = reportList.map((r) =>
-            r.reportId === reportId ? { ...r, status: newStatus } : r,
+        const updated = reportList.map(
+            (r) => (r.reportId === reportId ? { ...r, status: newStatus } : r),
+            console.log({ newStatus }),
         );
         setReportList(updated ?? []);
     };

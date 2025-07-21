@@ -18,14 +18,14 @@ import type { filteredCumulativeData } from "../../../types/dashboardData";
 export default function MainGrid() {
     const navigate = useNavigate();
     const handleClick = () => {
-        navigate("/admin/report"); // 이동할 경로 입력
+        navigate("/admin/report");
     };
 
     const [dashboardState, setDashboardState] =
         useState<filteredCumulativeData | null>(null);
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
-        console.log("토큰 : ", token);
+        // console.log("토큰 : ", token);
         const fetchData = async () => {
             try {
                 const res = await axios.get(
@@ -35,7 +35,6 @@ export default function MainGrid() {
                             Authorization: `Bearer ${token}`,
                         },
                     },
-                    // "/mock/dashBoardData.json",
                 );
                 const allData = res.data.data;
                 if (!allData) {
@@ -107,7 +106,6 @@ export default function MainGrid() {
     ];
     return (
         <Box sx={{ width: "100%", maxWidth: { sm: "100%", md: "1700px" } }}>
-            {/* cards */}
             <Typography component="h2" variant="h6" sx={{ mt: 4, mb: 2 }}>
                 개요
             </Typography>
