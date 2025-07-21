@@ -1,6 +1,5 @@
 import * as React from "react";
 import SearchSection from "../../components/home/SearchSection";
-import EmotionSection from "../../components/home/EmotionSection";
 import CustomMovieSection from "../../components/home/CustomMovieSection";
 import BoxOfficeSection from "../../components/home/BoxOfficeSection";
 import MatchSection from "../../components/home/MatchSection";

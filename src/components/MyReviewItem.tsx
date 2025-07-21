@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import StarRating from "./StarRating";
-import Like from "@assets/like.svg?react";
 import Unlike from "@assets/unlike.svg?react";
 import joyIcon from "@assets/character/joy_icon.png";
 import sadIcon from "@assets/character/sad_icon.png";
