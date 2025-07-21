@@ -1,5 +1,11 @@
 import * as React from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+    useLocation,
+    Navigate,
+} from "react-router-dom";
 import Login from "./pages/user/social/Login";
 import Home from "./pages/user/Home";
 import Signup from "./pages/user/social/Signup";
@@ -30,43 +36,68 @@ const AppContent: React.FC = () => {
         location.pathname === "/admin/report" ||
         location.pathname === "/admin/member";
 
+    // authority 값 가져오기
+    const authority = localStorage.getItem("authority");
+
     return (
         <>
             {!hideHeader && <Header />}
             <Routes>
-                {/*User*/}
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/signup-kakao" element={<SignupKakao />} />
-                <Route path="/mypage" element={<MyPage />} />
-                <Route path="/mypage/liked-movie" element={<LikedMovie />} />
-                <Route
-                    path="/mypage/watched-movie"
-                    element={<WatchedMovie />}
-                />
-                <Route path="/mypage/my-review" element={<MyReview />} />
-                <Route path="/search" element={<Search />} />
-                <Route path="/recommend" element={<RecommendMovie />} />
-                <Route path="/boxoffice" element={<BoxOfficeMovie />} />
-                <Route path="/weekmatch" element={<WeekMatch />} />
-                <Route
-                    path="/movies/detail/:movieId"
-                    element={<MovieDetail />}
-                />
-                <Route
-                    path="/review-write/:movieId"
-                    element={<ReviewWrite />}
-                />
-                <Route
-                    path="/login/oauth2/code/kakao"
-                    element={<KakaoRedirect />}
-                />
-
-                {/*Admin*/}
-                <Route path="/admin" element={<Dashboard />} />
-                <Route path="/admin/report" element={<ReportPage />} />
-                <Route path="/admin/member" element={<MemberPage />} />
+                {/* Redirect Logic */}
+                {authority === "ROLE_ADMIN" ? (
+                    <>
+                        <Route path="/admin" element={<Dashboard />} />
+                        <Route path="/admin/report" element={<ReportPage />} />
+                        <Route path="/admin/member" element={<MemberPage />} />
+                        {/* Admin이 유저 페이지 접근 시 리디렉션 */}
+                        <Route
+                            path="/*"
+                            element={<Navigate to="/admin" replace />}
+                        />
+                    </>
+                ) : (
+                    <>
+                        {/*User or default fallback*/}
+                        <Route path="/" element={<Home />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/signup" element={<Signup />} />
+                        <Route path="/signup-kakao" element={<SignupKakao />} />
+                        <Route path="/mypage" element={<MyPage />} />
+                        <Route
+                            path="/mypage/liked-movie"
+                            element={<LikedMovie />}
+                        />
+                        <Route
+                            path="/mypage/watched-movie"
+                            element={<WatchedMovie />}
+                        />
+                        <Route
+                            path="/mypage/my-review"
+                            element={<MyReview />}
+                        />
+                        <Route path="/search" element={<Search />} />
+                        <Route path="/recommend" element={<RecommendMovie />} />
+                        <Route path="/boxoffice" element={<BoxOfficeMovie />} />
+                        <Route path="/weekmatch" element={<WeekMatch />} />
+                        <Route
+                            path="/movies/detail/:movieId"
+                            element={<MovieDetail />}
+                        />
+                        <Route
+                            path="/review-write/:movieId"
+                            element={<ReviewWrite />}
+                        />
+                        <Route
+                            path="/login/oauth2/code/kakao"
+                            element={<KakaoRedirect />}
+                        />
+                        {/* User 또는 권한 없는 사용자가 어드민 페이지 접근 시 리디렉션 */}
+                        <Route
+                            path="/admin/*"
+                            element={<Navigate to="/" replace />}
+                        />
+                    </>
+                )}
             </Routes>
         </>
     );
