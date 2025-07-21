@@ -1,7 +1,6 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
-import type { GridCellParams, GridColDef } from "@mui/x-data-grid";
+import type { GridColDef } from "@mui/x-data-grid";
 import type { ReportStatus, ReportType } from "../../../../types/reportStatus";
 import axios from "axios";
 import type { JSX } from "react";

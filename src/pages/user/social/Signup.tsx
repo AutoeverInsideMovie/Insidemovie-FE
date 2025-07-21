@@ -211,7 +211,7 @@ const Signup: React.FC = () => {
     const validatePassword = (password: string) => {
         const trimmed = password.trim();
         const regex =
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':",.<>?]).{8,}$/;
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':",.<>?]).{8,}$/;
         return regex.test(trimmed);
     };
 

@@ -9,6 +9,7 @@ import MenuContent from "./MenuContent";
 import OptionsMenu from "./OptionsMenu";
 import logoLight from "../../../assets/insidemovie_white_long.svg";
 import logoDark from "../../../assets/insidemovie_dark_long.svg";
+import iconBingBong from "../../../assets/character/bingbong_icon.png";
 import { useColorScheme } from "@mui/material/styles";
 
 const drawerWidth = 240;
@@ -76,8 +77,8 @@ export default function SideMenu() {
             >
                 <Avatar
                     sizes="small"
-                    alt="Riley Carter"
-                    src="/static/images/avatar/7.jpg"
+                    alt="hks"
+                    src={iconBingBong}
                     sx={{ width: 36, height: 36 }}
                 />
                 <Box sx={{ mr: "auto" }}>
@@ -85,13 +86,13 @@ export default function SideMenu() {
                         variant="body2"
                         sx={{ fontWeight: 500, lineHeight: "16px" }}
                     >
-                        Riley Carter
+                        관리자
                     </Typography>
                     <Typography
                         variant="caption"
                         sx={{ color: "text.secondary" }}
                     >
-                        riley@email.com
+                        admin@test.com
                     </Typography>
                 </Box>
                 <OptionsMenu />

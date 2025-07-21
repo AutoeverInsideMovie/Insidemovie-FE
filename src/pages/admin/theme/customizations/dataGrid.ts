@@ -1,6 +1,6 @@
 import { paperClasses } from "@mui/material/Paper";
-import { alpha, Theme } from "@mui/material/styles";
-import type { DataGridProComponents } from "@mui/x-data-grid-pro/themeAugmentation";
+import { alpha, type Theme } from "@mui/material/styles";
+import type { DataGridComponents } from "@mui/x-data-grid/themeAugmentation";
 import { menuItemClasses } from "@mui/material/MenuItem";
 import { listItemIconClasses } from "@mui/material/ListItemIcon";
 import { iconButtonClasses } from "@mui/material/IconButton";
@@ -10,8 +10,8 @@ import { gridClasses } from "@mui/x-data-grid";
 import { tablePaginationClasses } from "@mui/material/TablePagination";
 import { gray } from "../../shared-theme/themePrimitives";
 
-export const dataGridCustomizations: DataGridProComponents<Theme> &
-    DataGridProComponents<Theme> = {
+export const dataGridCustomizations: DataGridComponents<Theme> &
+    DataGridComponents<Theme> = {
     MuiDataGrid: {
         styleOverrides: {
             root: ({ theme }) => ({

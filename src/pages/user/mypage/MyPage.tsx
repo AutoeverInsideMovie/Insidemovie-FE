@@ -210,7 +210,7 @@ const MyPage: React.FC = () => {
                                 setNewPwd(value);
                                 // Validate new password pattern
                                 const regex =
-                                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':",.<>?]).{8,}$/;
+                                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':",.<>?]).{8,}$/;
                                 if (!regex.test(value)) {
                                     setNewError(
                                         "PW는 영문, 숫자, 특수문자를 포함한 8자 이상이어야 합니다.",
