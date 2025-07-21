@@ -27,14 +27,16 @@ const Login: React.FC = () => {
     const handleLogin = async () => {
         try {
             const response = await memberApi().login({ email, password });
-            const { accessToken, refreshToken } = response.data.data;
+            const { accessToken, refreshToken, authority } = response.data.data;
 
             if (accessToken && refreshToken) {
                 localStorage.setItem("accessToken", accessToken);
                 localStorage.setItem("refreshToken", refreshToken);
+                localStorage.setItem("authority", authority);
 
-                navigate("/", { replace: true });
-                window.location.replace("/");
+                const target = authority === "ROLE_ADMIN" ? "/admin" : "/";
+                navigate(target, { replace: true });
+                window.location.replace(target);
             } else throw new Error("토큰이 존재하지 않습니다.");
         } catch (error) {
             setMessage(error.response?.data?.message || error);
