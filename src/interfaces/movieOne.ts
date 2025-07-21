@@ -16,4 +16,5 @@ export interface MovieOne {
     runtime: number;
     status: string;
     titleEn: string;
+    ratingAvg: number;
 }

@@ -7,6 +7,7 @@ interface EmotionSliderProps {
     image: string; // 캐릭터 이미지 경로
     value: number; // 현재 슬라이더 값
     onChange: (value: number) => void; // 값 변경 핸들러
+    onChangeEnd?: (value: number) => void; // called once when drag ends
 }
 
 const EmotionSlider: React.FC<EmotionSliderProps> = ({
@@ -15,9 +16,11 @@ const EmotionSlider: React.FC<EmotionSliderProps> = ({
     image,
     value,
     onChange,
+    onChangeEnd,
 }) => {
     const boxRef = useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = useState(false);
+    const currentValueRef = useRef<number>(value);
 
     const handleMouseMove = (e: MouseEvent) => {
         if (!boxRef.current) return;
@@ -29,15 +32,19 @@ const EmotionSlider: React.FC<EmotionSliderProps> = ({
             Math.min(100, ((rect.height - offsetY) / rect.height) * 100),
         );
         // Round to nearest multiple of 5
-        const stepValue = Math.round(newValue / 5) * 5;
+        const stepValue = newValue;
         // Only emit when changed
         if (stepValue !== value) {
             onChange(stepValue);
         }
+        currentValueRef.current = stepValue;
     };
 
     useEffect(() => {
-        const handleMouseUp = () => setIsDragging(false);
+        const handleMouseUp = () => {
+            setIsDragging(false);
+            if (onChangeEnd) onChangeEnd(currentValueRef.current);
+        };
         const handleMouseMoveGlobal = (e: MouseEvent) => {
             if (isDragging) handleMouseMove(e);
         };
@@ -48,7 +55,7 @@ const EmotionSlider: React.FC<EmotionSliderProps> = ({
             window.removeEventListener("mouseup", handleMouseUp);
             window.removeEventListener("mousemove", handleMouseMoveGlobal);
         };
-    }, [isDragging]);
+    }, [isDragging, onChangeEnd]);
 
     const handleMouseDown = (e: React.MouseEvent) => {
         setIsDragging(true);

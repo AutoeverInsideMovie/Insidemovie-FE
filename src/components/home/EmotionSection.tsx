@@ -79,20 +79,6 @@ const EmotionSection: React.FC<CharacterCarouselSectionProps> = ({
         loadEmotions();
     }, []);
 
-    // Call onEmotionsChange whenever any emotion value changes
-    useEffect(() => {
-        if (onEmotionsChange) {
-            onEmotionsChange(
-                joyValue,
-                sadValue,
-                angryValue,
-                fearValue,
-                disgustValue,
-            );
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [joyValue, sadValue, angryValue, fearValue, disgustValue]);
-
     return (
         <div
             className={`flex flex-col justify-center items-center ${className}`}
@@ -103,6 +89,15 @@ const EmotionSection: React.FC<CharacterCarouselSectionProps> = ({
                     color="#FFD602"
                     value={joyValue}
                     onChange={setJoyValue}
+                    onChangeEnd={() =>
+                        onEmotionsChange?.(
+                            joyValue,
+                            sadValue,
+                            angryValue,
+                            fearValue,
+                            disgustValue,
+                        )
+                    }
                     image={characters[0]}
                 />
                 <EmotionSlider
@@ -110,6 +105,15 @@ const EmotionSection: React.FC<CharacterCarouselSectionProps> = ({
                     color="#1169F0"
                     value={sadValue}
                     onChange={setSadValue}
+                    onChangeEnd={() =>
+                        onEmotionsChange?.(
+                            joyValue,
+                            sadValue,
+                            angryValue,
+                            fearValue,
+                            disgustValue,
+                        )
+                    }
                     image={characters[1]}
                 />
                 <EmotionSlider
@@ -117,6 +121,15 @@ const EmotionSection: React.FC<CharacterCarouselSectionProps> = ({
                     color="#DD2424"
                     value={angryValue}
                     onChange={setAngryValue}
+                    onChangeEnd={() =>
+                        onEmotionsChange?.(
+                            joyValue,
+                            sadValue,
+                            angryValue,
+                            fearValue,
+                            disgustValue,
+                        )
+                    }
                     image={characters[2]}
                 />
                 <EmotionSlider
@@ -124,6 +137,15 @@ const EmotionSection: React.FC<CharacterCarouselSectionProps> = ({
                     color="#9360BD"
                     value={fearValue}
                     onChange={setFearValue}
+                    onChangeEnd={() =>
+                        onEmotionsChange?.(
+                            joyValue,
+                            sadValue,
+                            angryValue,
+                            fearValue,
+                            disgustValue,
+                        )
+                    }
                     image={characters[3]}
                 />
                 <EmotionSlider
@@ -131,6 +153,15 @@ const EmotionSection: React.FC<CharacterCarouselSectionProps> = ({
                     color="#A2C95A"
                     value={disgustValue}
                     onChange={setDisgustValue}
+                    onChangeEnd={() =>
+                        onEmotionsChange?.(
+                            joyValue,
+                            sadValue,
+                            angryValue,
+                            fearValue,
+                            disgustValue,
+                        )
+                    }
                     image={characters[4]}
                 />
             </div>

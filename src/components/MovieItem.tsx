@@ -8,6 +8,7 @@ import fearIcon from "@assets/character/fear_icon.png";
 import disgustIcon from "@assets/character/disgust_icon.png";
 import bingbongIcon from "@assets/character/bingbong_icon.png";
 import StarFull from "@assets/star_full.svg?react";
+import TMDB from "@assets/TMDB.svg?react";
 
 interface MovieItemProps {
     movieId: number;
@@ -15,6 +16,7 @@ interface MovieItemProps {
     posterName: string;
     emotionIcon: string;
     emotionValue: number;
+    ratingAvg: number;
     starValue: number;
     className?: string;
 }
@@ -26,6 +28,7 @@ const emotionMap = {
     fear: fearIcon,
     disgust: disgustIcon,
     bingbong: bingbongIcon,
+    none: bingbongIcon,
 };
 
 const MovieItem: React.FC<MovieItemProps> = ({
@@ -34,6 +37,7 @@ const MovieItem: React.FC<MovieItemProps> = ({
     posterName,
     emotionIcon = "bingbong",
     emotionValue = 0,
+    ratingAvg = 0,
     starValue = 0,
     className = "",
 }) => {
@@ -62,13 +66,17 @@ const MovieItem: React.FC<MovieItemProps> = ({
                         <img
                             src={emotionMap[emotionIcon]}
                             alt={emotionIcon}
-                            className="w-6 h-6"
+                            className="w-4 h-4"
                         />
-                        <p>{emotionValue}%</p>
+                        <p>{Math.round(emotionValue)}%</p>
                     </div>
                     <div className="flex items-center text-xs font-light text-white">
-                        <StarFull className="w-6 h-6" />
-                        <p>{starValue}</p>
+                        <StarFull className="w-4 h-4" />
+                        <p>{Math.round(ratingAvg)}</p>
+                    </div>
+                    <div className="flex items-center text-xs font-light text-white">
+                        <TMDB className="w-4 h-4" />
+                        <p>{Math.round(starValue)}</p>
                     </div>
                 </div>
             </TransparentBox>
