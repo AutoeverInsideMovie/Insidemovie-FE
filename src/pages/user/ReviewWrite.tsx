@@ -242,7 +242,7 @@ const ReviewWrite: React.FC = () => {
                 }}
             />
             <ConfirmDialog
-                className={"max-w-md"}
+                className={"w-full max-w-md"}
                 isOpen={isSuccessOpen}
                 title={`리뷰 ${successMessage} 완료`}
                 message={`리뷰가 ${successMessage}되었습니다.`}

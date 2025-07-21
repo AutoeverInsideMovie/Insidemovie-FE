@@ -243,7 +243,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
                 </div>
             </div>
             <ConfirmDialog
-                className={"max-w-md"}
+                className={"w-full max-w-md"}
                 isOpen={isReportDialogOpen}
                 title="리뷰 신고"
                 message={

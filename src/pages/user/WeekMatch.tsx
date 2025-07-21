@@ -78,46 +78,59 @@ const WeekMatch: React.FC = () => {
                         </h1>
 
                         <div className="flex flex-col items-center justify-center">
-                            <div className="flex justify-center items-center gap-10 mt-10">
-                                {movieList.map((poster, idx) => (
-                                    <React.Fragment key={idx}>
-                                        <div className="flex flex-col">
-                                            <MovieItem
-                                                key={poster.id}
-                                                className={`cursor-pointer rounded transition-all duration-300 ${selectedMovieId === poster.id ? "border-2 rounded-3xl border-movie_sub" : ""}`}
-                                                movieId={poster.id}
-                                                posterImg={poster.posterPath}
-                                                posterName={poster.title}
-                                                emotionIcon={poster.mainEmotion}
-                                                emotionValue={
-                                                    poster.emotionValue
-                                                }
-                                                starValue={poster.voteAverage}
-                                                ratingAvg={poster.ratingAvg}
-                                            />
-
-                                            {/* 선택하기 링크 */}
-                                            <div className="text-center mt-2">
-                                                <span
-                                                    className="text-grey_200 underline cursor-pointer font-light"
-                                                    onClick={() =>
-                                                        setSelectedMovieId(
-                                                            poster.id,
-                                                        )
+                            {movieList.length === 0 ? (
+                                <div className="flex justify-center items-center gap-10 mt-10 text-center text-gray-400 py-12">
+                                    아직 투표된 내용이 없습니다.
+                                </div>
+                            ) : (
+                                <div className="flex justify-center items-center gap-10 mt-10">
+                                    {movieList.map((poster, idx) => (
+                                        <React.Fragment key={idx}>
+                                            <div className="flex flex-col">
+                                                <MovieItem
+                                                    key={poster.id}
+                                                    className={`cursor-pointer rounded transition-all duration-300 ${selectedMovieId === poster.id ? "border-2 rounded-3xl border-movie_sub" : ""}`}
+                                                    movieId={poster.id}
+                                                    posterImg={
+                                                        poster.posterPath
                                                     }
-                                                >
-                                                    선택하기
-                                                </span>
+                                                    posterName={poster.title}
+                                                    emotionIcon={
+                                                        poster.mainEmotion
+                                                    }
+                                                    emotionValue={
+                                                        poster.emotionValue
+                                                    }
+                                                    starValue={
+                                                        poster.voteAverage
+                                                    }
+                                                    ratingAvg={poster.ratingAvg}
+                                                />
+
+                                                {/* 선택하기 링크 */}
+                                                <div className="text-center mt-2">
+                                                    <span
+                                                        className="text-grey_200 underline cursor-pointer font-light"
+                                                        onClick={() =>
+                                                            setSelectedMovieId(
+                                                                poster.id,
+                                                            )
+                                                        }
+                                                    >
+                                                        선택하기
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        {idx < 2 && (
-                                            <span className="text-white text-xl mx-2">
-                                                VS
-                                            </span>
-                                        )}
-                                    </React.Fragment>
-                                ))}
-                            </div>
+                                            {idx < 2 && (
+                                                <span className="text-white text-xl mx-2">
+                                                    VS
+                                                </span>
+                                            )}
+                                        </React.Fragment>
+                                    ))}
+                                </div>
+                            )}
+
                             <Button
                                 className="w-1/2 mt-10"
                                 text="투표하기"
