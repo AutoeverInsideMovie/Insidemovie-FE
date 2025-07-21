@@ -122,6 +122,7 @@ const Login: React.FC = () => {
                 </p>
             </TransparentBox>
             <ConfirmDialog
+                className={"max-w-md"}
                 isOpen={isDialogOpen}
                 title="로그인 실패"
                 message={message}

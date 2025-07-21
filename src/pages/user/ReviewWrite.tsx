@@ -230,6 +230,7 @@ const ReviewWrite: React.FC = () => {
                 </div>
             </div>
             <ConfirmDialog
+                className={"max-w-md"}
                 isOpen={isErrorOpen}
                 title="오류"
                 message={errorMessage}
@@ -241,6 +242,7 @@ const ReviewWrite: React.FC = () => {
                 }}
             />
             <ConfirmDialog
+                className={"max-w-md"}
                 isOpen={isSuccessOpen}
                 title={`리뷰 ${successMessage} 완료`}
                 message={`리뷰가 ${successMessage}되었습니다.`}

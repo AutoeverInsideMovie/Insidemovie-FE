@@ -106,6 +106,7 @@ const KakaoRedirect: React.FC = () => {
 
     return (
         <ConfirmDialog
+            className={"max-w-md"}
             isOpen={dialog.isOpen}
             title={dialog.title}
             message={dialog.message}

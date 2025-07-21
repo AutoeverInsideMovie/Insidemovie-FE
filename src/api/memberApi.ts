@@ -85,6 +85,25 @@ export const memberApi = () => {
         });
     };
 
+    // 감정 상태 수정
+    const editEmotions = async ({
+        joy,
+        sadness,
+        fear,
+        anger,
+        disgust,
+        repEmotion,
+    }) => {
+        return await axios.patch("/api/v1/member/emotion/update", {
+            joy,
+            sadness,
+            fear,
+            anger,
+            disgust,
+            repEmotion,
+        });
+    };
+
     // 나의 감정 평균 조회
     const getMyAverageEmotions = async () => {
         return await axios.get("/api/v1/member/emotion-summary");
@@ -134,5 +153,6 @@ export const memberApi = () => {
         getMyLikedMovies,
         getMyVisitedMovies,
         getMyReviews,
+        editEmotions,
     };
 };
