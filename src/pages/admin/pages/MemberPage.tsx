@@ -70,7 +70,7 @@ export default function MemberPage(props: { disableCustomTheme?: boolean }) {
                                 variant="h6"
                                 sx={{ mb: 2, mt: 4 }}
                             >
-                                구성원 관리
+                                회원 관리
                             </Typography>
 
                             <Grid container spacing={2} columns={12}>
