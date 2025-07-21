@@ -72,11 +72,11 @@ const MovieItem: React.FC<MovieItemProps> = ({
                     </div>
                     <div className="flex items-center text-xs font-light text-white">
                         <StarFull className="w-4 h-4" />
-                        <p>{Math.round(starValue)}</p>
+                        <p>{Math.round(ratingAvg)}</p>
                     </div>
                     <div className="flex items-center text-xs font-light text-white">
                         <TMDB className="w-4 h-4" />
-                        <p>{Math.round(ratingAvg)}</p>
+                        <p>{Math.round(starValue)}</p>
                     </div>
                 </div>
             </TransparentBox>

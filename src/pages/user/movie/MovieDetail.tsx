@@ -171,7 +171,7 @@ const MovieDetail: React.FC = () => {
                         <img
                             src={movieInfo.posterPath}
                             alt={movieInfo.title}
-                            className="w-52 h-fit rounded-md"
+                            className="w-80 h-fit rounded-md"
                         />
                         <div>
                             <div className="flex items-center gap-2">
@@ -190,13 +190,13 @@ const MovieDetail: React.FC = () => {
                             </div>
                             <div className="flex items-center">
                                 <StarRating
-                                    value={movieInfo.voteAverage}
+                                    value={movieInfo.ratingAvg}
                                     readOnly={true}
                                     showValue={true}
                                     showOneStar={true}
                                 />
                                 <TMDB className="x-4 y-4 ml-4 mr-1" />
-                                {movieInfo.ratingAvg}
+                                {movieInfo.voteAverage}
                             </div>
                             <div className="flex gap-2 mt-4">
                                 {movieInfo.ottProviders.map((provider, idx) => {
