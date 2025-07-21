@@ -6,17 +6,17 @@ import angryIcon from "@assets/character/angry_icon.png";
 import fearIcon from "@assets/character/fear_icon.png";
 import disgustIcon from "@assets/character/disgust_icon.png";
 import bingbongIcon from "@assets/character/bingbong_icon.png";
+import StarFull from "@assets/star_full.svg?react";
+import { useNavigate } from "react-router-dom";
 
 interface BoxOfficeItemProps {
-    rank: number;
+    id: number;
+    rank: string;
     posterImg: string;
     posterName: string;
     starValue: number;
-    emotions: {
-        icon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
-        value: number;
-    }[];
-    onClick?: () => void;
+    mainEmotion: string;
+    mainEmotionValue: number;
 }
 
 const emotionMap = {
@@ -28,25 +28,21 @@ const emotionMap = {
     bingbong: bingbongIcon,
 };
 
-const emotionColorMap = {
-    joy: "bg-joy_yellow",
-    sad: "bg-sad_blue",
-    angry: "bg-angry_red",
-    fear: "bg-fear_purple",
-    disgust: "bg-disgust_green",
-    bingbong: "bg-bingbong_pink",
-};
-
 const BoxOfficeItem: React.FC<BoxOfficeItemProps> = ({
+    id,
     rank,
     posterImg,
     posterName,
     starValue,
-    emotions,
-    onClick,
+    mainEmotion,
+    mainEmotionValue,
 }) => {
+    const navigate = useNavigate();
     return (
-        <div className="flex gap-3 mb-2" onClick={onClick}>
+        <div
+            className="flex gap-3 mb-2"
+            onClick={() => navigate(`/movie/detail/${id}`)}
+        >
             <div className="w-[80px] text-white text-4xl font-bold text-end">
                 {rank}
             </div>
@@ -63,26 +59,25 @@ const BoxOfficeItem: React.FC<BoxOfficeItemProps> = ({
                     <div className="flex items-center my-2">
                         <StarRating value={starValue} readOnly />
                         <span className="ml-2 text-sm">
-                            {starValue.toFixed(1)}
+                            {Number.isInteger(Number(starValue))
+                                ? String(Number(starValue))
+                                : Number(starValue).toFixed(1)}
                         </span>
                     </div>
 
-                    <div className="inline-flex gap-2 items-center justify-center mt-2 bg-box_bg_white rounded-full px-2 py-1">
-                        {emotions.map((emotion, i) => (
-                            <div key={i} className="flex items-center gap-1">
-                                <img
-                                    src={emotionMap[emotion.icon]}
-                                    alt={emotion.icon}
-                                    className="w-5 h-5"
-                                />
-                                <div className="w-20 h-2 rounded-full bg-gray-500 overflow-hidden">
-                                    <div
-                                        className={`h-full rounded-full ${emotionColorMap[emotion.icon]}`}
-                                        style={{ width: `${emotion.value}%` }}
-                                    />
-                                </div>
-                            </div>
-                        ))}
+                    <div className="flex items-center gap-2 px-1 pb-2">
+                        <div className="flex items-center text-xs font-light text-white">
+                            <img
+                                src={emotionMap[mainEmotion]}
+                                alt={mainEmotion}
+                                className="w-6 h-6"
+                            />
+                            <p>{mainEmotionValue}%</p>
+                        </div>
+                        <div className="flex items-center text-xs font-light text-white">
+                            <StarFull className="w-6 h-6" />
+                            <p>{starValue}</p>
+                        </div>
                     </div>
                 </div>
             </div>

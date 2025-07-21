@@ -1,11 +1,11 @@
 import * as React from "react";
 import ArrowRight from "@assets/arrow_right.svg?react";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import BoxOfficeItem from "../BoxOfficeItem";
 import SamplePoster from "@assets/sample_poster.png";
-import type { BoxOffice } from "../../interfaces/boxOffice";
+import type { boxOffice } from "../../interfaces/boxOffice";
 import { useNavigate } from "react-router-dom";
+import { boxofficeApi } from "../../api/boxofficeApi";
 
 interface CustomBoxOfficeSectionProps {
     className?: string;
@@ -15,15 +15,15 @@ const BoxOfficeSection: React.FC<CustomBoxOfficeSectionProps> = ({
     className = "",
 }) => {
     const navigate = useNavigate();
-    const [movieList, setMovieList] = useState<BoxOffice[]>([]);
+    const [movieList, setMovieList] = useState<boxOffice[]>([]);
 
     useEffect(() => {
         (async () => {
             try {
-                const res = await axios.get("/mock/boxoffice.json");
-                setMovieList(res.data);
+                const res = await boxofficeApi().getDailyBoxOffice();
+                setMovieList(res.data.data.items);
             } catch (e) {
-                console.error("맞춤 영화 조회 에러!! : ", e);
+                console.error("박스오피스 영화 조회 에러!! : ", e);
             }
         })();
     }, []);
@@ -41,12 +41,13 @@ const BoxOfficeSection: React.FC<CustomBoxOfficeSectionProps> = ({
                 {movieList.slice(0, 3).map((movie, idx) => (
                     <BoxOfficeItem
                         key={idx}
-                        rank={movie.rank}
-                        posterImg={SamplePoster}
-                        posterName={movie.posterName}
-                        starValue={movie.starValue}
-                        emotions={movie.emotions}
-                        onClick={() => navigate("/movie")}
+                        id={movie.movieId}
+                        rank={movie.base.rank}
+                        posterImg={movie.posterPath}
+                        posterName={movie.title}
+                        starValue={movie.voteAverage}
+                        mainEmotion={movie.mainEmotion}
+                        mainEmotionValue={movie.mainEmotionValue}
                     />
                 ))}
             </div>

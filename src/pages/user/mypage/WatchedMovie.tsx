@@ -12,6 +12,7 @@ interface Movie {
     mainEmotion: string;
     mainEmotionValue: number;
     voteAverage: number;
+    ratingAvg: number;
 }
 
 const WatchedMovie: React.FC = () => {
@@ -71,6 +72,7 @@ const WatchedMovie: React.FC = () => {
                                         emotionIcon={poster.mainEmotion.toLowerCase()}
                                         emotionValue={poster.mainEmotionValue}
                                         starValue={poster.voteAverage}
+                                        ratingAvg={poster.ratingAvg}
                                     />
                                 ))}
                             </div>

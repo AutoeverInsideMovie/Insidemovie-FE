@@ -16,6 +16,7 @@ interface Movie {
     mainEmotion: string;
     mainEmotionValue: number;
     voteAverage: number;
+    ratingAvg: number;
 }
 
 const LikeMovieSection: React.FC<LikeMovieSectionProps> = ({
@@ -84,6 +85,7 @@ const LikeMovieSection: React.FC<LikeMovieSectionProps> = ({
                                 emotionIcon={poster.mainEmotion.toLowerCase()}
                                 emotionValue={poster.mainEmotionValue}
                                 starValue={poster.voteAverage}
+                                ratingAvg={poster.ratingAvg}
                             />
                         ))}
                     </div>

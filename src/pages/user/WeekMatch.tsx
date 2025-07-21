@@ -14,6 +14,7 @@ interface Movie {
     mainEmotion: string;
     emotionValue: number;
     releaseDate: string;
+    ratingAvg: number;
 }
 
 interface Winner {
@@ -28,6 +29,7 @@ interface Winner {
         emotionValue: number;
         releaseDate: string;
         matchDate: string;
+        ratingAvg: number;
     };
 }
 
@@ -91,6 +93,7 @@ const WeekMatch: React.FC = () => {
                                                     poster.emotionValue
                                                 }
                                                 starValue={poster.voteAverage}
+                                                ratingAvg={poster.ratingAvg}
                                             />
 
                                             {/* 선택하기 링크 */}
@@ -166,6 +169,7 @@ const WeekMatch: React.FC = () => {
                                             }
                                             starValue={movie.movie.voteAverage}
                                             winnerWeek={movie.matchDate}
+                                            ratingAvg={movie.movie.ratingAvg}
                                             onClick={() =>
                                                 navigate(
                                                     `/movies/detail/${movie.movie.id}`,
