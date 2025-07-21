@@ -10,6 +10,11 @@ import fearIcon from "@assets/character/fear_icon.png";
 import disgustIcon from "@assets/character/disgust_icon.png";
 import bingbongIcon from "@assets/character/bingbong_icon.png";
 import BingbongProfile from "@assets/profile/bingbong_profile.png";
+import joyProfile from "@assets/profile/joy_profile.png";
+import angryProfile from "@assets/profile/angry_profile.png";
+import sadnessProfile from "@assets/profile/sad_profile.png";
+import fearProfile from "@assets/profile/fear_profile.png";
+import disgustProfile from "@assets/profile/disgust_profile.png";
 import { reviewApi } from "../api/reviewApi";
 import { timeForToday } from "../services/timeForToday";
 import { ConfirmDialog } from "./ConfirmDialog";
@@ -86,6 +91,15 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
     const [reportReason, setReportReason] = useState<string>(
         "INAPPROPRIATE_LANGUAGE",
     );
+
+    const emotionProfileMap: Record<string, string> = {
+        joy: joyProfile,
+        anger: angryProfile,
+        sadness: sadnessProfile,
+        fear: fearProfile,
+        disgust: disgustProfile,
+    };
+
     // possible reasons
     const reportReasons = [
         { value: "INAPPROPRIATE_LANGUAGE", label: "부적절한 언어 사용" },
@@ -154,9 +168,13 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
             <div className="flex items-center justify-between">
                 <div className="flex gap-2 items-center">
                     <img
-                        src={profile ? profile : BingbongProfile}
-                        alt="유저"
-                        className="w-8 h-8 rounded-full"
+                        src={
+                            profile
+                                ? emotionProfileMap[profile?.toLowerCase()]
+                                : BingbongProfile
+                        }
+                        alt="Profile"
+                        className="h-8 w-8 rounded-full "
                     />
                     <div>
                         <div className="font-normal text-sm">

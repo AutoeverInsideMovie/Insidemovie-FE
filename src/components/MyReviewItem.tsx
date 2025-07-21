@@ -13,6 +13,11 @@ import Edit from "@assets/edit.svg?react";
 import Delete from "@assets/delete.svg?react";
 import ArrowRight from "@assets/arrow_right.svg?react";
 import BingbongProfile from "@assets/profile/bingbong_profile.png";
+import joyProfile from "@assets/profile/joy_profile.png";
+import angryProfile from "@assets/profile/angry_profile.png";
+import sadnessProfile from "@assets/profile/sad_profile.png";
+import fearProfile from "@assets/profile/fear_profile.png";
+import disgustProfile from "@assets/profile/disgust_profile.png";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { reviewApi } from "../api/reviewApi";
 import { timeForToday } from "../services/timeForToday";
@@ -69,6 +74,15 @@ const MyReviewItem: React.FC<MyReviewItemProps> = ({
     isMypage = false,
 }) => {
     const navigate = useNavigate();
+
+    const emotionProfileMap: Record<string, string> = {
+        joy: joyProfile,
+        anger: angryProfile,
+        sadness: sadnessProfile,
+        fear: fearProfile,
+        disgust: disgustProfile,
+    };
+
     const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
     const getTopEmotionIcon = (emotions: MyReviewItemProps["emotions"]) => {
@@ -97,9 +111,13 @@ const MyReviewItem: React.FC<MyReviewItemProps> = ({
             <div className="flex items-center justify-between">
                 <div className="flex gap-2 items-center">
                     <img
-                        src={profile ? profile : BingbongProfile}
-                        alt="유저"
-                        className="w-8 h-8 rounded-full"
+                        src={
+                            profile
+                                ? emotionProfileMap[profile?.toLowerCase()]
+                                : BingbongProfile
+                        }
+                        alt="Profile"
+                        className="h-8 w-8 rounded-full "
                     />
                     <div>
                         <div className="font-normal text-sm">
