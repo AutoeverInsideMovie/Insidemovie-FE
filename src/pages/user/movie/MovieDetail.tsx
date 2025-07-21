@@ -303,7 +303,7 @@ const MovieDetail: React.FC = () => {
                                 nickname={myReview.nickname}
                                 memberId={myReview.memberId}
                                 movieId={myReview.movieId}
-                                profile={myReview.profile}
+                                profile={myReview.memberEmotion}
                                 emotions={myReview.emotion}
                                 isReported={myReview.isReported}
                                 isConcealed={myReview.isConcealed}
@@ -367,7 +367,7 @@ const MovieDetail: React.FC = () => {
                                     nickname={review.nickname}
                                     memberId={review.memberId}
                                     movieId={review.movieId}
-                                    profile={review.profile}
+                                    profile={review.memberEmotion}
                                     emotions={review.emotion}
                                     isReported={review.isReported}
                                     isConcealed={review.isConcealed}

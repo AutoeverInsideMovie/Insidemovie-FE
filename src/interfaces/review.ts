@@ -11,7 +11,7 @@ export interface Review {
     nickname: string;
     memberId: string;
     movieId: string;
-    profile: string;
+    memberEmotion: string;
     emotion: {
         icon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
         value: number;
