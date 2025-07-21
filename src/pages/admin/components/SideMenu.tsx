@@ -34,7 +34,7 @@ export default function SideMenu() {
         <Drawer
             variant="permanent"
             sx={{
-                display: { xs: "none", md: "block" },
+                display: { xs: "block", md: "block" },
                 [`& .${drawerClasses.paper}`]: {
                     backgroundColor: "background.paper",
                 },

@@ -6,6 +6,7 @@ import Drawer, { drawerClasses } from "@mui/material/Drawer";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import iconBingBong from "../../../assets/character/bingbong_icon.png";
 
 import MenuContent from "./MenuContent";
 
@@ -45,11 +46,11 @@ export default function SideMenuMobile({
                         <Avatar
                             sizes="small"
                             alt="Riley Carter"
-                            src="/static/images/avatar/7.jpg"
+                            src={iconBingBong}
                             sx={{ width: 24, height: 24 }}
                         />
                         <Typography component="p" variant="h6">
-                            Riley Carter
+                            관리자
                         </Typography>
                     </Stack>
                 </Stack>
