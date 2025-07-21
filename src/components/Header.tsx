@@ -197,6 +197,7 @@ const Header: React.FC = () => {
             </header>
             <div className={`${scrolled ? "h-20" : "h-24"}`} />
             <ConfirmDialog
+                className="max-w-md"
                 isOpen={logoutDialogOpen}
                 title="로그아웃"
                 message="로그아웃 하시겠습니까?"

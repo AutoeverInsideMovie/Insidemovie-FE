@@ -190,6 +190,7 @@ const MyReviewItem: React.FC<MyReviewItemProps> = ({
                 )}
             </div>
             <ConfirmDialog
+                className={"max-w-md"}
                 isOpen={isDeleteConfirmOpen}
                 title="리뷰 삭제"
                 message="리뷰를 삭제하시겠습니까?"

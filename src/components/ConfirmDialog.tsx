@@ -9,6 +9,7 @@ interface ConfirmDialogProps {
     onConfirm: () => void;
     onCancel: () => void;
     isRedButton?: boolean;
+    className?: string;
 }
 
 export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
@@ -19,6 +20,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     onConfirm,
     onCancel,
     isRedButton = false,
+    className = "",
 }) => {
     useEffect(() => {
         if (!isOpen) return;
@@ -40,7 +42,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             onClick={() => onCancel()}
         >
             <div
-                className="bg-grey_100 rounded-3xl max-w-md w-full p-6 shadow-lg"
+                className={`bg-grey_100 rounded-3xl p-6 shadow-lg ${className}`}
                 onClick={(e) => e.stopPropagation()}
             >
                 <h3 className="text-black text-xl font-bold mb-2 text-center">

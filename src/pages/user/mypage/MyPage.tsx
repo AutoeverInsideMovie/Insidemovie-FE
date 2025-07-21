@@ -13,6 +13,13 @@ import WatchMovieSection from "../../../components/mypage/WatchMovieSection";
 import MyReviewSection from "../../../components/mypage/MyReviewSection";
 import { ConfirmDialog } from "../../../components/ConfirmDialog";
 import InputField from "../../../components/InputField";
+import EmotionSlider from "../../../components/EmotionSlider";
+import joyImg from "@assets/character/joy.png";
+import sadImg from "@assets/character/sad.png";
+import angryImg from "@assets/character/angry.png";
+import fearImg from "@assets/character/fear.png";
+import disgustImg from "@assets/character/disgust.png";
+import bingdbongImg from "@assets/character/bingbong.png";
 
 interface UserInfo {
     memberId: number;
@@ -24,6 +31,15 @@ interface UserInfo {
     repEmotionType: string;
     authority: string;
 }
+
+const characters = [
+    joyImg,
+    sadImg,
+    angryImg,
+    fearImg,
+    disgustImg,
+    bingdbongImg,
+];
 
 const MyPage: React.FC = () => {
     const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
@@ -53,7 +69,14 @@ const MyPage: React.FC = () => {
     const [isPwdSuccessOpen, setIsPwdSuccessOpen] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
 
-    // --- Password change form validity (reactive, like signup) ---
+    const [joyValue, setJoyValue] = useState(50);
+    const [sadValue, setSadValue] = useState(50);
+    const [angryValue, setAngryValue] = useState(50);
+    const [fearValue, setFearValue] = useState(50);
+    const [disgustValue, setDisgustValue] = useState(50);
+
+    const [isEmotionModalOpen, setIsEmotionModalOpen] = useState(false);
+
     const isPwdFormValid =
         currentPwd.trim() !== "" &&
         newPwd.trim() !== "" &&
@@ -83,17 +106,38 @@ const MyPage: React.FC = () => {
 
                 {/* 프로필 */}
                 <div className="flex items-center space-x-10 mb-8">
-                    <img
-                        src={
-                            userInfo
-                                ? emotionProfileMap[
-                                      userInfo.repEmotionType?.toLowerCase()
-                                  ]
-                                : bingbongProfile
-                        }
-                        alt="avatar"
-                        className="w-36 h-36 rounded-full"
-                    />
+                    <div
+                        className="relative w-52 h-fit cursor-pointer"
+                        onClick={() => {
+                            memberApi()
+                                .getMyAverageEmotions()
+                                .then((res) => {
+                                    setJoyValue(res.data.data.joy);
+                                    setSadValue(res.data.data.sadness);
+                                    setAngryValue(res.data.data.anger);
+                                    setFearValue(res.data.data.fear);
+                                    setDisgustValue(res.data.data.disgust);
+                                    setIsEmotionModalOpen(true);
+                                });
+                        }}
+                    >
+                        <img
+                            src={
+                                userInfo
+                                    ? emotionProfileMap[
+                                          userInfo.repEmotionType?.toLowerCase()
+                                      ]
+                                    : bingbongProfile
+                            }
+                            alt="avatar"
+                            className="w-full h-full rounded-full object-cover"
+                        />
+                        <div className="absolute bottom-0 w-full h-1/2 bg-black bg-opacity-70 rounded-b-full flex items-center justify-center">
+                            <span className="text-white text-sm font-medium">
+                                감정 변경
+                            </span>
+                        </div>
+                    </div>
                     <div className="w-full">
                         <h2 className="text-white text-3xl font-normal flex items-center">
                             {isEditMode ? (
@@ -278,7 +322,81 @@ const MyPage: React.FC = () => {
                 </div>
             )}
 
+            {/* Emotion modal */}
             <ConfirmDialog
+                className={"w-fit"}
+                isOpen={isEmotionModalOpen}
+                title="나의 감정 상태 수정"
+                message={
+                    <div className="flex flex-col items-center">
+                        <div className="flex items-center justify-center space-x-4 overflow-x-auto scrollbar-hide px-2 py-4">
+                            <EmotionSlider
+                                name="JOY"
+                                color="#FFD602"
+                                value={joyValue}
+                                onChange={setJoyValue}
+                                image={characters[0]}
+                            />
+                            <EmotionSlider
+                                name="SAD"
+                                color="#1169F0"
+                                value={sadValue}
+                                onChange={setSadValue}
+                                image={characters[1]}
+                            />
+                            <EmotionSlider
+                                name="ANGRY"
+                                color="#DD2424"
+                                value={angryValue}
+                                onChange={setAngryValue}
+                                image={characters[2]}
+                            />
+                            <EmotionSlider
+                                name="FEAR"
+                                color="#9360BD"
+                                value={fearValue}
+                                onChange={setFearValue}
+                                image={characters[3]}
+                            />
+                            <EmotionSlider
+                                name="DISGUST"
+                                color="#A2C95A"
+                                value={disgustValue}
+                                onChange={setDisgustValue}
+                                image={characters[4]}
+                            />
+                        </div>
+                    </div>
+                }
+                showCancel={true}
+                onCancel={() => setIsEmotionModalOpen(false)}
+                onConfirm={async () => {
+                    const emotionMap = {
+                        JOY: joyValue,
+                        SADNESS: sadValue,
+                        ANGER: angryValue,
+                        FEAR: fearValue,
+                        DISGUST: disgustValue,
+                    };
+                    const repEmotion = Object.entries(emotionMap).reduce(
+                        (a, b) => (b[1] > emotionMap[a] ? b[0] : a),
+                        "JOY",
+                    );
+                    await memberApi().editEmotions({
+                        joy: joyValue,
+                        sadness: sadValue,
+                        anger: angryValue,
+                        fear: fearValue,
+                        disgust: disgustValue,
+                        repEmotion,
+                    });
+                    setIsEmotionModalOpen(false);
+                    window.location.reload();
+                }}
+            />
+
+            <ConfirmDialog
+                className={"max-w-md"}
                 isOpen={isConfirmOpen}
                 title={
                     isPasswordChangeConfirm ? "비밀번호 변경" : "닉네임 변경"
@@ -362,6 +480,7 @@ const MyPage: React.FC = () => {
                 }}
             />
             <ConfirmDialog
+                className={"max-w-md"}
                 isOpen={isErrorOpen}
                 title="변경 실패"
                 message={errorMessage}
@@ -373,6 +492,7 @@ const MyPage: React.FC = () => {
                 }}
             />
             <ConfirmDialog
+                className={"max-w-md"}
                 isOpen={isPwdSuccessOpen}
                 title="비밀번호 변경 완료"
                 message={successMessage}
