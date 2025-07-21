@@ -137,7 +137,7 @@ export default function StatCard({
                             showTooltip
                             xAxis={{
                                 scaleType: "band",
-                                data: latestOneMonth, // Use the correct property 'data' for xAxis
+                                data: latestOneMonth,
                             }}
                             sx={{
                                 [`& .${areaElementClasses.root}`]: {

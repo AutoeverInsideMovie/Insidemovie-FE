@@ -4,7 +4,7 @@ import { getMemberColumns } from "../internals/data/gridData";
 import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import type { Member } from "../../../types/member"; // Report 타입 정의
+import type { Member } from "../../../types/member";
 import { useNavigate } from "react-router-dom";
 import { mapMembersToRows } from "../../../services/mapMembersToRows";
 import { useColorScheme, useTheme } from "@mui/material/styles";
@@ -20,7 +20,7 @@ export default function MemberBoard() {
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
-        console.log("토큰 : ", token);
+        // console.log("토큰 : ", token);
         const fetchData = async () => {
             try {
                 const res = await axios.get(
@@ -30,7 +30,6 @@ export default function MemberBoard() {
                             Authorization: `Bearer ${token}`,
                         },
                     },
-                    // "/mock/report.json",
                 );
                 const allData = res.data.data.content;
                 if (!allData) {
@@ -67,7 +66,6 @@ export default function MemberBoard() {
         <Box
             sx={{
                 width: "100%",
-                // 인덱스 0부터, odd -> 짝수 칸, even -> 홀수 칸
                 "& .MuiDataGrid-row.odd": {
                     backgroundColor:
                         appliedMode === "light"

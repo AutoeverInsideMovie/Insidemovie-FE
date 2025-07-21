@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
 import { mapReportsToRows } from "../../../services/mapReportsToRows";
 import axios from "axios";
-import type { Report } from "../../../types/report"; // Report 타입 정의
+import type { Report } from "../../../types/report";
 import { useNavigate } from "react-router-dom";
 import type { ReportStatus } from "../../../types/reportStatus";
 import { useColorScheme, useTheme } from "@mui/material/styles";
@@ -21,7 +21,7 @@ export default function ReportBoard() {
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
-        console.log("토큰 : ", token);
+        // console.log("토큰 : ", token);
         const fetchData = async () => {
             try {
                 const res = await axios.get(
@@ -31,7 +31,6 @@ export default function ReportBoard() {
                             Authorization: `Bearer ${token}`,
                         },
                     },
-                    // "/mock/report.json",
                 );
                 const allData = res.data.data.content;
                 if (!allData) {

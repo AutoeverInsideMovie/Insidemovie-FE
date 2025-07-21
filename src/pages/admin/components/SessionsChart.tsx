@@ -31,18 +31,18 @@ function getLastYearFromLastMonth() {
     const month = lastMonthDate.getMonth(); // 0~11
     const monthArray = [];
     for (let i = 0; i < 12; i++) {
-        monthArray.push(i); // 월 배열
+        monthArray.push(i); // 12개월 기본 배열
     }
 
     const months = monthArray
         .map((i) => {
-            const d = new Date(year, month - i, 1); // 오늘 연/월부터 역순
+            const d = new Date(year, month - i, 1);
             return d.toLocaleDateString("ko-KR", {
                 year: "2-digit",
                 month: "long",
             });
         })
-        .reverse(); // 그래프에 나타내기 위해선 역순으로 된 배열을 반대로 써야함
+        .reverse();
 
     return months;
 }
