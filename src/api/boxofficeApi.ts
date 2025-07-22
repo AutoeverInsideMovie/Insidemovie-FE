@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "./axiosInstance";
 
 export const boxofficeApi = () => {
     // 주간 박스오피스 조회
