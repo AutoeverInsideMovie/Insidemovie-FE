@@ -23,10 +23,6 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
 }) => {
     const [recommendList, setRecommendList] = useState<Movie[]>([]);
 
-    useEffect(() => {
-        // Removed the initial call to handleEmotionsChange
-    }, []);
-
     const handleEmotionsChange = async (
         joy: number,
         sad: number,
