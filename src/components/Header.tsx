@@ -38,6 +38,7 @@ const Header: React.FC = () => {
         sadness: sadnessProfile,
         fear: fearProfile,
         disgust: disgustProfile,
+        none: bingbongProfile,
     };
 
     const [menuOpen, setMenuOpen] = useState(false);
