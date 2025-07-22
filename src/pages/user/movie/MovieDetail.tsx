@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import { useMediaQuery } from "react-responsive";
 import StarRating from "../../../components/StarRating";
 import joyIcon from "@assets/character/joy_icon.png";
 import sadIcon from "@assets/character/sad_icon.png";
@@ -71,6 +72,12 @@ const MovieDetail: React.FC = () => {
     // Determine login status based on stored access token
     const isLogin = Boolean(localStorage.getItem("accessToken"));
 
+    // Mobile infinite scroll / desktop pagination
+    const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLastPage, setIsLastPage] = useState(false);
+    const observer = useRef<IntersectionObserver | null>(null);
+
     useEffect(() => {
         (async () => {
             try {
@@ -95,20 +102,29 @@ const MovieDetail: React.FC = () => {
                 } finally {
                     setMyReviewLoaded(true);
                 }
-                // 전체 리뷰 목록 조회
+                // 전체 리뷰 목록 조회 (mobile infinite scroll, desktop pagination)
+                setIsLoading(true);
                 const listRes = await reviewApi().getReviewList({
                     movieId: movieIdNumber,
                     sort: reviewSort,
                     page: reviewPage,
                     size: 10,
                 });
-                setReviewList(listRes.data.data.content);
-                setReviewTotalPages(listRes.data.data.totalPages);
+                const { content, totalPages: tp, last } = listRes.data.data;
+                if (isMobile && reviewPage > 0) {
+                    setReviewList((prev) => [...prev, ...content]);
+                } else {
+                    setReviewList(content);
+                }
+                setReviewTotalPages(tp);
+                setIsLastPage(last);
+                setIsLoading(false);
             } catch (e) {
                 console.error("영화 상세 정보 조회 에러: ", e);
+                setIsLoading(false);
             }
         })();
-    }, [movieIdNumber, reviewPage, reviewSort]);
+    }, [movieIdNumber, reviewPage, reviewSort, isMobile]);
     const handleReviewPageChange = (
         _: React.ChangeEvent<unknown>,
         value: number,
@@ -120,7 +136,24 @@ const MovieDetail: React.FC = () => {
     ) => {
         setReviewSort(e.target.value as "POPULAR" | "LATEST" | "OLDEST");
         setReviewPage(0);
+        setReviewList([]);
+        setIsLastPage(false);
     };
+
+    // Attach to last ReviewItem on mobile
+    const lastReviewRef = useCallback(
+        (node: HTMLDivElement) => {
+            if (!isMobile || isLoading) return;
+            if (observer.current) observer.current.disconnect();
+            observer.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && !isLastPage) {
+                    setReviewPage((prev) => prev + 1);
+                }
+            });
+            if (node) observer.current.observe(node);
+        },
+        [isMobile, isLoading, isLastPage],
+    );
 
     // 좋아요/취소 토글 핸들러
     const handleLikeClick = async () => {
@@ -419,7 +452,7 @@ const MovieDetail: React.FC = () => {
                         ))}
 
                     {/* 리뷰 목록 */}
-                    <div className="mt-12">
+                    <div className="mt-12 mb-36">
                         <div className="flex items-center justify-between mb-4">
                             <h2 className="text-3xl font-semibold text-white">
                                 리뷰
@@ -446,29 +479,38 @@ const MovieDetail: React.FC = () => {
                                 리뷰가 없습니다
                             </div>
                         ) : (
-                            reviewList.map((review) => (
-                                <ReviewItem
-                                    reviewId={review.reviewId}
-                                    content={review.content}
-                                    rating={review.rating}
-                                    spoiler={review.spoiler}
-                                    createdAt={review.createdAt}
-                                    likeCount={review.likeCount}
-                                    myReview={review.myReview}
-                                    modify={review.modify}
-                                    myLike={review.myLike}
-                                    nickname={review.nickname}
-                                    memberId={review.memberId}
-                                    movieId={review.movieId}
-                                    profile={review.memberEmotion}
-                                    emotion={review.emotion}
-                                    isReported={review.isReported}
-                                    isConcealed={review.isConcealed}
-                                    {...review}
-                                />
-                            ))
+                            reviewList.map((review, idx) => {
+                                const isLast =
+                                    isMobile && idx === reviewList.length - 1;
+                                return (
+                                    <div
+                                        key={review.reviewId}
+                                        ref={isLast ? lastReviewRef : undefined}
+                                    >
+                                        <ReviewItem
+                                            reviewId={review.reviewId}
+                                            content={review.content}
+                                            rating={review.rating}
+                                            spoiler={review.spoiler}
+                                            createdAt={review.createdAt}
+                                            likeCount={review.likeCount}
+                                            myReview={review.myReview}
+                                            modify={review.modify}
+                                            myLike={review.myLike}
+                                            nickname={review.nickname}
+                                            memberId={review.memberId}
+                                            movieId={review.movieId}
+                                            profile={review.memberEmotion}
+                                            emotion={review.emotion}
+                                            isReported={review.isReported}
+                                            isConcealed={review.isConcealed}
+                                            {...review}
+                                        />
+                                    </div>
+                                );
+                            })
                         )}
-                        {reviewTotalPages > 0 && (
+                        {!isMobile && reviewTotalPages > 0 && (
                             <div className="flex justify-center mt-20 mb-36">
                                 <Pagination
                                     count={reviewTotalPages}

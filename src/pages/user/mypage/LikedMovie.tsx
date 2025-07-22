@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import { useMediaQuery } from "react-responsive";
 import MovieItem from "../../../components/MovieItem";
 import ArrowRight from "@assets/arrow_right.svg?react";
 import { memberApi } from "../../../api/memberApi";
@@ -21,28 +22,58 @@ const LikedMovie: React.FC = () => {
     const [page, setPage] = useState(0);
     const [pageSize] = useState(40);
     const [totalPages, setTotalPages] = useState(0);
+    // mobile infinite scroll / desktop pagination
+    const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLastPage, setIsLastPage] = useState(false);
+    const observer = useRef<IntersectionObserver | null>(null);
 
     useEffect(() => {
-        (async () => {
+        const fetchLiked = async () => {
+            setIsLoading(true);
             try {
                 const res = await memberApi().getMyLikedMovies({
                     page,
                     pageSize,
                 });
                 const { content, totalPages: tp } = res.data.data;
-                setMovieList(content);
                 setTotalPages(tp);
+                const lastFlag = page >= tp - 1;
+                setIsLastPage(lastFlag);
+                if (isMobile && page > 0) {
+                    setMovieList((prev) => [...prev, ...content]);
+                } else {
+                    setMovieList(content);
+                }
             } catch (e) {
                 console.error("내가 좋아요한 영화 조회 에러: ", e);
+            } finally {
+                setIsLoading(false);
             }
-        })();
-    }, [page, pageSize]);
+        };
+        fetchLiked();
+    }, [page, pageSize, isMobile]);
+
+    // detect last item on mobile to load more
+    const lastItemRef = useCallback(
+        (node: HTMLDivElement) => {
+            if (!isMobile || isLoading) return;
+            if (observer.current) observer.current.disconnect();
+            observer.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && !isLastPage) {
+                    setPage((prev) => prev + 1);
+                }
+            });
+            if (node) observer.current.observe(node);
+        },
+        [isMobile, isLoading, isLastPage],
+    );
 
     return (
         <div>
             <div className="flex justify-center">
-                <div className="max-w-screen-lg w-full flex flex-col pt-20">
-                    <h1 className=" flex gap-4 items-center text-white text-3xl font-semibold text-left pb-3 border-b-[1px] border-box_bg_white">
+                <div className="max-w-screen-lg w-full flex flex-col pt-20 px-5">
+                    <h1 className="flex gap-4 items-center text-white text-3xl font-semibold text-left pb-3 border-b-[1px] border-box_bg_white">
                         <p
                             className="font-extralight cursor-pointer hover:font-normal"
                             onClick={() => {
@@ -76,7 +107,14 @@ const LikedMovie: React.FC = () => {
                                     />
                                 ))}
                             </div>
-                            {totalPages > 1 && (
+                            {/* Sentinel for mobile infinite scroll */}
+                            {isMobile && !isLastPage && (
+                                <div
+                                    ref={lastItemRef}
+                                    style={{ height: 1, marginBottom: 20 }}
+                                />
+                            )}
+                            {!isMobile && totalPages > 1 && (
                                 <div className="flex justify-center text-white mt-6 mb-36">
                                     <Pagination
                                         count={totalPages}

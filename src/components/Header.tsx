@@ -12,6 +12,10 @@ import angryProfile from "@assets/profile/angry_profile.png";
 import sadnessProfile from "@assets/profile/sad_profile.png";
 import fearProfile from "@assets/profile/fear_profile.png";
 import disgustProfile from "@assets/profile/disgust_profile.png";
+import HomeIcon from "@assets/home_icon.svg?react";
+import BoxofficeIcon from "@assets/boxoffice_icon.svg?react";
+import MovieIcon from "@assets/movie_icon.svg?react";
+import MatchIcon from "@assets/match_icon.svg?react";
 
 interface UserInfo {
     memberId: number;
@@ -26,10 +30,10 @@ interface UserInfo {
 const Header: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const isHome = location.pathname === "/";
     const isBoxOffice = location.pathname === "/boxoffice";
     const isRecommend = location.pathname === "/recommend";
     const isWeekMatch = location.pathname === "/weekmatch";
-    const isMypage = location.pathname === "/mypage";
     const [scrolled, setScrolled] = useState(false);
 
     const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
@@ -99,7 +103,7 @@ const Header: React.FC = () => {
                 className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
                     scrolled
                         ? "h-20 backdrop-blur-md bg-box_bg_white"
-                        : "h-40 bg-transparent p-10"
+                        : "h-40 bg-transparent py-10 md:p-10"
                 }`}
             >
                 <div className="max-w-screen-xl mx-auto flex items-center justify-between px-6 h-full relative">
@@ -198,30 +202,33 @@ const Header: React.FC = () => {
                 </div>
             </header>
             <div className={`${scrolled ? "h-20" : "h-24"}`} />
-            <div className="fixed bottom-0 left-0 w-full bg-box_bg_white/90 border-t border-gray-200 flex justify-around items-center h-14 md:hidden z-50">
+            <div className="fixed bottom-0 left-0 w-full bg-movie_main/90 border-gray-200 flex justify-around items-center h-16 md:hidden z-50">
+                <button
+                    onClick={() => navigate("/")}
+                    className={`flex flex-col justify-center items-center text-xs ${isHome ? "font-normal text-white" : "font-light text-gray-500"}`}
+                >
+                    <HomeIcon className="w-5 h-5" />홈
+                </button>
                 <button
                     onClick={() => navigate("/boxoffice")}
-                    className={`text-xs ${isBoxOffice ? "font-bold text-primary" : "text-gray-500"}`}
+                    className={`flex flex-col justify-center items-center text-xs ${isBoxOffice ? "font-normal text-white" : "font-light text-gray-500"}`}
                 >
+                    <BoxofficeIcon className="w-5 h-5" />
                     박스오피스
                 </button>
                 <button
                     onClick={() => navigate("/recommend")}
-                    className={`text-xs ${isRecommend ? "font-bold text-primary" : "text-gray-500"}`}
+                    className={`flex flex-col justify-center items-center text-xs ${isRecommend ? "font-normal text-white" : "font-light text-gray-500"}`}
                 >
+                    <MovieIcon className="w-5 h-5" />
                     추천 영화
                 </button>
                 <button
                     onClick={() => navigate("/weekmatch")}
-                    className={`text-xs ${isWeekMatch ? "font-bold text-primary" : "text-gray-500"}`}
+                    className={`flex flex-col justify-center items-center text-xs ${isWeekMatch ? "font-normal text-white" : "font-light text-gray-500"}`}
                 >
+                    <MatchIcon className="w-5 h-5" />
                     영화 대결
-                </button>
-                <button
-                    onClick={() => navigate("/mypage")}
-                    className={`text-xs ${isMypage ? "font-bold text-primary" : "text-gray-500"}`}
-                >
-                    마이페이지
                 </button>
             </div>
             <ConfirmDialog

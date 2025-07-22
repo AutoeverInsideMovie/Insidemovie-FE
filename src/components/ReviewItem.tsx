@@ -75,6 +75,8 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
     isReported,
     isConcealed,
 }) => {
+    // Guard repEmotion when emotion prop might be null
+    const repEmotion = emotion?.repEmotion ?? "none";
     const [showContent, setShowContent] = useState(!spoiler); // 스포일러면 처음엔 false
     const [liked, setLiked] = useState<boolean>(Boolean(myLike));
     const [likeCountState, setLikeCountState] = useState<number>(likeCount);
@@ -166,13 +168,11 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
                     </div>
                 </div>
                 <div className="flex items-center gap-1 bg-box_bg_white/10 px-2 py-1 rounded-full text-sm">
-                    {emotion.repEmotion && (
-                        <img
-                            src={emotionMap[emotion.repEmotion]}
-                            alt={emotion.repEmotion}
-                            className="w-6 h-6"
-                        />
-                    )}
+                    <img
+                        src={emotionMap[repEmotion]}
+                        alt={repEmotion}
+                        className="w-6 h-6"
+                    />
                     |
                     <StarRating
                         value={rating}

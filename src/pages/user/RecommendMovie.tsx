@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { movieApi } from "../../api/movieApi";
 import MovieItem from "../../components/MovieItem";
 import Tag from "../../components/Tag";
@@ -44,12 +44,18 @@ const RecommendMovie: React.FC = () => {
     const pageSize = 40;
     const [totalPages, setTotalPages] = useState(0);
     const [totalElements, setTotalElements] = useState(0);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     // Sort type: 'rating' for 평점순, 'latest' for 최신순
     const [sortType, setSortType] = useState<"rating" | "latest">("rating");
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLastPage, setIsLastPage] = useState(false);
+    const observer = useRef<IntersectionObserver | null>(null);
 
     useEffect(() => {
         const fetchByGenre = async () => {
             try {
+                setIsLoading(true);
                 const res =
                     sortType === "rating"
                         ? await movieApi().getPopularMoviesByGenre({
@@ -67,16 +73,55 @@ const RecommendMovie: React.FC = () => {
                     totalPages: tp,
                     totalElements: te,
                 } = res.data.data;
-                setMovieList(content);
+                if (isMobile) {
+                    setMovieList((prev) =>
+                        page === 0 ? content : [...prev, ...content],
+                    );
+                } else {
+                    setMovieList(content);
+                }
                 setTotalPages(tp);
                 setTotalElements(te);
+                setIsLastPage(page >= tp - 1);
             } catch (e) {
                 console.error("장르별 조회 에러: ", e);
                 setMovieList([]);
+            } finally {
+                setIsLoading(false);
             }
         };
         fetchByGenre();
-    }, [selectedTag, page, sortType]);
+    }, [selectedTag, page, sortType, isMobile]);
+
+    // Infinite scroll via IntersectionObserver on mobile
+    const lastItemRef = useCallback(
+        (node: HTMLDivElement) => {
+            if (!isMobile) return;
+            if (isLoading) return;
+            if (observer.current) observer.current.disconnect();
+            observer.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && page < totalPages - 1) {
+                    setPage((prev) => prev + 1);
+                }
+            });
+            if (node) observer.current.observe(node);
+        },
+        [isMobile, isLoading, page, totalPages],
+    );
+
+    // Reset list and page when switching between mobile and desktop
+    useEffect(() => {
+        const handleResize = () => {
+            const mobileNow = window.innerWidth < 768;
+            if (mobileNow !== isMobile) {
+                setIsMobile(mobileNow);
+                setPage(0);
+                setMovieList([]);
+            }
+        };
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [isMobile]);
 
     const handleTagClick = (label: string) => {
         setSelectedTag(label);
@@ -144,20 +189,30 @@ const RecommendMovie: React.FC = () => {
                                       />
                                   ))
                                 : movieList.map((poster, idx) => (
-                                      <MovieItem
+                                      <div
                                           key={poster.id}
-                                          movieId={poster.id}
-                                          posterImg={poster.posterPath}
-                                          posterName={poster.title}
-                                          emotionIcon={poster.mainEmotion.toLowerCase()}
-                                          emotionValue={poster.mainEmotionValue}
-                                          starValue={poster.voteAverage}
-                                          ratingAvg={poster.ratingAvg}
-                                      />
+                                          ref={
+                                              idx === movieList.length - 1
+                                                  ? lastItemRef
+                                                  : undefined
+                                          }
+                                      >
+                                          <MovieItem
+                                              movieId={poster.id}
+                                              posterImg={poster.posterPath}
+                                              posterName={poster.title}
+                                              emotionIcon={poster.mainEmotion.toLowerCase()}
+                                              emotionValue={
+                                                  poster.mainEmotionValue
+                                              }
+                                              starValue={poster.voteAverage}
+                                              ratingAvg={poster.ratingAvg}
+                                          />
+                                      </div>
                                   ))}
                         </div>
                         {totalPages > 1 && (
-                            <div className="flex justify-center text-white mt-6 mb-36">
+                            <div className="hidden sm:flex justify-center text-white mt-6 mb-36">
                                 <Pagination
                                     count={totalPages}
                                     page={page + 1}

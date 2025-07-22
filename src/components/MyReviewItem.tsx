@@ -71,6 +71,7 @@ const MyReviewItem: React.FC<MyReviewItemProps> = ({
     isConcealed,
     isMypage = false,
 }) => {
+    const repEmotion = emotion?.repEmotion ?? "none";
     const navigate = useNavigate();
 
     const emotionProfileMap: Record<string, string> = {
@@ -109,8 +110,8 @@ const MyReviewItem: React.FC<MyReviewItemProps> = ({
                 </div>
                 <div className="flex items-center gap-1 bg-box_bg_white/10 px-2 py-1 rounded-full text-sm">
                     <img
-                        src={emotionMap[emotion.repEmotion]}
-                        alt={emotion.repEmotion}
+                        src={emotionMap[repEmotion]}
+                        alt={repEmotion}
                         className="w-6 h-6"
                     />
                     |

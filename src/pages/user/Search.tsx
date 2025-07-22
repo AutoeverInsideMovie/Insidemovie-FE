@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { movieApi } from "../../api/movieApi";
 import MovieItem from "../../components/MovieItem";
 import { Pagination } from "@mui/material";
 import SearchIcon from "@assets/search.svg?react";
 import CloseIcon from "@assets/close.svg?react";
+import { useMediaQuery } from "react-responsive";
 
 interface Movie {
     id: number;
@@ -25,6 +26,11 @@ const Search: React.FC = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [totalElements, setTotalElements] = useState(0);
 
+    const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLastPage, setIsLastPage] = useState(false);
+    const observer = useRef<IntersectionObserver | null>(null);
+
     const [searchTerm, setSearchTerm] = useState("");
 
     const handleSearch = () => {
@@ -41,7 +47,8 @@ const Search: React.FC = () => {
 
     useEffect(() => {
         if (!title) return;
-        (async () => {
+        const fetchResults = async () => {
+            setIsLoading(true);
             try {
                 const res = await movieApi().searchTitle({
                     title,
@@ -53,14 +60,23 @@ const Search: React.FC = () => {
                     totalPages: tp,
                     totalElements: te,
                 } = res.data.data;
-                setResults(content);
                 setTotalPages(tp);
                 setTotalElements(te);
+                setIsLastPage(page >= tp - 1);
+                if (isMobile && page > 0) {
+                    setResults((prev) => [...prev, ...content]);
+                } else {
+                    setResults(content);
+                }
             } catch (e) {
                 console.error("영화 검색 실패:", e);
+                if (!isMobile) setResults([]);
+            } finally {
+                setIsLoading(false);
             }
-        })();
-    }, [title, page]);
+        };
+        fetchResults();
+    }, [title, page, isMobile]);
 
     const handlePageChange = (
         _e: React.ChangeEvent<unknown>,
@@ -68,6 +84,20 @@ const Search: React.FC = () => {
     ) => {
         setPage(value - 1);
     };
+
+    const lastItemRef = useCallback(
+        (node: HTMLDivElement) => {
+            if (!isMobile || isLoading) return;
+            if (observer.current) observer.current.disconnect();
+            observer.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && !isLastPage) {
+                    setPage((prev) => prev + 1);
+                }
+            });
+            if (node) observer.current.observe(node);
+        },
+        [isMobile, isLoading, isLastPage],
+    );
 
     return (
         <div className="flex justify-center">
@@ -117,20 +147,30 @@ const Search: React.FC = () => {
                 ) : (
                     <>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-4 mb-20">
-                            {results.map((movie) => (
-                                <MovieItem
-                                    key={movie.id}
-                                    movieId={movie.id}
-                                    posterImg={movie.posterPath}
-                                    posterName={movie.title}
-                                    emotionIcon={movie.mainEmotion.toLowerCase()}
-                                    emotionValue={movie.mainEmotionValue}
-                                    starValue={movie.voteAverage}
-                                    ratingAvg={movie.ratingAvg}
-                                />
-                            ))}
+                            {results.map((movie, idx) => {
+                                const isLast =
+                                    isMobile && idx === results.length - 1;
+                                return (
+                                    <div
+                                        key={movie.id}
+                                        ref={isLast ? lastItemRef : undefined}
+                                    >
+                                        <MovieItem
+                                            movieId={movie.id}
+                                            posterImg={movie.posterPath}
+                                            posterName={movie.title}
+                                            emotionIcon={movie.mainEmotion.toLowerCase()}
+                                            emotionValue={
+                                                movie.mainEmotionValue
+                                            }
+                                            starValue={movie.voteAverage}
+                                            ratingAvg={movie.ratingAvg}
+                                        />
+                                    </div>
+                                );
+                            })}
                         </div>
-                        {totalPages > 1 && (
+                        {!isMobile && totalPages > 1 && (
                             <div className="flex justify-center text-white mt-6 mb-36">
                                 <Pagination
                                     count={totalPages}
