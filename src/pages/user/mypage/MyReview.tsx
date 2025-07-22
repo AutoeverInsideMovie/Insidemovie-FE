@@ -98,7 +98,7 @@ const MyReview: React.FC = () => {
                                         memberId={review.memberId}
                                         movieId={review.movieId}
                                         profile={review.memberEmotion}
-                                        emotions={review.emotion}
+                                        emotion={review.emotion}
                                         isReported={review.isReported}
                                         isConcealed={review.isConcealed}
                                         isMypage={true}
