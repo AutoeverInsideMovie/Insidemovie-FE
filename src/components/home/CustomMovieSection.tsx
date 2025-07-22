@@ -64,7 +64,7 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
                 setRecommendList([]);
                 setIsLoading(false);
             }
-        }, 500);
+        });
         return () => clearTimeout(timer);
     }, []);
 
