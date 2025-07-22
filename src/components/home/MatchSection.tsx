@@ -74,7 +74,7 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
                 금주의 영화 대결
                 <ArrowRight />
             </h1>
-            <div className="flex flex-col md:flex-row w-full justify-between gap-10">
+            <div className="flex flex-col w-full justify-between gap-10">
                 <div>
                     {movieList.length === 0 ? (
                         <div className="flex justify-center items-center gap-10 mt-10 text-center text-gray-400 py-12">
@@ -103,7 +103,7 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
                         </div>
                     )}
                     <Button
-                        className="w-full"
+                        className="w-full mt-12"
                         text="투표하러 가기"
                         textColor="black"
                         buttonColor="white"
