@@ -66,7 +66,7 @@ export default function AppNavbar() {
                         <img
                             src={logo}
                             alt="로고"
-                            style={{ height: "40px", objectFit: "contain" }}
+                            style={{ height: "44px", objectFit: "contain" }}
                         />
                     </Stack>
                     <ColorModeIconDropdown />
