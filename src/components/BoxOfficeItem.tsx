@@ -7,6 +7,7 @@ import disgustIcon from "@assets/character/disgust_icon.png";
 import bingbongIcon from "@assets/character/bingbong_icon.png";
 import StarFull from "@assets/star_full.svg?react";
 import TMDB from "@assets/TMDB.svg?react";
+import DefaultImage from "@assets/defaultImage.svg?react";
 import Down from "@assets/down.svg?react";
 import Up from "@assets/up.svg?react";
 import { useNavigate } from "react-router-dom";
@@ -52,7 +53,9 @@ const BoxOfficeItem: React.FC<BoxOfficeItemProps> = ({
     return (
         <div
             className="flex gap-3 mb-2"
-            onClick={() => navigate(`/movies/detail/${movieId}`)}
+            onClick={() =>
+                movieId !== null ? navigate(`/movies/detail/${movieId}`) : null
+            }
         >
             <div className="w-[80px] text-white font-bold text-end relative">
                 <p className="text-4xl">{rank}</p>
@@ -78,11 +81,15 @@ const BoxOfficeItem: React.FC<BoxOfficeItemProps> = ({
                 </div>
             </div>
             <div className="flex w-full rounded-3xl bg-box_bg_white items-center cursor-pointer transform transition-all duration-200 hover:bg-box_bg_white/30">
-                <img
-                    src={posterPath}
-                    alt={title}
-                    className="w-auto h-32 rounded-l-3xl object-cover me-4"
-                />
+                {posterPath ? (
+                    <img
+                        src={posterPath}
+                        alt={title}
+                        className="w-auto h-32 rounded-l-3xl object-cover me-4"
+                    />
+                ) : (
+                    <DefaultImage className="w-auto h-32 rounded-l-3xl object-cover me-4" />
+                )}
 
                 <div className="flex flex-col gap-2 flex-1 text-white">
                     <div className="text-lg font-semibold">{title}</div>
