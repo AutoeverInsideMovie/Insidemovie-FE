@@ -37,8 +37,6 @@ export default function SideMenu() {
                 display: { xs: "block", md: "block" },
                 [`& .${drawerClasses.paper}`]: {
                     backgroundColor: "background.paper",
-                    boxShadow: "none",
-                    borderBottom: "none",
                 },
             }}
         >
