@@ -83,7 +83,7 @@ const EmotionSection: React.FC<CharacterCarouselSectionProps> = ({
         <div
             className={`flex flex-col justify-center items-center ${className}`}
         >
-            <div className="flex items-center justify-center space-x-4 overflow-x-auto scrollbar-hide px-2 py-4">
+            <div className="flex flex-wrap items-center justify-center space-x-4 overflow-x-auto scrollbar-hide px-2 py-4 m">
                 <EmotionSlider
                     name="JOY"
                     color="#FFD602"

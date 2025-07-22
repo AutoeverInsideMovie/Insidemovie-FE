@@ -26,6 +26,7 @@ import {
     Snackbar,
     Alert,
 } from "@mui/material";
+import type { Emotion } from "../interfaces/review";
 
 interface ReviewItemProps {
     reviewId: number;
@@ -41,17 +42,14 @@ interface ReviewItemProps {
     memberId: string;
     movieId: string;
     profile: string;
-    emotions: {
-        icon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
-        value: number;
-    }[];
+    emotion: Emotion;
     isReported: boolean;
     isConcealed: boolean;
 }
 
 const emotionMap = {
     joy: joyIcon,
-    sad: sadIcon,
+    sadness: sadIcon,
     angry: angryIcon,
     fear: fearIcon,
     disgust: disgustIcon,
@@ -73,7 +71,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
     memberId,
     movieId,
     profile,
-    emotions,
+    emotion,
     isReported,
     isConcealed,
 }) => {
@@ -145,25 +143,6 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
         }
     };
 
-    const getTopEmotionIcon = (emotions: ReviewItemProps["emotions"]) => {
-        const list = Array.isArray(emotions) ? emotions : [];
-        if (list.length === 0) return null;
-
-        const topEmotion = list.reduce((prev, curr) =>
-            curr.value > prev.value ? curr : prev,
-        );
-        return topEmotion.icon;
-        // if (!emotions || emotions.length === 0) return null;
-        //
-        // const topEmotion = emotions.reduce((prev, curr) =>
-        //     curr.value > prev.value ? curr : prev,
-        // );
-        //
-        // return topEmotion.icon;
-    };
-
-    const topEmotionIcon = getTopEmotionIcon(emotions);
-
     return (
         <div className="bg-box_bg_white p-4 rounded-3xl text-white mb-3">
             <div className="flex items-center justify-between">
@@ -187,10 +166,10 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
                     </div>
                 </div>
                 <div className="flex items-center gap-1 bg-box_bg_white/10 px-2 py-1 rounded-full text-sm">
-                    {topEmotionIcon && (
+                    {emotion.repEmotion && (
                         <img
-                            src={emotionMap[topEmotionIcon]}
-                            alt={topEmotionIcon}
+                            src={emotionMap[emotion.repEmotion]}
+                            alt={emotion.repEmotion}
                             className="w-6 h-6"
                         />
                     )}

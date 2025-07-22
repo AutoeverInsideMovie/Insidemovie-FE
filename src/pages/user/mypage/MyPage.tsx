@@ -100,13 +100,13 @@ const MyPage: React.FC = () => {
 
     return (
         <div className="flex justify-center">
-            <div className="max-w-screen-lg w-full flex flex-col pt-20 py-36">
+            <div className="max-w-screen-lg w-full flex flex-col pt-20 py-36 px-5">
                 <h1 className="text-white text-3xl font-semibold pb-14 text-left">
                     마이페이지
                 </h1>
 
                 {/* 프로필 */}
-                <div className="flex items-center space-x-10 mb-8">
+                <div className="flex flex-col md:flex-row items-center md:space-x-10 mb-8">
                     <div
                         className="relative w-52 h-fit cursor-pointer"
                         onClick={() => {
@@ -194,7 +194,7 @@ const MyPage: React.FC = () => {
                         textColor={"black"}
                         buttonColor={"white"}
                         onClick={() => setIsPwdDialogOpen(true)}
-                        className="min-w-32 bg-white text-gray-800 px-4 py-2 rounded-full"
+                        className="mt-6 md:mt-0 w-full md:w-fit md:min-w-32 bg-white text-gray-800 rounded-full"
                     />
                 </div>
 
@@ -325,12 +325,12 @@ const MyPage: React.FC = () => {
 
             {/* Emotion modal */}
             <ConfirmDialog
-                className={"w-fit"}
+                className={"w-fit m-5"}
                 isOpen={isEmotionModalOpen}
                 title="나의 감정 상태 수정"
                 message={
                     <div className="flex flex-col items-center">
-                        <div className="flex items-center justify-center space-x-4 overflow-x-auto scrollbar-hide px-2 py-4">
+                        <div className="flex flex-wrap items-center justify-center space-x-4 overflow-x-auto scrollbar-hide px-2 py-4">
                             <EmotionSlider
                                 name="JOY"
                                 color="#FFD602"

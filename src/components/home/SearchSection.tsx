@@ -20,7 +20,7 @@ const SearchSection: React.FC<SearchSectionProps> = ({ className = "" }) => {
     };
 
     return (
-        <div className={`max-w-screen-md w-full ${className}`}>
+        <div className={`md:max-w-screen-md w-full ${className}`}>
             <div className="relative">
                 <input
                     type="text"

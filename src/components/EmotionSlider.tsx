@@ -67,7 +67,7 @@ const EmotionSlider: React.FC<EmotionSliderProps> = ({
             <div
                 ref={boxRef}
                 onMouseDown={handleMouseDown}
-                className="w-28 h-44 rounded-3xl overflow-hidden relative cursor-pointer transform transition-transform duration-200 border-1"
+                className="w-20 md:w-28 h-36 md:h-44 rounded-3xl overflow-hidden relative cursor-pointer transform transition-transform duration-200 border-1"
                 style={{
                     background: `linear-gradient(to top, ${color} ${value}%, rgba(255,255,255,0.05) ${value}%)`,
                     transform: isDragging ? "scale(1.05)" : "scale(1)",

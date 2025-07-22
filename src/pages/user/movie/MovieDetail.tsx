@@ -164,10 +164,10 @@ const MovieDetail: React.FC = () => {
                     }}
                 />
             </div>
-            <div className="flex justify-center relative z-10 pt-96">
+            <div className="flex justify-center relative z-10 pt-96 mx-5">
                 <div className="max-w-screen-lg w-full">
                     {/* 상단: 포스터 + 정보 */}
-                    <div className="flex gap-10 text-white">
+                    <div className="flex flex-col items-center md:items-start md:flex-row gap-10 text-white">
                         <img
                             src={movieInfo.posterPath}
                             alt={movieInfo.title}
@@ -318,7 +318,7 @@ const MovieDetail: React.FC = () => {
                     </div>
 
                     {/* 감정 평가 & 시놉시스 */}
-                    <div className="flex gap-10 mt-10">
+                    <div className="flex flex-col md:flex-row gap-10 mt-10">
                         <div className="flex-1 bg-box_bg_white p-6 rounded-3xl">
                             <div className="flex items-center mb-4 text-white">
                                 <h2 className="text-3xl  font-bold">
@@ -397,7 +397,7 @@ const MovieDetail: React.FC = () => {
                                 memberId={myReview.memberId}
                                 movieId={myReview.movieId}
                                 profile={myReview.memberEmotion}
-                                emotions={myReview.emotion}
+                                emotion={myReview.emotion}
                                 isReported={myReview.isReported}
                                 isConcealed={myReview.isConcealed}
                                 isMypage={false}
@@ -461,7 +461,7 @@ const MovieDetail: React.FC = () => {
                                     memberId={review.memberId}
                                     movieId={review.movieId}
                                     profile={review.memberEmotion}
-                                    emotions={review.emotion}
+                                    emotion={review.emotion}
                                     isReported={review.isReported}
                                     isConcealed={review.isConcealed}
                                     {...review}

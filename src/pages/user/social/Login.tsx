@@ -36,7 +36,7 @@ const Login: React.FC = () => {
 
                 const target = authority === "ROLE_ADMIN" ? "/admin" : "/";
                 navigate(target, { replace: true });
-                window.location.replace(target);    
+                window.location.replace(target);
             } else throw new Error("토큰이 존재하지 않습니다.");
         } catch (error) {
             setMessage(error.response?.data?.message || error);
@@ -58,7 +58,7 @@ const Login: React.FC = () => {
     return (
         <div className="min-h-screen flex items-center justify-center">
             <TransparentBox
-                className="w-[500px] h-[600px]"
+                className="w-full m-5 md:m-0 md:w-[500px] h-[600px]"
                 padding="px-8 py-10"
             >
                 <img

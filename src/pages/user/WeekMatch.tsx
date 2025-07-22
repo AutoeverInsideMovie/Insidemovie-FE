@@ -72,7 +72,7 @@ const WeekMatch: React.FC = () => {
         <div>
             <div className="flex justify-center">
                 <div className="max-w-screen-lg w-full">
-                    <div className="flex flex-col pt-20">
+                    <div className="flex flex-col pt-20 mx-5">
                         <h1 className="text-center text-white text-3xl font-semibold pb-3 border-b-[1px] border-box_bg_white">
                             가장 마음에 드는 영화를 골라주세요
                         </h1>
@@ -83,7 +83,7 @@ const WeekMatch: React.FC = () => {
                                     아직 투표된 내용이 없습니다.
                                 </div>
                             ) : (
-                                <div className="flex justify-center items-center gap-10 mt-10">
+                                <div className="flex flex-col md:flex-rowjustify-center items-center overflow-x-auto gap-10 mt-10">
                                     {movieList.map((poster, idx) => (
                                         <React.Fragment key={idx}>
                                             <div className="flex flex-col">

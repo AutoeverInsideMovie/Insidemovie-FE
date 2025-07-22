@@ -29,6 +29,7 @@ const Header: React.FC = () => {
     const isBoxOffice = location.pathname === "/boxoffice";
     const isRecommend = location.pathname === "/recommend";
     const isWeekMatch = location.pathname === "/weekmatch";
+    const isMypage = location.pathname === "/mypage";
     const [scrolled, setScrolled] = useState(false);
 
     const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
@@ -113,7 +114,7 @@ const Header: React.FC = () => {
                                 className="text-white font-bold text-lg h-[50px] w-auto"
                             />
                         </div>
-                        <nav className="flex gap-6 text-white text-sm font-extralight">
+                        <div className="hidden md:flex gap-6 text-white text-sm font-extralight">
                             <a
                                 href="/boxoffice"
                                 className={`${
@@ -138,7 +139,7 @@ const Header: React.FC = () => {
                             >
                                 금주의 영화 대결
                             </a>
-                        </nav>
+                        </div>
                     </div>
                     {userInfo?.nickname ? (
                         <div className="relative">
@@ -197,6 +198,32 @@ const Header: React.FC = () => {
                 </div>
             </header>
             <div className={`${scrolled ? "h-20" : "h-24"}`} />
+            <div className="fixed bottom-0 left-0 w-full bg-box_bg_white/90 border-t border-gray-200 flex justify-around items-center h-14 md:hidden z-50">
+                <button
+                    onClick={() => navigate("/boxoffice")}
+                    className={`text-xs ${isBoxOffice ? "font-bold text-primary" : "text-gray-500"}`}
+                >
+                    박스오피스
+                </button>
+                <button
+                    onClick={() => navigate("/recommend")}
+                    className={`text-xs ${isRecommend ? "font-bold text-primary" : "text-gray-500"}`}
+                >
+                    추천 영화
+                </button>
+                <button
+                    onClick={() => navigate("/weekmatch")}
+                    className={`text-xs ${isWeekMatch ? "font-bold text-primary" : "text-gray-500"}`}
+                >
+                    영화 대결
+                </button>
+                <button
+                    onClick={() => navigate("/mypage")}
+                    className={`text-xs ${isMypage ? "font-bold text-primary" : "text-gray-500"}`}
+                >
+                    마이페이지
+                </button>
+            </div>
             <ConfirmDialog
                 className="w-full max-w-md"
                 isOpen={logoutDialogOpen}

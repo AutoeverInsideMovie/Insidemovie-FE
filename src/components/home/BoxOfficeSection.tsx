@@ -40,7 +40,7 @@ const BoxOfficeSection: React.FC<CustomBoxOfficeSectionProps> = ({
                 박스오피스 순위
                 <ArrowRight />
             </h1>
-            <div className="flex">
+            <div className="flex flex-col md:flex-row">
                 {/* Daily Box Office */}
                 <div className="flex flex-col flex-1 gap-3 overflow-x-hidden scrollbar-hide px-2">
                     <h2 className="text-white font-semibold mb-2">
@@ -50,7 +50,7 @@ const BoxOfficeSection: React.FC<CustomBoxOfficeSectionProps> = ({
                         ? Array.from({ length: 3 }).map((_, idx) => (
                               <div
                                   key={idx}
-                                  className="w-[400px] h-[150px] mx-1 my-1 bg-gray-700 animate-pulse rounded-lg"
+                                  className="w-full h-[150px] mx-1 my-1 bg-gray-700 animate-pulse rounded-lg"
                               />
                           ))
                         : movieDailyList.map((movie, idx) => (
@@ -71,7 +71,7 @@ const BoxOfficeSection: React.FC<CustomBoxOfficeSectionProps> = ({
                           ))}
                 </div>
                 {/* Weekly Box Office */}
-                <div className="flex flex-col flex-1 gap-3 overflow-x-hidden scrollbar-hide px-2">
+                <div className="flex flex-col flex-1 gap-3 overflow-x-hidden scrollbar-hide px-2 mt-10 md:mt-0">
                     <h2 className="text-white font-semibold mb-2">
                         주간 순위 Top 3
                     </h2>
@@ -79,7 +79,7 @@ const BoxOfficeSection: React.FC<CustomBoxOfficeSectionProps> = ({
                         ? Array.from({ length: 3 }).map((_, idx) => (
                               <div
                                   key={idx}
-                                  className="w-[400px] h-[150px] mx-1 my-1 bg-gray-700 animate-pulse rounded-lg"
+                                  className="w-full h-[150px] mx-1 my-1 bg-gray-700 animate-pulse rounded-lg"
                               />
                           ))
                         : movieWeeklyList.map((movie, idx) => (

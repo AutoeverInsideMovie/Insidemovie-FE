@@ -1,14 +1,15 @@
 import axios from "axios";
 
+const baseURL = "http://localhost:8080";
+// const baseURL = "http://52.79.175.149:8080";
 const axiosInstance = axios.create({
-    // baseURL: "http://52.79.175.149:8080",
-    baseURL: "http://localhost:8080",
+    baseURL: baseURL,
 });
 
 const token = localStorage.getItem("refreshToken");
 
 const reissue = async (refreshToken: string | null) => {
-    return axios.post("http://localhost:8080/api/v1/member/reissue", null, {
+    return axios.post(`${baseURL}/api/v1/member/reissue`, null, {
         headers: {
             "Authorization-Refresh": `Bearer ${refreshToken}`,
         },

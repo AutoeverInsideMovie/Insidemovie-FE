@@ -27,6 +27,20 @@ export const memberApi = () => {
         });
     };
 
+    // 이메일 인증
+    const emailAuth = async ({ mail }) => {
+        return await axios.post("/api/v1/mail/send", null, {
+            params: { mail },
+        });
+    };
+
+    // 인증번호 확인
+    const checkAuthNumber = async ({ mail, code }) => {
+        return await axios.get("/api/v1/mail/check", {
+            params: { mail, code },
+        });
+    };
+
     // 닉네임 중복 확인
     const checkNickname = async ({ nickname }) => {
         return await axios.get("/api/v1/member/check-nickname", {
@@ -143,6 +157,8 @@ export const memberApi = () => {
         login,
         signup,
         signupKakao,
+        emailAuth,
+        checkAuthNumber,
         checkNickname,
         changeNickname,
         changePassword,

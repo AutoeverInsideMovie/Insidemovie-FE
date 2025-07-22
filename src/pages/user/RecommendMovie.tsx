@@ -95,11 +95,11 @@ const RecommendMovie: React.FC = () => {
             <div className="flex justify-center">
                 <div className="max-w-screen-lg w-full">
                     <div className="flex flex-col pt-20">
-                        <h1 className="text-white text-3xl font-semibold text-left pb-3 border-b-[1px] border-box_bg_white">
+                        <h1 className="text-white text-3xl font-semibold text-left pb-3 border-b-[1px] border-box_bg_white mx-5 md:mx-0">
                             추천 영화
                         </h1>
 
-                        <div className="flex items-center pt-3 w-full overflow-x-auto scrollbar-hide whitespace-nowrap">
+                        <div className="flex items-center pt-3 w-full overflow-x-auto scrollbar-hide whitespace-nowrap px-5 md:mx-0">
                             {genreList.map((tag) => (
                                 <Tag
                                     key={tag}
@@ -109,7 +109,7 @@ const RecommendMovie: React.FC = () => {
                                 />
                             ))}
                         </div>
-                        <div className="flex items-center justify-between w-full mt-10">
+                        <div className="flex items-center justify-between w-full mt-10 px-5 md:px-0">
                             <p className="text-white text-2xl font-semibold">
                                 <span className="font-extralight text-sm">
                                     {totalElements}건
@@ -135,7 +135,7 @@ const RecommendMovie: React.FC = () => {
                                 <MenuItem value="latest">최신순</MenuItem>
                             </Select>
                         </div>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-4 mb-20">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-4 mb-20 mx-5 md:mx-0">
                             {movieList.length === 0
                                 ? Array.from({ length: 20 }).map((_, idx) => (
                                       <div

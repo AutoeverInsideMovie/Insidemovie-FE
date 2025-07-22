@@ -20,6 +20,7 @@ import disgustProfile from "@assets/profile/disgust_profile.png";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { reviewApi } from "../api/reviewApi";
 import { timeForToday } from "../services/timeForToday";
+import type { Emotion } from "../interfaces/review";
 
 interface MyReviewItemProps {
     reviewId: number;
@@ -35,10 +36,7 @@ interface MyReviewItemProps {
     memberId: string;
     movieId: string;
     profile: string;
-    emotions: {
-        icon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
-        value: number;
-    }[];
+    emotion: Emotion;
     isReported: boolean;
     isConcealed: boolean;
     isMypage?: boolean;
@@ -46,7 +44,7 @@ interface MyReviewItemProps {
 
 const emotionMap = {
     joy: joyIcon,
-    sad: sadIcon,
+    sadness: sadIcon,
     angry: angryIcon,
     fear: fearIcon,
     disgust: disgustIcon,
@@ -68,7 +66,7 @@ const MyReviewItem: React.FC<MyReviewItemProps> = ({
     memberId,
     movieId,
     profile,
-    emotions,
+    emotion,
     isReported,
     isConcealed,
     isMypage = false,
@@ -84,25 +82,6 @@ const MyReviewItem: React.FC<MyReviewItemProps> = ({
     };
 
     const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
-
-    const getTopEmotionIcon = (emotions: MyReviewItemProps["emotions"]) => {
-        const list = Array.isArray(emotions) ? emotions : [];
-        if (list.length === 0) return null;
-
-        const topEmotion = list.reduce((prev, curr) =>
-            curr.value > prev.value ? curr : prev,
-        );
-        return topEmotion.icon;
-        /*if (!emotions || emotions.length === 0) return null;
-
-        const topEmotion = emotions.reduce((prev, curr) =>
-            curr.value > prev.value ? curr : prev,
-        );
-
-        return topEmotion.icon;*/
-    };
-
-    const topEmotionIcon = getTopEmotionIcon(emotions);
 
     return (
         <div
@@ -129,13 +108,11 @@ const MyReviewItem: React.FC<MyReviewItemProps> = ({
                     </div>
                 </div>
                 <div className="flex items-center gap-1 bg-box_bg_white/10 px-2 py-1 rounded-full text-sm">
-                    {topEmotionIcon && (
-                        <img
-                            src={emotionMap[topEmotionIcon]}
-                            alt={topEmotionIcon}
-                            className="w-6 h-6"
-                        />
-                    )}
+                    <img
+                        src={emotionMap[emotion.repEmotion]}
+                        alt={emotion.repEmotion}
+                        className="w-6 h-6"
+                    />
                     |
                     <StarRating
                         value={rating}

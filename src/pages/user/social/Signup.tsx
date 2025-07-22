@@ -59,10 +59,13 @@ const Signup: React.FC = () => {
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
     const [email, setEmail] = useState("");
+    const [emailCheck, setEmailCheck] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
     const [nickname, setNickname] = useState("");
     const [emailError, setEmailError] = useState("");
+    const [emailCheckError, setEmailCheckError] = useState("");
+    const [emailSent, setEmailSent] = useState(false);
     const [passwordError, setPasswordError] = useState("");
     const [passwordConfirmError, setPasswordConfirmError] = useState("");
     const [nicknameError, setNicknameError] = useState("");
@@ -221,6 +224,25 @@ const Signup: React.FC = () => {
         setEmailError(
             validateEmail(value) ? "" : "올바른 이메일 형식이 아닙니다.",
         );
+    };
+
+    // 이메일 인증 요청
+    const handleSendAuthCode = () => {
+        memberApi()
+            .emailAuth({ mail: email })
+            .then(() => {
+                setEmailCheckError("");
+                setEmailSent(true);
+            })
+            .catch((error) => {
+                setEmailCheckError(error.response?.data?.message);
+            });
+    };
+
+    // 인증번호 입력 처리
+    const handleCodeChange = (value: string) => {
+        setEmailCheck(value);
+        if (emailCheckError) setEmailCheckError("");
     };
 
     // 비밀번호 필드
@@ -382,15 +404,15 @@ const Signup: React.FC = () => {
 
     return (
         <div className="min-h-screen flex justify-center items-center px-4">
-            <div className="max-w-screen-xl w-full flex">
+            <div className="max-w-screen-xl w-full flex flex-col md:flex-row">
                 {/* Left side with logo and background */}
-                <div className="w-1/2 bg-cover bg-center relative flex items-center justify-center">
+                <div className="w-full md:w-1/2 bg-cover bg-center relative flex items-center justify-center">
                     <BackgroundBubble className="absolute h-fit w-fit" />
                     <img src={Logo} alt="INSIDE MOVIE" className="w-56 z-10" />
                 </div>
 
                 {/* Right side with signup form */}
-                <div className="w-1/2 flex items-center justify-center">
+                <div className="w-full md:w-1/2 flex items-center justify-center">
                     <TransparentBox
                         className="w-[500px] h-fit flex flex-col justify-center items-center"
                         padding="px-8 py-10"
@@ -405,14 +427,36 @@ const Signup: React.FC = () => {
                                     </span>
                                     에 오신 것을 환영합니다.
                                 </p>
+                                <div className="flex items-center">
+                                    <InputField
+                                        type="email"
+                                        placeholder="이메일"
+                                        icon="email"
+                                        value={email}
+                                        onChange={handleEmailChange}
+                                        disabled={emailSent}
+                                        isError={true}
+                                        error={emailError}
+                                    />
+                                    <Button
+                                        className="ml-2 w-24 mb-10"
+                                        text="인증하기"
+                                        onClick={handleSendAuthCode}
+                                        disabled={
+                                            !email || !!emailError || emailSent
+                                        }
+                                    />
+                                </div>
+
                                 <InputField
-                                    type="email"
-                                    placeholder="이메일"
+                                    type="text"
+                                    placeholder="인증 번호"
                                     icon="email"
-                                    value={email}
-                                    onChange={handleEmailChange}
+                                    value={emailCheck}
+                                    onChange={handleCodeChange}
                                     isError={true}
-                                    error={emailError}
+                                    error={emailCheckError}
+                                    disabled={!emailSent}
                                 />
                                 <InputField
                                     type="password"
@@ -437,12 +481,27 @@ const Signup: React.FC = () => {
                                 <Button
                                     text="다음"
                                     textColor="white"
-                                    buttonColor={
-                                        isStep1Disabled ? "disabled" : "default"
-                                    }
+                                    buttonColor="default"
                                     className="w-full mt-10"
-                                    disabled={isStep1Disabled}
-                                    onClick={() => setStep(2)}
+                                    disabled={
+                                        !emailSent ||
+                                        !emailCheck ||
+                                        !!emailCheckError
+                                    }
+                                    onClick={async () => {
+                                        try {
+                                            await memberApi().checkAuthNumber({
+                                                mail: email,
+                                                code: emailCheck,
+                                            });
+                                            setEmailCheckError("");
+                                            setStep(2);
+                                        } catch (error) {
+                                            setEmailCheckError(
+                                                error.response?.data?.message,
+                                            );
+                                        }
+                                    }}
                                 />
                             </div>
                         )}

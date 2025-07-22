@@ -9,7 +9,7 @@ const Home: React.FC = () => {
     window.dispatchEvent(new Event("profileUpdated"));
     return (
         <div className="min-h-screen flex justify-center flex-col items-center px-4">
-            <div className="max-w-screen-lg w-full flex flex-col items-center mb-52">
+            <div className="md:max-w-screen-lg w-full flex flex-col items-center mb-52">
                 <SearchSection className="mt-32" />
                 {/*<EmotionSection className="mt-32" />*/}
                 <CustomMovieSection className="mt-32" />

@@ -12,10 +12,16 @@ export interface Review {
     memberId: string;
     movieId: string;
     memberEmotion: string;
-    emotion: {
-        icon: "joy" | "sad" | "angry" | "fear" | "disgust" | "bingbong";
-        value: number;
-    }[];
+    emotion: Emotion;
     isReported: boolean;
     isConcealed: boolean;
+}
+
+export interface Emotion {
+    repEmotion: string;
+    joy: number;
+    sadness: number;
+    anger: number;
+    fear: number;
+    disgust: number;
 }

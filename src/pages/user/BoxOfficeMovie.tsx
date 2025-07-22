@@ -28,7 +28,7 @@ const BoxOfficeMovie: React.FC = () => {
                 <h1 className="text-white text-3xl font-semibold pb-6 text-left">
                     박스오피스 순위 top100
                 </h1>
-                <div className="flex">
+                <div className="flex flex-col md:flex-row">
                     {/* Daily Box Office */}
                     <div className="flex flex-col flex-1 gap-3 overflow-x-hidden scrollbar-hide px-2">
                         <h2 className="text-white font-semibold mb-2">
@@ -52,7 +52,7 @@ const BoxOfficeMovie: React.FC = () => {
                         ))}
                     </div>
                     {/* Weekly Box Office */}
-                    <div className="flex flex-col flex-1 gap-3 overflow-x-hidden scrollbar-hide px-2">
+                    <div className="flex flex-col flex-1 gap-3 overflow-x-hidden scrollbar-hide px-2 mt-10 md:mt-0">
                         <h2 className="text-white font-semibold mb-2">
                             주간 순위 Top 3
                         </h2>

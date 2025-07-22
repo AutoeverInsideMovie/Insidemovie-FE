@@ -15,6 +15,7 @@ interface InputFieldProps {
     onChange?: (value: string) => void;
     isError?: boolean;
     error?: string;
+    disabled?: boolean;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -26,6 +27,7 @@ const InputField: React.FC<InputFieldProps> = ({
     onChange,
     isError = false,
     error,
+    disabled = false,
 }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [internalValue, setInternalValue] = useState("");
@@ -55,6 +57,7 @@ const InputField: React.FC<InputFieldProps> = ({
                     placeholder={placeholder}
                     value={value !== undefined ? value : internalValue}
                     onChange={handleChange}
+                    disabled={disabled}
                     className="ml-3 py-3 flex-1 bg-transparent outline-none text-black"
                 />
                 {showToggle && (
