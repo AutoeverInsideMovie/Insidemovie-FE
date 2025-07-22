@@ -72,14 +72,6 @@ const EmotionSection: React.FC<CharacterCarouselSectionProps> = ({
                     fear: fear100,
                     disgust: disgust100,
                 });
-
-                onEmotionsChange?.(
-                    joy100,
-                    sad100,
-                    angry100,
-                    fear100,
-                    disgust100,
-                );
             } catch {
                 // not logged in or error: keep defaults
             }

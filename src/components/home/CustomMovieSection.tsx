@@ -3,6 +3,7 @@ import MovieItem from "../MovieItem";
 import { useState, useEffect } from "react";
 import { recommendApi } from "../../api/recommendApi";
 import EmotionSection from "./EmotionSection";
+import { memberApi } from "../../api/memberApi";
 
 interface CustomMovieSectionProps {
     className?: string;
@@ -32,11 +33,11 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
     ) => {
         try {
             // Normalize values to 0-1
-            const joyNorm = joy / 100;
-            const sadNorm = sad / 100;
-            const angryNorm = angry / 100;
-            const fearNorm = fear / 100;
-            const disgustNorm = disgust / 100;
+            const joyNorm = joy;
+            const sadNorm = sad;
+            const angryNorm = angry;
+            const fearNorm = fear;
+            const disgustNorm = disgust;
             const res = await recommendApi().getRecommendMovie({
                 joy: joyNorm,
                 sadness: sadNorm,
@@ -54,6 +55,41 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
             setRecommendList([]);
         }
     };
+
+    useEffect(() => {
+        const loadEmotions = async () => {
+            try {
+                const res = await memberApi().getMyAverageEmotions();
+                const data = res.data.data;
+                // API returns decimals between 0 and 1
+                const joy100 = Math.round(data.joy);
+                const sad100 = Math.round(data.sadness);
+                const angry100 = Math.round(data.anger);
+                const fear100 = Math.round(data.fear);
+                const disgust100 = Math.round(data.disgust);
+
+                const response = await recommendApi().getRecommendMovie({
+                    joy: joy100,
+                    sadness: sad100,
+                    anger: angry100,
+                    fear: fear100,
+                    disgust: disgust100,
+                });
+                setRecommendList(response.data.data);
+            } catch {
+                const response = await recommendApi().getRecommendMovie({
+                    joy: 50,
+                    sadness: 50,
+                    anger: 50,
+                    fear: 50,
+                    disgust: 50,
+                });
+                setRecommendList(response.data.data);
+            }
+        };
+        loadEmotions();
+    }, []);
+
     return (
         <section className={`w-full ${className}`}>
             <EmotionSection onEmotionsChange={handleEmotionsChange} />

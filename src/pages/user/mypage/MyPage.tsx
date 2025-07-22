@@ -49,6 +49,7 @@ const MyPage: React.FC = () => {
         sadness: sadnessProfile,
         fear: fearProfile,
         disgust: disgustProfile,
+        none: bingbongProfile,
     };
 
     const [isEditMode, setIsEditMode] = useState(false);
