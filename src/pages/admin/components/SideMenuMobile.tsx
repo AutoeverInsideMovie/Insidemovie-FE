@@ -6,8 +6,10 @@ import Drawer, { drawerClasses } from "@mui/material/Drawer";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import iconBingBong from "../../../assets/character/bingbong_icon.png";
 
 import MenuContent from "./MenuContent";
+import { memberApi } from "../../../api/memberApi";
 
 interface SideMenuMobileProps {
     open: boolean | undefined;
@@ -18,6 +20,18 @@ export default function SideMenuMobile({
     open,
     toggleDrawer,
 }: SideMenuMobileProps) {
+    const handleLogout = async () => {
+        try {
+            await memberApi().logout();
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            localStorage.removeItem("authority");
+
+            window.location.replace("/");
+        } catch (err) {
+            console.error("Logout failed", err);
+        }
+    };
     return (
         <Drawer
             anchor="right"
@@ -39,17 +53,23 @@ export default function SideMenuMobile({
             >
                 <Stack direction="row" sx={{ p: 2, pb: 0, gap: 1 }}>
                     <Stack
-                        direction="row"
+                        direction="column"
                         sx={{ gap: 1, alignItems: "center", flexGrow: 1, p: 1 }}
                     >
                         <Avatar
                             sizes="small"
-                            alt="Riley Carter"
-                            src="/static/images/avatar/7.jpg"
+                            alt="name"
+                            src={iconBingBong}
                             sx={{ width: 24, height: 24 }}
                         />
                         <Typography component="p" variant="h6">
-                            Riley Carter
+                            관리자
+                        </Typography>
+                        <Typography
+                            variant="caption"
+                            sx={{ color: "text.secondary" }}
+                        >
+                            admin@test.com
                         </Typography>
                     </Stack>
                 </Stack>
@@ -64,6 +84,7 @@ export default function SideMenuMobile({
                         variant="outlined"
                         fullWidth
                         startIcon={<LogoutRoundedIcon />}
+                        onClick={handleLogout}
                     >
                         Logout
                     </Button>

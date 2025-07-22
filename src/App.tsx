@@ -28,13 +28,16 @@ import Search from "./pages/user/Search";
 
 const AppContent: React.FC = () => {
     const location = useLocation();
-    const hideHeader =
-        location.pathname === "/login" ||
-        location.pathname === "/signup" ||
-        location.pathname === "/signup-kakao" ||
-        location.pathname === "/admin" ||
-        location.pathname === "/admin/report" ||
-        location.pathname === "/admin/member";
+    const cleanedPath = location.pathname.replace(/\/$/, "");
+
+    const hideHeader = [
+        "/login",
+        "/signup",
+        "/signup-kakao",
+        "/admin",
+        "/admin/report",
+        "/admin/member",
+    ].includes(cleanedPath);    // URL 끝에 "/" 붙어도 적용되게 변경
 
     // authority 값 가져오기
     const authority = localStorage.getItem("authority");

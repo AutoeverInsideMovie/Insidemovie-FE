@@ -36,7 +36,6 @@ export default function ReportPage(props: { disableCustomTheme?: boolean }) {
             <Box sx={{ display: "flex" }}>
                 <SideMenu />
                 <AppNavbar />
-                {/* Main content */}
                 <Box
                     component="main"
                     sx={(theme) => ({
