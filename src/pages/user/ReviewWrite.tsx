@@ -130,7 +130,7 @@ const ReviewWrite: React.FC = () => {
 
     return (
         <div className="flex justify-center">
-            <div className="max-w-screen-lg w-full">
+            <div className="max-w-screen-lg w-full mx-5 mb-36">
                 <div className="flex flex-col">
                     <div className="flex justify-between items-center pt-20 py-36 pb-6">
                         <h1 className="text-white text-3xl font-semibold text-left">
