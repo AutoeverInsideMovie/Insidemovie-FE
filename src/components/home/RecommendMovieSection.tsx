@@ -128,18 +128,25 @@ const RecommendMovieSection: React.FC<RecommendMovieSectionProps> = ({
                     className="w-full overflow-x-auto scrollbar-hide"
                 >
                     <div className="flex gap-3 w-max px-2">
-                        {movieList.map((poster, idx) => (
-                            <MovieItem
-                                key={idx}
-                                movieId={poster.id}
-                                posterImg={poster.posterPath}
-                                posterName={poster.title}
-                                emotionIcon={poster.mainEmotion.toLowerCase()}
-                                emotionValue={poster.mainEmotionValue}
-                                starValue={poster.voteAverage}
-                                ratingAvg={poster.ratingAvg}
-                            />
-                        ))}
+                        {movieList.length === 0
+                            ? Array.from({ length: 5 }).map((_, idx) => (
+                                  <div
+                                      key={idx}
+                                      className="w-[200px] h-[280px] mx-1 my-3 bg-gray-700 animate-pulse rounded-lg"
+                                  />
+                              ))
+                            : movieList.map((poster, idx) => (
+                                  <MovieItem
+                                      key={idx}
+                                      movieId={poster.id}
+                                      posterImg={poster.posterPath}
+                                      posterName={poster.title}
+                                      emotionIcon={poster.mainEmotion.toLowerCase()}
+                                      emotionValue={poster.mainEmotionValue}
+                                      starValue={poster.voteAverage}
+                                      ratingAvg={poster.ratingAvg}
+                                  />
+                              ))}
                     </div>
                 </div>
 

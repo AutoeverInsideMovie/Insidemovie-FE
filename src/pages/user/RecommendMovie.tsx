@@ -136,18 +136,25 @@ const RecommendMovie: React.FC = () => {
                             </Select>
                         </div>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-4 mb-20">
-                            {movieList.map((poster) => (
-                                <MovieItem
-                                    key={poster.id}
-                                    movieId={poster.id}
-                                    posterImg={poster.posterPath}
-                                    posterName={poster.title}
-                                    emotionIcon={poster.mainEmotion.toLowerCase()}
-                                    emotionValue={poster.mainEmotionValue}
-                                    starValue={poster.voteAverage}
-                                    ratingAvg={poster.ratingAvg}
-                                />
-                            ))}
+                            {movieList.length === 0
+                                ? Array.from({ length: 20 }).map((_, idx) => (
+                                      <div
+                                          key={idx}
+                                          className="w-[200px] h-[280px] mx-1 my-3 bg-gray-700 animate-pulse rounded-lg"
+                                      />
+                                  ))
+                                : movieList.map((poster, idx) => (
+                                      <MovieItem
+                                          key={poster.id}
+                                          movieId={poster.id}
+                                          posterImg={poster.posterPath}
+                                          posterName={poster.title}
+                                          emotionIcon={poster.mainEmotion.toLowerCase()}
+                                          emotionValue={poster.mainEmotionValue}
+                                          starValue={poster.voteAverage}
+                                          ratingAvg={poster.ratingAvg}
+                                      />
+                                  ))}
                         </div>
                         {totalPages > 1 && (
                             <div className="flex justify-center text-white mt-6 mb-36">

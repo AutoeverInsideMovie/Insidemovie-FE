@@ -1,6 +1,6 @@
 import * as React from "react";
 import MovieItem from "../MovieItem";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { recommendApi } from "../../api/recommendApi";
 import EmotionSection from "./EmotionSection";
 
@@ -22,6 +22,10 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
     className = "",
 }) => {
     const [recommendList, setRecommendList] = useState<Movie[]>([]);
+
+    useEffect(() => {
+        // Removed the initial call to handleEmotionsChange
+    }, []);
 
     const handleEmotionsChange = async (
         joy: number,
@@ -61,18 +65,25 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
                 맞춤 영화
             </h1>
             <div className="flex gap-3 overflow-x-hidden scrollbar-hide px-2">
-                {recommendList.map((movie, idx) => (
-                    <MovieItem
-                        key={idx}
-                        movieId={movie.movieId}
-                        posterImg={movie.posterPath}
-                        posterName={movie.title}
-                        emotionIcon={movie.dominantEmotion.toLowerCase()}
-                        emotionValue={movie.dominantEmotionRatio || 0}
-                        starValue={movie.voteAverage}
-                        ratingAvg={movie.ratingAvg}
-                    />
-                ))}
+                {recommendList.length === 0
+                    ? Array.from({ length: 5 }).map((_, idx) => (
+                          <div
+                              key={idx}
+                              className="w-[200px] h-[280px] mx-1 my-3 bg-gray-700 animate-pulse rounded-lg"
+                          />
+                      ))
+                    : recommendList.map((movie, idx) => (
+                          <MovieItem
+                              key={idx}
+                              movieId={movie.movieId}
+                              posterImg={movie.posterPath}
+                              posterName={movie.title}
+                              emotionIcon={movie.dominantEmotion.toLowerCase()}
+                              emotionValue={movie.dominantEmotionRatio || 0}
+                              starValue={movie.voteAverage}
+                              ratingAvg={movie.ratingAvg}
+                          />
+                      ))}
             </div>
         </section>
     );
