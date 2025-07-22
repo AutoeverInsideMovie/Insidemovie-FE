@@ -7,7 +7,6 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import iconBingBong from "../../../assets/character/bingbong_icon.png";
-import iconBingBong from "../../../assets/character/bingbong_icon.png";
 
 import MenuContent from "./MenuContent";
 import { memberApi } from "../../../api/memberApi";
