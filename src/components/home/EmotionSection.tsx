@@ -55,11 +55,11 @@ const EmotionSection: React.FC<CharacterCarouselSectionProps> = ({
                 const res = await memberApi().getMyAverageEmotions();
                 const data = res.data.data;
                 // API returns decimals between 0 and 1
-                const joy100 = Math.round(data.joy * 100);
-                const sad100 = Math.round(data.sadness * 100);
-                const angry100 = Math.round(data.anger * 100);
-                const fear100 = Math.round(data.fear * 100);
-                const disgust100 = Math.round(data.disgust * 100);
+                const joy100 = Math.round(data.joy);
+                const sad100 = Math.round(data.sadness);
+                const angry100 = Math.round(data.anger);
+                const fear100 = Math.round(data.fear);
+                const disgust100 = Math.round(data.disgust);
                 setJoyValue(joy100);
                 setSadValue(sad100);
                 setAngryValue(angry100);
@@ -78,6 +78,23 @@ const EmotionSection: React.FC<CharacterCarouselSectionProps> = ({
         };
         loadEmotions();
     }, []);
+
+    useEffect(() => {
+        onEmotionsChange?.(
+            joyValue,
+            sadValue,
+            angryValue,
+            fearValue,
+            disgustValue,
+        );
+    }, [
+        joyValue,
+        sadValue,
+        angryValue,
+        fearValue,
+        disgustValue,
+        onEmotionsChange,
+    ]);
 
     return (
         <div
