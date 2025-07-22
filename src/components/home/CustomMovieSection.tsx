@@ -4,7 +4,6 @@ import ArrowRight from "@assets/arrow_right.svg?react";
 import { useState, useEffect } from "react";
 import { recommendApi } from "../../api/recommendApi";
 import EmotionSection from "./EmotionSection";
-import { memberApi } from "../../api/memberApi";
 
 interface CustomMovieSectionProps {
     className?: string;
@@ -27,6 +26,7 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
     const [canScrollLeft, setCanScrollLeft] = React.useState(false);
     const [canScrollRight, setCanScrollRight] = React.useState(true);
     const [recommendList, setRecommendList] = useState<Movie[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     React.useEffect(() => {
         const scrollElement = scrollRef.current;
@@ -45,6 +45,28 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
 
         return () => scrollElement.removeEventListener("scroll", updateScroll);
     }, [recommendList]);
+
+    useEffect(() => {
+        const timer = setTimeout(async () => {
+            setIsLoading(true);
+            try {
+                const res = await recommendApi().getRecommendMovie({
+                    joy: 50,
+                    sadness: 50,
+                    anger: 50,
+                    fear: 50,
+                    disgust: 50,
+                });
+                setRecommendList(res.data.data);
+                setIsLoading(false);
+            } catch (e) {
+                console.error("맞춤 영화 추천 에러!! : ", e);
+                setRecommendList([]);
+                setIsLoading(false);
+            }
+        }, 500);
+        return () => clearTimeout(timer);
+    }, []);
 
     const handleEmotionsChange = async (
         joy: number,
@@ -78,40 +100,6 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
         }
     };
 
-    useEffect(() => {
-        const loadEmotions = async () => {
-            try {
-                const res = await memberApi().getMyAverageEmotions();
-                const data = res.data.data;
-                // API returns decimals between 0 and 1
-                const joy100 = Math.round(data.joy);
-                const sad100 = Math.round(data.sadness);
-                const angry100 = Math.round(data.anger);
-                const fear100 = Math.round(data.fear);
-                const disgust100 = Math.round(data.disgust);
-
-                const response = await recommendApi().getRecommendMovie({
-                    joy: joy100,
-                    sadness: sad100,
-                    anger: angry100,
-                    fear: fear100,
-                    disgust: disgust100,
-                });
-                setRecommendList(response.data.data);
-            } catch {
-                const response = await recommendApi().getRecommendMovie({
-                    joy: 50,
-                    sadness: 50,
-                    anger: 50,
-                    fear: 50,
-                    disgust: 50,
-                });
-                setRecommendList(response.data.data);
-            }
-        };
-        loadEmotions();
-    }, []);
-
     return (
         <section className={`w-full ${className}`}>
             <EmotionSection onEmotionsChange={handleEmotionsChange} />
@@ -124,7 +112,7 @@ const CustomMovieSection: React.FC<CustomMovieSectionProps> = ({
                     className="w-full overflow-x-auto scrollbar-hide"
                 >
                     <div className="flex gap-3 w-max px-2">
-                        {recommendList.length === 0
+                        {isLoading
                             ? Array.from({ length: 5 }).map((_, idx) => (
                                   <div
                                       key={idx}

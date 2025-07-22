@@ -53,22 +53,24 @@ const BoxOfficeSection: React.FC<CustomBoxOfficeSectionProps> = ({
                                   className="w-full h-[150px] mx-1 my-1 bg-gray-700 animate-pulse rounded-lg"
                               />
                           ))
-                        : movieDailyList.map((movie, idx) => (
-                              <BoxOfficeItem
-                                  key={`daily-${idx}`}
-                                  movieId={movie.movieId}
-                                  rank={movie.base.rank}
-                                  rankInten={movie.base.rankInten}
-                                  rankOldAndNew={movie.base.rankOldAndNew}
-                                  posterPath={movie.posterPath}
-                                  title={movie.title}
-                                  audiAcc={movie.base.audiAcc}
-                                  mainEmotion={movie.mainEmotion.toLowerCase()}
-                                  mainEmotionValue={movie.mainEmotionValue}
-                                  voteAverage={movie.voteAverage}
-                                  ratingAvg={movie.ratingAvg}
-                              />
-                          ))}
+                        : movieDailyList
+                              .slice(0, 3)
+                              .map((movie, idx) => (
+                                  <BoxOfficeItem
+                                      key={`daily-${idx}`}
+                                      movieId={movie.movieId}
+                                      rank={movie.base.rank}
+                                      rankInten={movie.base.rankInten}
+                                      rankOldAndNew={movie.base.rankOldAndNew}
+                                      posterPath={movie.posterPath}
+                                      title={movie.title}
+                                      audiAcc={movie.base.audiAcc}
+                                      mainEmotion={movie.mainEmotion.toLowerCase()}
+                                      mainEmotionValue={movie.mainEmotionValue}
+                                      voteAverage={movie.voteAverage}
+                                      ratingAvg={movie.ratingAvg}
+                                  />
+                              ))}
                 </div>
                 {/* Weekly Box Office */}
                 <div className="flex flex-col flex-1 gap-3 overflow-x-hidden scrollbar-hide px-2 mt-10 md:mt-0">
@@ -82,22 +84,24 @@ const BoxOfficeSection: React.FC<CustomBoxOfficeSectionProps> = ({
                                   className="w-full h-[150px] mx-1 my-1 bg-gray-700 animate-pulse rounded-lg"
                               />
                           ))
-                        : movieWeeklyList.map((movie, idx) => (
-                              <BoxOfficeItem
-                                  key={`weekly-${idx}`}
-                                  movieId={movie.movieId}
-                                  rank={movie.base.rank}
-                                  rankInten={movie.base.rankInten}
-                                  rankOldAndNew={movie.base.rankOldAndNew}
-                                  posterPath={movie.posterPath}
-                                  title={movie.title}
-                                  audiAcc={movie.base.audiAcc}
-                                  mainEmotion={movie.mainEmotion.toLowerCase()}
-                                  mainEmotionValue={movie.mainEmotionValue}
-                                  voteAverage={movie.voteAverage}
-                                  ratingAvg={movie.ratingAvg}
-                              />
-                          ))}
+                        : movieWeeklyList
+                              .slice(0, 3)
+                              .map((movie, idx) => (
+                                  <BoxOfficeItem
+                                      key={`weekly-${idx}`}
+                                      movieId={movie.movieId}
+                                      rank={movie.base.rank}
+                                      rankInten={movie.base.rankInten}
+                                      rankOldAndNew={movie.base.rankOldAndNew}
+                                      posterPath={movie.posterPath}
+                                      title={movie.title}
+                                      audiAcc={movie.base.audiAcc}
+                                      mainEmotion={movie.mainEmotion.toLowerCase()}
+                                      mainEmotionValue={movie.mainEmotionValue}
+                                      voteAverage={movie.voteAverage}
+                                      ratingAvg={movie.ratingAvg}
+                                  />
+                              ))}
                 </div>
             </div>
         </section>
