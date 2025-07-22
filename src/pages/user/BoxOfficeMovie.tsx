@@ -24,7 +24,7 @@ const BoxOfficeMovie: React.FC = () => {
 
     return (
         <div className="flex justify-center">
-            <div className="max-w-screen-lg w-full flex flex-col pt-20 py-36">
+            <div className="max-w-screen-lg w-full flex flex-col pt-20 py-36 px-5">
                 <h1 className="text-white text-3xl font-semibold pb-6 text-left">
                     박스오피스 순위 top100
                 </h1>
