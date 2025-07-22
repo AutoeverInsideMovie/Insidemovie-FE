@@ -83,7 +83,7 @@ const WeekMatch: React.FC = () => {
                                     아직 투표된 내용이 없습니다.
                                 </div>
                             ) : (
-                                <div className="flex flex-col md:flex-rowjustify-center items-center overflow-x-auto gap-10 mt-10">
+                                <div className="flex flex-col md:flex-row justify-center items-center overflow-x-hidden gap-10 mt-10">
                                     {movieList.map((poster, idx) => (
                                         <React.Fragment key={idx}>
                                             <div className="flex flex-col">

@@ -10,7 +10,9 @@ import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import SideMenuMobile from "./SideMenuMobile";
 import MenuButton from "./MenuButton";
 import ColorModeIconDropdown from "../shared-theme/ColorModeIconDropdown";
-import logo from "../../../assets/insidemovie_white_long.svg";
+import logoLight from "../../../assets/insidemovie_white_long.svg";
+import logoDark from "../../../assets/insidemovie_dark_long.svg";
+import { useColorScheme } from "@mui/material/styles";
 
 const Toolbar = styled(MuiToolbar)({
     width: "100%",
@@ -29,6 +31,9 @@ const Toolbar = styled(MuiToolbar)({
 });
 
 export default function AppNavbar() {
+    const { mode, systemMode } = useColorScheme();
+    const appliedMode = mode === "system" ? systemMode : mode;
+    const logo = appliedMode === "light" ? logoDark : logoLight;
     const [open, setOpen] = React.useState(false);
 
     const toggleDrawer = (newOpen: boolean) => () => {

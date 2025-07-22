@@ -130,19 +130,12 @@ const ReviewWrite: React.FC = () => {
 
     return (
         <div className="flex justify-center">
-            <div className="max-w-screen-lg w-full">
+            <div className="max-w-screen-lg w-full mx-5 mb-36">
                 <div className="flex flex-col">
                     <div className="flex justify-between items-center pt-20 py-36 pb-6">
                         <h1 className="text-white text-3xl font-semibold text-left">
                             {isEditMode ? "리뷰 수정" : "리뷰 작성"}
                         </h1>
-                        <Button
-                            text={isEditMode ? "수정하기" : "등록하기"}
-                            textColor="white"
-                            buttonColor="default"
-                            onClick={handleSubmit}
-                            className="px-12"
-                        />
                     </div>
                     <div className="flex gap-10 text-white">
                         <img
@@ -223,10 +216,19 @@ const ReviewWrite: React.FC = () => {
                     </div>
                     <textarea
                         placeholder="리뷰 내용을 입력하세요"
-                        className="bg-box_bg_white h-[400px] text-white text-xs w-full p-4 outline-none focus:ring-1 focus:ring-movie_sub rounded-3xl"
+                        className="bg-box_bg_white h-[400px] text-white text-sm w-full p-4 outline-none focus:ring-1 focus:ring-movie_sub rounded-3xl"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
                     />
+                    <div className="flex items-center justify-end gap-3 my-6 flex-wrap">
+                        <Button
+                            text={isEditMode ? "수정하기" : "등록하기"}
+                            textColor="white"
+                            buttonColor="default"
+                            onClick={handleSubmit}
+                            className="px-16"
+                        />
+                    </div>
                 </div>
             </div>
             <ConfirmDialog

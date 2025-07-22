@@ -495,7 +495,6 @@ const MovieDetail: React.FC = () => {
                                             createdAt={review.createdAt}
                                             likeCount={review.likeCount}
                                             myReview={review.myReview}
-                                            modify={review.modify}
                                             myLike={review.myLike}
                                             nickname={review.nickname}
                                             memberId={review.memberId}

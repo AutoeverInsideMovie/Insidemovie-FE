@@ -9,7 +9,7 @@ import angryIcon from "@assets/character/angry_icon.png";
 import fearIcon from "@assets/character/fear_icon.png";
 import disgustIcon from "@assets/character/disgust_icon.png";
 import bingbongIcon from "@assets/character/bingbong_icon.png";
-import BingbongProfile from "@assets/profile/bingbong_profile.png";
+import bingbongProfile from "@assets/profile/bingbong_profile.png";
 import joyProfile from "@assets/profile/joy_profile.png";
 import angryProfile from "@assets/profile/angry_profile.png";
 import sadnessProfile from "@assets/profile/sad_profile.png";
@@ -57,6 +57,15 @@ const emotionMap = {
     none: bingbongIcon,
 };
 
+const emotionProfileMap: Record<string, string> = {
+    joy: joyProfile,
+    anger: angryProfile,
+    sadness: sadnessProfile,
+    fear: fearProfile,
+    disgust: disgustProfile,
+    none: bingbongProfile,
+};
+
 const ReviewItem: React.FC<ReviewItemProps> = ({
     reviewId,
     content,
@@ -65,7 +74,6 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
     createdAt,
     likeCount,
     myReview = false,
-    modify = false,
     myLike = false,
     nickname,
     memberId,
@@ -92,14 +100,6 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
     const [reportReason, setReportReason] = useState<string>(
         "INAPPROPRIATE_LANGUAGE",
     );
-
-    const emotionProfileMap: Record<string, string> = {
-        joy: joyProfile,
-        anger: angryProfile,
-        sadness: sadnessProfile,
-        fear: fearProfile,
-        disgust: disgustProfile,
-    };
 
     // possible reasons
     const reportReasons = [
@@ -153,7 +153,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
                         src={
                             profile
                                 ? emotionProfileMap[profile?.toLowerCase()]
-                                : BingbongProfile
+                                : bingbongProfile
                         }
                         alt="Profile"
                         className="h-8 w-8 rounded-full "
