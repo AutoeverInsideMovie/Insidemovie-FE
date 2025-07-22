@@ -51,6 +51,7 @@ const emotionMap = {
     fear: fearIcon,
     disgust: disgustIcon,
     bingbong: bingbongIcon,
+    none: bingbongIcon,
 };
 
 const MyReviewItem: React.FC<MyReviewItemProps> = ({
