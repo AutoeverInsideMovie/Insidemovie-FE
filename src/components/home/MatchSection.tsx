@@ -74,14 +74,14 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
                 금주의 영화 대결
                 <ArrowRight />
             </h1>
-            <div className="flex flex-col w-full justify-between gap-10">
-                <div>
+            <div className="flex flex-col w-full justify-center gap-10">
+                <div className="flex flex-col items-center">
                     {movieList.length === 0 ? (
                         <div className="flex justify-center items-center gap-10 mt-10 text-center text-gray-400 py-12">
                             아직 투표된 내용이 없습니다.
                         </div>
                     ) : (
-                        <div className="flex flex-col md:flex-row justify-between items-center">
+                        <div className="flex flex-col md:flex-row justify-center items-center">
                             {movieList.map((poster, idx) => (
                                 <React.Fragment key={idx}>
                                     <MovieItem
@@ -103,7 +103,7 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
                         </div>
                     )}
                     <Button
-                        className="w-full mt-12"
+                        className="w-1/2 mt-12"
                         text="투표하러 가기"
                         textColor="black"
                         buttonColor="white"
