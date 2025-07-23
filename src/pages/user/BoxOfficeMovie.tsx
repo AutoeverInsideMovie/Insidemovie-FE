@@ -26,13 +26,13 @@ const BoxOfficeMovie: React.FC = () => {
         <div className="flex justify-center">
             <div className="max-w-screen-lg w-full flex flex-col pt-20 py-36 px-5">
                 <h1 className="text-white text-3xl font-semibold pb-6 text-left">
-                    박스오피스 순위 top100
+                    박스오피스 순위 top10
                 </h1>
                 <div className="flex flex-col md:flex-row">
                     {/* Daily Box Office */}
                     <div className="flex flex-col flex-1 gap-3 overflow-x-hidden scrollbar-hide px-2">
                         <h2 className="text-white font-semibold mb-2">
-                            일별 순위 Top 3
+                            일별 순위 Top 10
                         </h2>
                         {movieDailyList.map((movie, idx) => (
                             <BoxOfficeItem
@@ -54,7 +54,7 @@ const BoxOfficeMovie: React.FC = () => {
                     {/* Weekly Box Office */}
                     <div className="flex flex-col flex-1 gap-3 overflow-x-hidden scrollbar-hide px-2 mt-10 md:mt-0">
                         <h2 className="text-white font-semibold mb-2">
-                            주간 순위 Top 3
+                            주간 순위 Top 10
                         </h2>
                         {movieWeeklyList.map((movie, idx) => (
                             <BoxOfficeItem
