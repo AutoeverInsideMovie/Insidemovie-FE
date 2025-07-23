@@ -45,7 +45,7 @@ interface MyReviewItemProps {
 const emotionMap = {
     joy: joyIcon,
     sadness: sadIcon,
-    angry: angryIcon,
+    anger: angryIcon,
     fear: fearIcon,
     disgust: disgustIcon,
     bingbong: bingbongIcon,

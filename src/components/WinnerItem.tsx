@@ -39,15 +39,15 @@ const WinnerItem: React.FC<WinnerItemProps> = ({
                 <div className="flex items-center my-2">
                     <StarFull className="w-4 h-4" />
                     <span className="ml-1 text-sm">
-                        {Number.isInteger(Number(starValue))
-                            ? String(Number(starValue))
-                            : Number(starValue).toFixed(1)}
-                    </span>
-                    <TMDB className="w-4 h-4 ml-3" />
-                    <span className="ml-1 text-sm">
                         {Number.isInteger(Number(ratingAvg))
                             ? String(Number(ratingAvg))
                             : Number(ratingAvg).toFixed(1)}
+                    </span>
+                    <TMDB className="w-4 h-4 ml-3" />
+                    <span className="ml-1 text-sm">
+                        {Number.isInteger(Number(starValue))
+                            ? String(Number(starValue))
+                            : Number(starValue).toFixed(1)}
                     </span>
                 </div>
             </div>

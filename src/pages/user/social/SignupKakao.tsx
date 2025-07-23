@@ -32,11 +32,11 @@ const emotionMap = {
 };
 
 const emotionColorMap = {
-    joy: "text-joy_yellow",
-    sad: "text-sad_blue",
-    angry: "text-angry_red",
-    fear: "text-fear_purple",
-    disgust: "text-disgust_green",
+    joy: "bg-joy_yellow",
+    sad: "bg-sad_blue",
+    angry: "bg-angry_red",
+    fear: "bg-fear_purple",
+    disgust: "bg-disgust_green",
 };
 
 const emotionLabelMap: Record<keyof typeof emotionMap, string> = {
@@ -369,19 +369,21 @@ const Signup: React.FC = () => {
                                         ].map((e, i) => (
                                             <div
                                                 key={i}
-                                                className="flex items-center gap-1"
+                                                className="flex flex-1 items-center gap-1"
                                             >
                                                 <img
                                                     src={emotionMap[e.icon]}
                                                     alt={e.icon}
                                                     className="w-4 h-4"
                                                 />
-                                                <div className="w-14 h-2 rounded-full bg-box_bg_white overflow-hidden">
+                                                <div
+                                                    className="h-2 w-full rounded-full bg-box_bg_white overflow-hidden"
+                                                    style={{
+                                                        width: `${Math.round(e.value * 100)}%`,
+                                                    }}
+                                                >
                                                     <div
                                                         className={`h-full rounded-full ${emotionColorMap[e.icon]}`}
-                                                        style={{
-                                                            width: `${Math.round(e.value * 100)}%`,
-                                                        }}
                                                     />
                                                 </div>
                                             </div>
@@ -585,7 +587,7 @@ const Signup: React.FC = () => {
                     // 성공 시 로그인으로, 실패 시 다이얼로그만 닫기
                     if (dialogTitle === "회원가입 성공") {
                         navigate("/login", { replace: true });
-                        window.location.replace("/");
+                        window.location.replace("/login");
                     }
                 }}
                 onCancel={() => setIsDialogOpen(false)}
