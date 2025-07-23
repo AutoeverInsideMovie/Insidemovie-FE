@@ -512,7 +512,7 @@ const Signup: React.FC = () => {
                             <div className="w-full transition-all duration-300">
                                 {/* Emotion averages display */}
                                 <div className="bg-box_bg_white px-4 py-2 rounded-3xl mb-6 ring-2 ring-purple-500 ring-opacity-50 shadow-[0_0_10px_rgba(124,106,255,1.0)] transition-shadow duration-300">
-                                    <div className="inline-flex gap-2 items-center justify-center">
+                                    <div className="flex gap-2 items-center justify-center">
                                         {[
                                             {
                                                 icon: "joy",
