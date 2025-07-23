@@ -82,7 +82,7 @@ const MatchSection: React.FC<MatchSectionProps> = ({ className = "" }) => {
                         </div>
                     ) : (
                         <div className="flex flex-col md:flex-row justify-center items-center">
-                            {movieList.map((poster, idx) => (
+                            {movieList.slice(0, 5).map((poster, idx) => (
                                 <React.Fragment key={idx}>
                                     <MovieItem
                                         movieId={poster.id}
