@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import Edit from "@assets/edit.svg?react";
 import Delete from "@assets/delete.svg?react";
 import ArrowRight from "@assets/arrow_right.svg?react";
-import BingbongProfile from "@assets/profile/bingbong_profile.png";
+import bingbongProfile from "@assets/profile/bingbong_profile.png";
 import joyProfile from "@assets/profile/joy_profile.png";
 import angryProfile from "@assets/profile/angry_profile.png";
 import sadnessProfile from "@assets/profile/sad_profile.png";
@@ -80,6 +80,7 @@ const MyReviewItem: React.FC<MyReviewItemProps> = ({
         sadness: sadnessProfile,
         fear: fearProfile,
         disgust: disgustProfile,
+        none: bingbongProfile,
     };
 
     const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
@@ -94,7 +95,7 @@ const MyReviewItem: React.FC<MyReviewItemProps> = ({
                         src={
                             profile
                                 ? emotionProfileMap[profile?.toLowerCase()]
-                                : BingbongProfile
+                                : bingbongProfile
                         }
                         alt="Profile"
                         className="h-8 w-8 rounded-full "
