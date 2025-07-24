@@ -37,6 +37,7 @@ const ReviewWrite: React.FC = () => {
 
     const [isErrorOpen, setIsErrorOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [buttonEnabled, setButtonEnabled] = useState(true);
 
     // 달력 아이콘으로 달력 열기
     const datePickerRef = useRef<ReactDatePicker | null>(null);
@@ -92,6 +93,7 @@ const ReviewWrite: React.FC = () => {
         }
 
         try {
+            setButtonEnabled(false);
             if (isEditMode && reviewId) {
                 await reviewApi().modifyReview({
                     reviewId,
@@ -112,6 +114,7 @@ const ReviewWrite: React.FC = () => {
                 });
                 setSuccessMessage("등록");
                 setIsSuccessOpen(true);
+                setButtonEnabled(true);
             }
         } catch (err) {
             console.error("리뷰 등록 실패:", err);
@@ -225,6 +228,7 @@ const ReviewWrite: React.FC = () => {
                             text={isEditMode ? "수정하기" : "등록하기"}
                             textColor="white"
                             buttonColor="default"
+                            disabled={!buttonEnabled}
                             onClick={handleSubmit}
                             className="px-16"
                         />

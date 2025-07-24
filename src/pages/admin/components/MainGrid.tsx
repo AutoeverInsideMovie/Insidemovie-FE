@@ -29,7 +29,7 @@ export default function MainGrid() {
         const fetchData = async () => {
             try {
                 const res = await axios.get(
-                    "http://localhost:8080/api/v1/admin/dashboard",
+                    "http://52.79.175.149:8080/api/v1/admin/dashboard",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

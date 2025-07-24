@@ -1,4 +1,4 @@
-FROM node:24-alpine AS build
+FROM node:24-slim AS build
 WORKDIR /movie
 ENV NODE_OPTIONS=--max_old_space_size=4096
 COPY . .
