@@ -3,12 +3,12 @@ import { DataGrid, type GridRowsProp } from "@mui/x-data-grid";
 import { getMemberColumns } from "../internals/data/gridData";
 import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import type { Member } from "../../../types/member";
 import { useNavigate } from "react-router-dom";
 import { mapMembersToRows } from "../../../services/mapMembersToRows";
 import { useColorScheme, useTheme } from "@mui/material/styles";
 import { darken } from "@mui/material/styles";
+import axios from "../../../api/axiosInstance";
 
 export default function MemberBoard() {
     const [memberList, setMemberList] = useState<Member[] | null>(null);
@@ -24,7 +24,7 @@ export default function MemberBoard() {
         const fetchData = async () => {
             try {
                 const res = await axios.get(
-                    "http://52.79.175.149:8080/api/v1/admin/members?page=0&size=20",
+                    "/api/v1/admin/members?page=0&size=20",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

@@ -2,8 +2,8 @@ import * as React from "react";
 import Chip from "@mui/material/Chip";
 import type { GridColDef } from "@mui/x-data-grid";
 import type { ReportStatus, ReportType } from "../../../../types/reportStatus";
-import axios from "axios";
 import type { JSX } from "react";
+import axios from "../../../../api/axiosInstance";
 
 export const statusDisplayMap: Record<
     ReportStatus,
@@ -124,7 +124,7 @@ export const renderButtonSimple = (
 
         try {
             await axios.patch(
-                `http://52.79.175.149:8080/api/v1/admin/reports/${reportId}/${statusParam}`,
+                `/api/v1/admin/reports/${reportId}/${statusParam}`,
                 { status: newStatus },
                 { headers: { Authorization: `Bearer ${token}` } },
             );
@@ -189,7 +189,7 @@ export const renderMemberButton = (
         }
         try {
             await axios.patch(
-                `http://localhost:8080/api/v1/admin/members/${memberId}/${statusParam}`,
+                `/api/v1/admin/members/${memberId}/${statusParam}`,
                 { banned: newStatus },
                 { headers: { Authorization: `Bearer ${token}` } },
             );
